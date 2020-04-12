@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.yeblog_user.dao.ColumnMapper">
+
+    <select id="pageColumnInfo" parameterType="com.tao.yeblog_user.model.qo.ColumnQO"
+            resultType="com.tao.yeblog_user.model.dto.ColumnDTO">
+      select * from
+      (
+      select t1.columnid,
+      t1.name columnName,
+      count(t2.id) blogCount,
+      count(t3.id) blogCount0,
+      count(t4.id) blogCount01,
+      count(t5.id) blogCount02,
+      count(t6.id) blogCount00,
+      count(t7.id) blogCount1,
+      count(t8.id) blogCount11,
+      count(t9.id) blogCount12,
+      count(t10.id) blogCount10
+      from yeblog_db.column t1
+      left join blog t2 on t1.id = t2.columnid
+      left join (select * from blog where type = '0')t3 on t2.id = t3.id
+      left join (select * from blog where type = '0' and enable = '1')t4 on t2.id = t4.id
+      left join (select * from blog where type = '0' and enable = '2')t5 on t2.id = t5.id
+      left join (select * from blog where type = '0' and enable = '0')t6 on t2.id = t6.id
+      left join (select * from blog where type = '1')t7 on t2.id = t7.id
+      left join (select * from blog where type = '1' and enable = '1')t8 on t2.id = t8.id
+      left join (select * from blog where type = '1' and enable = '2')t9 on t2.id = t9.id
+      left join (select * from blog where type = '1' and enable = '0')t10 on t2.id = t10.id
+      group by t1.id
+      ) t
+      where 1=1
+      <if test="columnId !=null and columnId != ''">
+        and t.columnId like(concat('%',#{columnId},'%'))
+      </if>
+      <if test="columnName !=null and columnName != ''">
+        and t.columnName like(concat('%',#{columnName},'%'))
+      </if>
+      <choose>
+          <when test="blogType !=null and blogType != ''">
+              <choose>
+                  <when test="blogType == '0'.toString()">
+                      <if test="blogCountQ != null and blogCountQ != ''">
+                          and t.blogCount0 >= #{blogCountQ}
+                      </if>
+                      <if test="blogCountZ != null and blogCountZ != ''">
+                          and t.blogCount0 &lt;= #{blogCountZ}
+                      </if>
+                  </when>
+                  <when test="blogType == '1'.toString()">
+                      <if test="blogCountQ != null and blogCountQ != ''">
+                          and t.blogCount1 >= #{blogCountQ}
+                      </if>
+                      <if test="blogCountZ != null and blogCountZ != ''">
+                          and t.blogCount1 &lt;= #{blogCountZ}
+                      </if>
+                  </when>
+              </choose>
+            </when>
+            <otherwise>
+                <if test="blogCountQ != null and blogCountQ != ''">
+                    and t.blogCount >= #{blogCountQ}
+                </if>
+                <if test="blogCountZ != null and blogCountZ != ''">
+                    and t.blogCount &lt;= #{blogCountZ}
+                </if>
+            </otherwise>
+      </choose>
+    </select>
+
+    <select id="listColumnInfo" parameterType="com.tao.yeblog_user.model.qo.ColumnQO"
+            resultType="com.tao.yeblog_user.model.dto.SelectDTO">
+      select t1.columnid value,
+      t1.name name
+      from yeblog_db.column t1
+      where 1=1
+      <if test="columnId != null and columnId != ''">
+          and t1.columnid &lt;> #{columnId}
+      </if>
+      order by t1.columnid
+    </select>
+
+    <select id="listColumnInfoAll" parameterType="com.tao.yeblog_user.model.qo.ColumnQO"
+                resultType="com.tao.yeblog_user.model.dto.SelectDTO">
+      select "0" value,
+             "全部" name
+      from yeblog_db.column
+      union
+      select *
+      from
+      (
+        select t1.columnid value, t1.name name
+        from yeblog_db.column t1
+        order by t1.columnid
+      ) t
+    </select>
+
+    <insert id="createColumn" parameterType="com.tao.yeblog_user.model.dto.ColumnDTO">
+      insert into yeblog_db.column
+      (
+          id,
+          columnid,
+          name
+      )
+      values
+      (
+          uuid(),
+          #{columnId},
+          #{columnName}
+      )
+    </insert>
+
+    <update id="updateColumnInfo" parameterType="com.tao.yeblog_user.model.dto.ColumnDTO">
+        update yeblog_db.column t
+        <set>
+            <if test="columnName != null and columnName != ''">
+                t.name = #{columnName},
+            </if>
+        </set>
+        <where>
+            <if test="columnId != null and columnId != ''">
+                and t.columnId = #{columnId}
+            </if>
+        </where>
+
+    </update>
+
+    <delete id="deleteColumn" parameterType="com.tao.yeblog_user.model.dto.ColumnDTO">
+        delete from yeblog_db.column
+        <where>
+            <if test="columnId != null and columnId != ''">
+                and columnid = #{columnId}
+            </if>
+        </where>
+
+    </delete>
+
+</mapper>

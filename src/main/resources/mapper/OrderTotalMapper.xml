@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.yeblog_user.dao.OrderTotalMapper">
+
+    <select id="getOrderCountByYear" resultType="com.tao.yeblog_user.model.dto.OrderChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "未完成" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from yeblog_db.order
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from yeblog_db.order t
+              where 1= 1
+              and t.enable= "1"
+              group by DATE_FORMAT(t.createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "已完成" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from yeblog_db.order
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from yeblog_db.order t
+              where 1= 1
+              and t.enable= "2"
+              group by DATE_FORMAT(t.createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getOrderCountByMonth" resultType="com.tao.yeblog_user.model.dto.OrderChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "未完成" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from yeblog_db.order
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from yeblog_db.order t
+              where 1= 1
+              and t.enable= "1"
+              group by DATE_FORMAT(t.createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "已完成" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from yeblog_db.order
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from yeblog_db.order t
+              where 1= 1
+              and t.enable= "2"
+              group by DATE_FORMAT(t.createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getOrderCountByDay" resultType="com.tao.yeblog_user.model.dto.OrderChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "未完成" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from yeblog_db.order t
+              where 1= 1
+              and t.enable= "1"
+              group by DATE_FORMAT(t.createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "已完成" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from yeblog_db.order t
+              where 1= 1
+              and t.enable= "2"
+              group by DATE_FORMAT(t.createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getOrderMoneyByYear" resultType="com.tao.yeblog_user.model.dto.OrderChartsDTO">
+        select t1.day tjny,
+        ifnull(t2.value, 0) value
+        from
+        (
+            select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+            from
+            (
+                select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                from yeblog_db.order
+            ) t0
+            limit 5
+        ) t1
+        left join
+        (
+            select sum(t.price) value,
+            DATE_FORMAT(t.createtime, '%Y年') tjny
+            from yeblog_db.order t
+            where 1= 1
+            and t.enable = "2"
+            group by DATE_FORMAT(t.createtime, '%Y')
+        ) t2 on t1.day= t2.tjny
+        order by t1.day asc
+    </select>
+
+    <select id="getOrderMoneyByMonth" resultType="com.tao.yeblog_user.model.dto.OrderChartsDTO">
+        select t1.day tjny,
+        ifnull(t2.value, 0) value
+        from
+        (
+            select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+            from
+            (
+                select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                from yeblog_db.order
+            ) t0
+            limit 6
+        ) t1
+        left join
+        (
+            select sum(t.price) value,
+            DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+            from yeblog_db.order t
+            where 1= 1
+            and t.enable = "2"
+            group by DATE_FORMAT(t.createtime, '%Y%m')
+        ) t2 on t1.day= t2.tjny
+        order by t1.day asc
+    </select>
+
+    <select id="getOrderMoneyByDay" resultType="com.tao.yeblog_user.model.dto.OrderChartsDTO">
+        select t1.day tjny,
+        ifnull(t2.value, 0) value
+        from
+        (
+            select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+            from
+            (
+                select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                from blog
+            ) t0
+            limit 15
+        ) t1
+        left join
+        (
+            select sum(t.price) value,
+            DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+            from yeblog_db.order t
+            where 1= 1
+            and t.enable = "2"
+            group by DATE_FORMAT(t.createtime, '%Y%m%d')
+        ) t2 on t1.day= t2.tjny
+        order by t1.day asc
+    </select>
+
+    <select id="getOrderMoneyCountByOne" resultType="com.tao.yeblog_user.model.dto.OrderChartsDTO">
+            select t1.day tjny,
+            ifnull(t2.value, 0) value,
+            ifnull(t2.price, 0) price
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from yeblog_db.order
+                ) t0
+                limit 1
+            ) t1
+            left join
+            (
+              select count(*) value,
+                sum(t.price) price,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from yeblog_db.order t
+              where 1= 1
+              and t.enable &lt;> "0"
+              group by DATE_FORMAT(t.createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+    </select>
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.yeblog_user.dao.OrderMapper">
+
+    <select id="pageOrderInfo" parameterType="com.tao.yeblog_user.model.qo.OrderQO"
+                         resultType="com.tao.yeblog_user.model.dto.OrderDTO">
+      select t1.orderid orderId,
+      t2.loginid userId,
+      t1.price price,
+      t1.enable enable,
+      t1.createtime createTime,
+      t1.address address,
+      t1.remark remark,
+      t1.expressid expressId,
+      t1.userphone userPhone
+      from yeblog_db.order t1
+      left join blog_user t2 on t1.userid = t2.id
+      where 1=1
+      <if test="orderId !=null and orderId != ''">
+        and t1.orderid like(concat('%',#{orderId},'%'))
+      </if>
+      <if test="userId !=null and userId != ''">
+        and t2.loginid like(concat('%',#{userId},'%'))
+      </if>
+      <if test="enable !=null and enable != ''">
+        and t1.enable = #{enable}
+      </if>
+      <if test="priceQ !=null and priceQ != ''">
+        and t1.price >= #{priceQ}
+      </if>
+      <if test="priceZ !=null and priceZ != ''">
+        and t1.price &lt;= #{priceZ}
+      </if>
+      <if test="createTimeQ !=null and createTimeQ != ''">
+        and t1.createtime >= date_format(#{createTimeQ},'%Y-%m-%d')
+      </if>
+      <if test="createTimeZ !=null and createTimeZ != ''">
+        and t1.createtime &lt;= date_format(#{createTimeZ},'%Y-%m-%d')
+      </if>
+      order by t1.createtime desc
+    </select>
+
+    <select id="listOrderShopInfo" parameterType="com.tao.yeblog_user.model.qo.OrderQO"
+              resultType="com.tao.yeblog_user.model.dto.OrderDTO">
+      select t2.goodsid goodsId,
+      t2.name goodsName,
+      t1.nums nums,
+      t2.price price,
+      (t1.nums * t2.price) priceCount
+      from order_shop t1
+      left join shop t2 on t1.goodsid = t2.id
+      where 1=1
+      <if test="orderId !=null and orderId != ''">
+        and t1.orderid = (select t3.id from yeblog_db.order t3 where t3.orderid = #{orderId})
+      </if>
+      order by priceCount desc
+    </select>
+
+    <select id="listOrderMoney" resultType="com.tao.yeblog_user.model.dto.OrderDTO">
+      select "" goodsId,
+      "合计" goodsName,
+      "" price,
+      sum(t.nums) nums,
+      sum(t.priceCount) priceCount
+      from
+      (
+        select ifnull(sum(t2.nums),0) nums,
+        (t1.price*ifnull(sum(t2.nums),0)) priceCount
+        from shop t1
+        left join (
+          select t4.goodsid,
+          t4.nums
+          from yeblog_db.order t3
+          left join order_shop t4 on t3.id = t4.orderid
+          where t3.enable = "2"
+        ) t2 on t1.id = t2.goodsid
+        where 1=1
+        group by t1.id
+        order by nums desc,priceCount desc
+      ) t
+      union
+      select t1.goodsid goodsId,
+      t1.name goodsName,
+      t1.price price,
+      ifnull(sum(t2.nums),0) nums,
+      (t1.price*ifnull(sum(t2.nums),0)) priceCount
+      from shop t1
+      left join (
+        select t4.goodsid,
+        t4.nums
+        from yeblog_db.order t3
+        left join order_shop t4 on t3.id = t4.orderid
+        where t3.enable = "2"
+      ) t2 on t1.id = t2.goodsid
+      group by t1.id
+      order by nums desc,priceCount desc
+    </select>
+
+    <update id="updateOrderInfo" parameterType="com.tao.yeblog_user.model.dto.OrderDTO">
+      update yeblog_db.order t
+      <set>
+        <if test="expressId != null and expressId != ''">
+          t.expressid = #{expressId},
+        </if>
+      </set>
+      where 1=1
+      <if test="orderId != null and orderId != ''">
+        and t.orderid = #{orderId}
+      </if>
+    </update>
+
+</mapper>

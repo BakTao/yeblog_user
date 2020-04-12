@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.yeblog_user.dao.ScheduleMapper">
+
+    <select id="pageScheduleInfo" parameterType="com.tao.yeblog_user.model.qo.ScheduleQO"
+            resultType="com.tao.yeblog_user.model.dto.ScheduleDTO">
+      select t1.scheduleid scheduleId,
+      t2.loginid userId,
+      t1.title title,
+      t1.type type,
+      t1.content content,
+      t1.createtime createTime,
+      t1.finishtime finishTime
+      from schedule t1
+      left join blog_user t2 on t1.userid = t2.id
+      where 1=1
+      <if test="type !=null and type != ''">
+        and t1.type in
+        <foreach collection="types" item="type" open="(" close=")" separator=",">
+          #{type}
+        </foreach>
+      </if>
+      order by t1.createtime desc
+    </select>
+
+    <update id="updateScheduleInfo" parameterType="com.tao.yeblog_user.model.dto.ScheduleDTO">
+      update schedule t
+      <set>
+        <if test="type != null and type != ''">
+          t.type = #{type},
+        </if>
+        <if test="type == '3'.toString()">
+          t.finishtime = sysdate(),
+        </if>
+      </set>
+      where 1=1
+      <if test="scheduleId !=null and scheduleId != ''">
+        and t.scheduleid in
+        <foreach collection="scheduleIds" item="scheduleId" open="(" close=")" separator=",">
+          #{scheduleId}
+        </foreach>
+      </if>
+    </update>
+
+    <delete id="deleteSchedule" parameterType="com.tao.yeblog_user.model.dto.ScheduleDTO">
+        delete from schedule
+        <where>
+            <if test="scheduleId != null and scheduleId != ''">
+              and scheduleid in
+              <foreach collection="scheduleIds" item="scheduleId" open="(" close=")" separator=",">
+                #{scheduleId}
+              </foreach>
+            </if>
+        </where>
+    </delete>
+
+</mapper>

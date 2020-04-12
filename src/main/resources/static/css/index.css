@@ -1,0 +1,132 @@
+body{
+    margin: 0;
+}
+
+.header{
+    position: fixed;
+    width: 100%;
+    height: 5.1rem;
+    background-color: black;
+    z-index: 999;
+}
+
+.contain{
+    width: 1050px;
+    height: 1050px;
+    background-color: green;
+    padding-top: 6.236rem;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+}
+
+.navbar{
+    width: 194px;
+    background-color: red;
+    margin-right: 1.236rem;
+}
+
+.nav-list{
+    background-color: blue;
+    width: 160px;
+    height: 100%;
+    position: fixed;
+    
+}
+
+.page{
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.item{
+    display: block;
+    height: 3em;
+    line-height: 3em;
+    padding: 0 1.236rem;
+    text-decoration: none;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: .5px;
+    margin-bottom: .618rem;
+}
+
+.main{
+    width: 100%;
+}
+
+.content{
+    width: 590px;
+    float: left;
+}
+
+.rotation{
+    height: 200px;
+    background-color: antiquewhite
+}
+
+.rotation-list .titleBack{
+    background-color: black;
+    width: 100%;
+    position: absolute;
+    height: 20px;
+    bottom: 0;
+}
+
+.rotation-list .title{
+    color: white;
+    left: 8%;
+    position: absolute;
+}
+
+.new-article-list{
+    margin-top: 46px;
+    background-color: aquamarine;
+}
+
+.rank-list{
+    width: 266px;
+    position: absolute;
+    right: 0;
+    background-color: yellow;
+}
+
+.rank-list p{
+    line-height: 3em;
+    margin: 0;
+    padding: 0 1rem;
+    border-bottom: 1px dashed black;
+}
+
+.rank-list ul{
+    list-style: none;
+    padding: .618rem 0;
+    margin: 0;
+    counter-reset:subsection;
+}
+
+.rank-list ul li.rank-item{
+    height: 1.9em;
+    line-height: 1.9em;
+    padding: 0 1rem;
+    margin-bottom: .618rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rank-list ul li span.index{
+    width: 1.5em;
+    height: 1.5em;
+    line-height: 1.5em;
+    display: inline-block;
+    text-align: center;
+    margin-right: .618rem;
+    font-size: 1rem;
+    background-color: chartreuse;
+}
+.rank-list ul li span.index:before{
+    counter-increment:subsection;
+    content:counter(subsection);
+}

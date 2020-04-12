@@ -1,0 +1,1097 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.yeblog_user.dao.BlogTotalMapper">
+
+    <!-- 按博客类型 -->
+    <select id="getBlogCountBylxByYear" parameterType="com.tao.yeblog_user.model.qo.BlogChartsQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "全部" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "原创" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              and t.type= "0"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "转载" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              and t.type= "1"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "草稿" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              and t.type= "2"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getBlogCountBylxByMonth" parameterType="com.tao.yeblog_user.model.qo.BlogChartsQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "全部" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "原创" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              and t.type= "0"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "转载" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              and t.type= "1"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "草稿" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              and t.type= "2"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getBlogCountBylxByDay" parameterType="com.tao.yeblog_user.model.qo.BlogChartsQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "全部" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "原创" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.type= "0"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "转载" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.type= "1"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "草稿" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.type= "2"
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <!-- 按是否有效 -->
+    <select id="getBlogCountByyxByYear" parameterType="com.tao.yeblog_user.model.qo.BlogChartsQO"
+                resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "全部" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "无效" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "0"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "有效" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "1"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "未审核" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+              select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 year), '%Y年') day
+              from(
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 year)
+                    from blog
+                  ) t0
+              limit 5
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "2"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getBlogCountByyxByMonth" parameterType="com.tao.yeblog_user.model.qo.BlogChartsQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "全部" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "无效" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "0"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "有效" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "1"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "未审核" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 month), '%Y年%m月') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 month)
+                    from blog
+                ) t0
+                limit 6
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "2"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getBlogCountByyxByDay" parameterType="com.tao.yeblog_user.model.qo.BlogChartsQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+        select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "全部" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "无效" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "0"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "有效" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "1"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "未审核" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 15
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.enable = "2"
+              <if test="blogType !=null and blogType != ''">
+                and t.type in
+                <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+                  #{blogType}
+                </foreach>
+              </if>
+              <if test=" tjnyq != null and tjnyq != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') >= #{tjnyq}
+              </if>
+              <if test=" tjnyz != null and tjnyz != ''">
+                  and DATE_FORMAT(t.createtime,'%Y%m%d') &lt;= #{tjnyz}
+              </if>
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getBlogCountByColumn" parameterType="com.tao.yeblog_user.model.qo.BlogChartsQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+        select count(t1.id) value,
+	    concat(
+	    ifnull(t2.name,''),
+	    '(',
+	    (case
+	    when t1.type= "0" then "原创"
+	    when t1.type= "1" then "转载"
+	    when t1.type= "2" then "草稿"
+	    end),
+	    ')'
+	    ) name
+        from blog t1
+        left join yeblog_db.column t2 on t1.columnid= t2.id
+        where t1.enable= "1"
+        <if test="columnId !=null and columnId != ''">
+            and t2.columnid in
+            <foreach collection="columnIds" item="columnId" open="(" close=")" separator=",">
+                #{columnId}
+            </foreach>
+        </if>
+        group by t1.columnid,t1.type;
+    </select>
+
+    <select id="getBlogCountByWeek" resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+            select group_concat(t.tjny) tjny,
+               group_concat(t.value) value,
+               "原创" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 7
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+			 and t.type = "0"
+             and t.enable = "1"
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "原创未审核" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 7
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.type = "0"
+              and t.enable = "2"
+
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "转载" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 7
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.type = "1"
+              and t.enable = "1"
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+        union
+        select group_concat(t.tjny) tjny,
+        group_concat(t.value) value,
+        "转载未审核" type
+        from
+        (
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 7
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.type = "1"
+              and t.enable = "2"
+
+
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+        ) t
+    </select>
+
+    <select id="getBlogCountByOne" resultType="com.tao.yeblog_user.model.dto.BlogChartsDTO">
+            select t1.day tjny,
+            ifnull(t2.value, 0) value
+            from
+            (
+                select DATE_FORMAT(@cdate := DATE_ADD(@cdate, INTERVAL -1 day), '%Y年%m月%d日') day
+                from
+                (
+                    select @cdate := DATE_ADD(sysdate(), INTERVAL+ 1 day)
+                    from blog
+                ) t0
+                limit 1
+            ) t1
+            left join
+            (
+              select count(*) value,
+              DATE_FORMAT(t.createtime, '%Y年%m月%d日') tjny
+              from blog t
+              where 1= 1
+              and t.enable &lt;> "0" and t.type &lt;> "2"
+              group by DATE_FORMAT(createtime, '%Y%m%d')
+            ) t2 on t1.day= t2.tjny
+            order by t1.day
+    </select>
+</mapper>

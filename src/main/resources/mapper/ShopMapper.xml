@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.yeblog_user.dao.ShopMapper">
+
+    <select id="pageShopInfo" parameterType="com.tao.yeblog_user.model.qo.ShopQO"
+            resultType="com.tao.yeblog_user.model.dto.ShopDTO">
+      select t1.goodsid goodsId,
+      t1.name goodsName,
+      t1.nums nums,
+      t1.buynums buyNums,
+      t1.price price,
+      t3.url photo,
+      t1.type type,
+      t1.content content,
+      t4.url bookFile,
+      t4.name bookFileName,
+      t2.categoryid categoryId,
+      t2.name categoryName,
+      t1.enable enable
+      from shop t1
+      left join category t2 on t1.category = t2.id
+      left join sys_file t3 on t1.photo = t3.id
+      left join sys_file t4 on t1.bookFile = t4.id
+      where 1=1
+      <if test="goodsId !=null and goodsId != ''">
+        and t1.goodsid like(concat('%',#{goodsId},'%'))
+      </if>
+      <if test="goodsName !=null and goodsName != ''">
+        and t1.name like(concat('%',#{goodsName},'%'))
+      </if>
+      <if test="categoryId !=null and categoryId != ''">
+        and t2.categoryid in
+        <foreach collection="categoryIds" item="categoryId" open="(" close=")" separator=",">
+          #{categoryId}
+        </foreach>
+      </if>
+      <if test="enable !=null and enable != ''">
+        and t1.enable = #{enable}
+      </if>
+      <if test="type !=null and type != ''">
+        and t1.type = #{type}
+      </if>
+      <if test="numsQ !=null and numsQ != ''">
+        and t1.nums >= #{numsQ}
+      </if>
+      <if test="numsZ !=null and numsZ != ''">
+        and t1.nums &lt;= #{numsZ}
+      </if>
+      <if test="buyNumsQ !=null and buyNumsQ != ''">
+        and t1.buynums >= #{buyNumsQ}
+      </if>
+      <if test="buyNumsZ !=null and buyNumsZ != ''">
+        and t1.buynums &lt;= #{buyNumsZ}
+      </if>
+      <if test="priceQ !=null and priceQ != ''">
+        and t1.price >= #{priceQ}
+      </if>
+      <if test="priceZ !=null and priceZ != ''">
+        and t1.price &lt;= #{priceZ}
+      </if>
+    </select>
+
+    <select id="listCategoryInfo" resultType="com.tao.yeblog_user.model.dto.SelectDTO">
+      select t1.categoryid value,
+      t1.name name
+      from yeblog_db.category t1
+      where 1=1
+      order by t1.categoryid
+    </select>
+
+    <insert id="createCategory" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
+      insert into category
+      (
+          id,
+          categoryid,
+          name
+      )
+      values
+      (
+          uuid(),
+          #{categoryId},
+          #{categoryName}
+      )
+    </insert>
+
+    <delete id="deleteCategory" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
+        delete from category
+        <where>
+        <if test="categoryId !=null and categoryId != ''">
+            and categoryid in
+            <foreach collection="categoryIds" item="categoryId" open="(" close=")" separator=",">
+                #{categoryId}
+            </foreach>
+        </if>
+        </where>
+
+    </delete>
+
+
+
+    <update id="updateShopInfo" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
+      update shop t
+      <set>
+        <if test="goodsName != null and goodsName != ''">
+          t.name = #{goodsName},
+        </if>
+        <if test="categoryId != null and categoryId != ''">
+          t.category = (select id from category t1 where t1.categoryid = #{categoryId}),
+        </if>
+        <if test="nums != null and nums != ''">
+          t.nums = #{nums},
+        </if>
+        <if test="buyNums != null and buyNums != ''">
+          t.buynums = #{buyNums},
+        </if>
+        <if test="price != null and price != ''">
+          t.price = #{price},
+        </if>
+        <if test="type != null and type != ''">
+          t.type = #{type},
+        </if>
+        <if test="bookFile != null">
+          t.bookfile = #{bookFile},
+        </if>
+        <if test="photo != null and photo != ''">
+          t.photo = #{photo},
+        </if>
+        <if test="content != null and content != ''">
+          t.content = #{content},
+        </if>
+        <if test="enable != null and enable != ''">
+          t.enable = #{enable},
+        </if>
+      </set>
+      where 1=1
+      <if test="goodsId != null and goodsId != ''">
+        and t.goodsid = #{goodsId}
+      </if>
+    </update>
+
+    <insert id="createShop" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
+      insert into shop
+      (id,
+      goodsid,
+      name,
+      nums,
+      buynums,
+      price,
+      photo,
+      type,
+      content,
+      bookfile,
+      enable,
+      category
+      )
+      select
+      uuid(),
+      #{goodsId},
+      #{goodsName},
+      #{nums},
+      "0",
+      #{price},
+      #{photo},
+      #{type},
+      #{content},
+      #{bookFile},
+      "1",
+      t.id from category t where t.categoryid = #{categoryId}
+
+    </insert>
+</mapper>
