@@ -4,34 +4,32 @@
 
     <select id="pageBlogInfo" parameterType="com.tao.yeblog_user.model.qo.BlogQO"
             resultType="com.tao.yeblog_user.model.dto.BlogDTO">
-      select t.*
-      from
+      select t.* from
       (
-        select t5.*,count(t6.blogid) collectionNums
-        from
-        (
-          select
-          t1.id id,
-          t1.blogid blogId2,
-          t2.loginid userId2,
-          t3.columnid columnId,
-          t3.name columnName,
-          t1.title title,
-          t1.type type,
-          t1.enable enable,
-          t1.content content,
-          t1.cover cover,
-          t1.createtime createTime,
-          t1.reason reason,
-          count(t4.blogid) praiseNums
-          from blog t1
-          left join blog_user t2 on t1.userid = t2.id
-          left join yeblog_db.column  t3 on t1.columnid = t3.id
-          left join user_praise t4 on t1.id = t4.blogid
-          group by t1.id
-        ) t5
-        left join user_collection t6 on t5.id = t6.blogid
-        group by t5.id
+        select t9.*,
+        count(distinct t10.id) + count(t11.commentid) commentNums
+        from(
+            select t6.*, count(t8.blogid) viewNums
+            from
+            (
+              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, t1.type type, t1.enable enable, t1.content content, t4.url cover, t1.createtime createTime, count(t5.blogid) collectionNums
+              from blog t1
+              left join blog_user t2 on t1.userid= t2.id
+              left join yeblog_db.column t3 on t1.columnid= t3.id
+              left join sys_file t4 on t1.cover= t4.id
+              left join user_collection t5 on t1.id= t5.blogid
+              group by t1.id) t6
+              left join(
+                select t7.*
+                from blog_view t7
+                group by t7.ip, day(t7.time)
+              ) t8 on t6.id= t8.blogid
+            group by t6.blogId
+        ) t9
+        left join blog_comment t10 on t9.id= t10.blogid
+        left join comment_reply t11 on t10.id= t11.commentid
+        group by t9.id
+        order by t9.createtime desc
       ) t
       where 1=1
       <if test="title !=null and title != ''">
@@ -70,11 +68,17 @@
       <if test="collectionNumsZ !=null and collectionNumsZ != ''">
         and t.collectionNums &lt;= #{collectionNumsZ}
       </if>
-      <if test="praiseNumsQ !=null and praiseNumsQ != ''">
-        and t.praiseNums >= #{prt.columnIdaiseNumsQ}
+      <if test="viewNumsQ !=null and viewNumsQ != ''">
+        and t.viewNums >= #{viewNumsQ}
       </if>
-      <if test="praiseNumsZ !=null and praiseNumsZ != ''">
-        and t.praiseNums &lt;= #{praiseNumsZ}
+      <if test="viewNumsZ !=null and viewNumsZ != ''">
+        and t.viewNums &lt;= #{viewNumsZ}
+      </if>
+      <if test="commentNumsQ !=null and commentNumsQ != ''">
+        and t.commentNums >= #{commentNumsQ}
+      </if>
+      <if test="commentNumsZ !=null and commentNumsZ != ''">
+        and t.commentNums &lt;= #{commentNumsZ}
       </if>
     </select>
 
@@ -118,7 +122,7 @@
             select t6.*, count(t8.blogid) viewNums
             from
             (
-              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t1.columnid columnId, t3.name columnName, t1.title title, case when t1.type="0" then "原创" when t1.type="1" then "转载" end as type, t1.content content, t4.url cover, date_format(t1.createtime, '%Y年%m月%d日') createTime, count(t5.blogid) collectionNums
+              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, case when t1.type="0" then "原创" when t1.type="1" then "转载" end as type, t1.content content, t4.url cover, date_format(t1.createtime, '%Y年%m月%d日') createTime, count(t5.blogid) collectionNums
               from blog t1
               left join blog_user t2 on t1.userid= t2.id
               left join yeblog_db.column t3 on t1.columnid= t3.id

@@ -39,4 +39,11 @@ public interface BlogMapper {
      * @return
      */
     Page<BlogDTO> pageBlogInfoByView(BlogQO blogQO);
+
+    /**
+     * 获取前15新博客信息
+     * @param blogQO
+     * @return
+     */
+    Page<BlogDTO> pageBlogInfoByNew(BlogQO blogQO);
 }

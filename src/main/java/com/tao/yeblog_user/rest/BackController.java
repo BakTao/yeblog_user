@@ -31,7 +31,7 @@ public class BackController {
         return "set";
     }
 
-    @RequestMapping("/article")
+    @RequestMapping("/article/{articleId}")
     public String article(){
         return "article";
     }

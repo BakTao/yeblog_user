@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tao.yeblog_user.dao.CommentMapper">
+
+    <select id="pageCommentInfo" parameterType="com.tao.yeblog_user.model.qo.CommentQO"
+            resultType="com.tao.yeblog_user.model.dto.CommentDTO">
+        select t.*
+        from
+        (
+            select t5.*,(@i:= @i+ 1) as rank
+            from(
+                select t1.id id,
+                t1.time time,
+                t1.content content,
+                t1.enable enable,
+                t2.loginid userId,
+                t2.name userName,
+                t3.url userPhoto,
+                count(t4.commentid) praiseNums
+                from blog_comment t1
+                left join blog_user t2 on t1.userid= t2.id
+                left join sys_file t3 on t2.userphoto= t3.id
+                left join comment_praise t4 on t1.id= t4.commentid
+                where t1.blogid=(
+                    select id
+                    from blog t
+                    where t.blogid= #{blogId}
+                )
+                group by t1.id
+                order by t1.time
+            ) t5,
+            (SELECT @i:= 0) as i
+        ) t
+        where t.enable= "1"
+        order by ${sort} desc
+
+    </select>
+
+    <select id="listReplyCommentInfo" parameterType="com.tao.yeblog_user.model.qo.CommentQO"
+                resultType="com.tao.yeblog_user.model.dto.CommentDTO">
+        select t2.loginid userId,
+        t2.name userName,
+        t4.url userPhoto,
+        t3.loginid replyUserId,
+        t3.name replyUserName,
+        t1.content content,
+        t1.time time
+        from comment_reply t1
+        left join blog_user t2 on t1.userid = t2.id
+        left join blog_user t3 on t1.replyuserid = t3.id
+        left join sys_file t4 on t2.userphoto = t4.id
+        where t1.commentid = #{commentId}
+        order by time asc
+    </select>
+</mapper>

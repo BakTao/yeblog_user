@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="../assets/img/logo.png">
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
     <title>YeBlog - 博客 - 专栏</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <link href="/static/modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/static/modules/layui/css/layui.css" rel="stylesheet" />
     <link href="/static/css/index.css" rel="stylesheet" />
 </head>
 
@@ -39,14 +40,63 @@
 
             </nav>
         </div>
-        <div class="main">
-            <div>文章</div>
+        <div class="main-content">
+            <div class="detail">
+                <div class="detail-type"><span></span></div>
+                    <div class="detail-title"><h2 class="title"></h2>
+                        <span class="user"><i></i><span></span></span>
+                        <span class="date"><i></i><span></span></span>
+                        <span class="viewNums"><i></i><span></span></span>
+                    </div>
+                    <div class="detail-content">
+                        <p><img class="detail-cover" onclick="previewImg(this);"></p>
+
+                    </div>
+                <div class="collectionBtn">
+                    <div class="collectionIcon"><i></i></div>
+                    <div class="collectionNums"><span></span></div>
+                </div>
+                <div class="detail-meta">
+                    <p class='item'><span class="date">本文发布于</span><span class="viewNums">,被观看了</span></p>
+                    <p class='item'><span class="userName">本文作者:</span><a class="userNamea" href="" target="_blank"></a></p>
+                    <p class='item'><span class="columnName">本文专栏:</span><a class="columnNamea" href="" target="_blank"></a></p>
+
+                </div>
+                <div class="detail-comment">
+                    <div class="comment-box">
+                        <div class="comment-top">
+                            <div class="total">
+                                <div class="count">
+                                    <strong class="count">
+
+                                    </strong>
+                                    <span>条评论</span>
+                                </div>
+                            </div>
+                            <div class="sort">
+                                <a href="" class="sort-btn1">最新</a>
+                                <a href="" class="sort-btn2">最热</a>
+                            </div>
+                        </div>
+                        <div class="comment-list">
+                            <ul class="list-box">
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="commentPage"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 </body>
 
 <script src="/static/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+<script src="/static/modules/layui/layui.js" type="text/javascript"></script>
 <script src="/static/js/index.js" type="text/javascript"></script>
+<script src="/static/js/common.js" type="text/javascript"></script>
+
+<script src="/static/js/article/article.js" type="text/javascript"></script>
 
 </html>

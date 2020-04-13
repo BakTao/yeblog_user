@@ -60,4 +60,16 @@ public class BlogController {
     public Response<IPage<BlogDTO>> pageBlogInfoByView(@RequestBody BlogQO blogQO){
         return Response.successData(blogService.pageBlogInfoByView(blogQO));
     }
+
+    /**
+     * 获取前15新博客信息
+     * @param blogQO
+     * @return
+     */
+    @PostMapping("/pageBlogInfoByNew")
+    public Response<IPage<BlogDTO>> pageBlogInfoByNew(@RequestBody BlogQO blogQO){
+        return Response.successData(blogService.pageBlogInfoByNew(blogQO));
+    }
+
+
 }

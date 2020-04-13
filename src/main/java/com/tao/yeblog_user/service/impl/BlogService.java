@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tao.yeblog_user.common.IPage;
@@ -89,6 +90,29 @@ public class BlogService implements  IBlogService {
 
         PageHelper.startPage(blogQO.getPageIndex(),blogQO.getPageSize());
         PageInfo<BlogDTO> pageInfo = new PageInfo<>(blogMapper.pageBlogInfoByView(blogQO));
+
+        Pager pager = new Pager();
+        pager.setPageIndex(pageInfo.getPageNum());
+        pager.setPageSize(pageInfo.getPageSize());
+        pager.setPageCount(pageInfo.getPages());
+        pager.setRecordCount(pageInfo.getTotal());
+        pager.setPrePageIndex(pageInfo.getPrePage());
+        pager.setNextPageIndex(pageInfo.getNextPage());
+        pager.setExistsPrePage(pageInfo.isHasPreviousPage());
+        pager.setExistsNextPage(pageInfo.isHasNextPage());
+
+        page.setPager(pager);
+        page.setData(pageInfo.getList());
+
+        return page;
+    }
+
+    @Override
+    public IPage<BlogDTO> pageBlogInfoByNew(BlogQO blogQO) {
+        PageDefaultImpl<BlogDTO> page = new PageDefaultImpl<>();
+
+        PageHelper.startPage(blogQO.getPageIndex(),blogQO.getPageSize());
+        PageInfo<BlogDTO> pageInfo = new PageInfo<>(blogMapper.pageBlogInfoByNew(blogQO));
 
         Pager pager = new Pager();
         pager.setPageIndex(pageInfo.getPageNum());

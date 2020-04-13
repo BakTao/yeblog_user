@@ -62,6 +62,71 @@ layui.use(['carousel', 'form'], function() {
     })
 
     $.ajax({
+        url: "/back/blogServices/pageBlogInfoByNew",
+        contentType: "application/json",
+        type: "post",
+        data: JSON.stringify({"pageSize":15}),
+        success: function (data) {
+            var rowData = data.body.data;
+            for(var i=0; i<rowData.length; i++){
+                if(rowData[i].cover != null && rowData[i].cover != '' ) {
+                    $(".new-article-list").append(
+                        '<div class="new-article-item">' +
+                            '<div class="new-article-content">' +
+                                '<div class="new-article-cover">' +
+                                    '<a href="article/' + rowData[i].blogId +'" target="_blank">' +
+                                        '<span>' + rowData[i].type +'</span><img src="'+ uploadUrl + rowData[i].cover + '">' +
+                                    '</a>' +
+                                '</div>' +
+                                '<div class="new-article-body">' +
+                                    '<h5 class="new-article-title">' +
+                                        '<a href="article/' + rowData[i].blogId +'"  target="_blank">' + rowData[i].title + '</a>' +
+                                    '</h5>' +
+                                    '<p class="new-article-descrption">' + rowData[i].content + '</p>' +
+                                    '<div class="new-article-meta">' +
+                                        '<span class="date"><i></i><span>' + rowData[i].createTime + '</span></span>' +
+                                        '<span class="userName"><i></i><span>' + rowData[i].userName + '</span></span>' +
+                                        '<span class="view"><i></i><span>' + rowData[i].viewNums + '</span></span>' +
+                                        '<span class="comment"><i></i><span>' + rowData[i].commentNums + '</span></span>' +
+                                        '<span class="collection"><i></i><span>' + rowData[i].collectionNums + '</span></span>' +
+                                        '<span class="columnName"><i></i><span>' + rowData[i].columnName + '</span></span>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>'
+                    )
+                }else{
+                    $(".new-article-list").append(
+                    '<div class="new-article-item">' +
+                        '<div class="new-article-content">' +
+                            '<div class="new-article-cover">' +
+                                '<a href="article/' + rowData[i].blogId +'" target="_blank">' +
+                                    '<span>' + rowData[i].type +'</span><img src="/static/img/logo.png">' +
+                                '</a>' +
+                            '</div>' +
+                            '<div class="new-article-body">' +
+                                '<h5 class="new-article-title">' +
+                                    '<a href="article/' + rowData[i].blogId +'" target="_blank">' + rowData[i].title + '</a>' +
+                                '</h5>' +
+                                '<p class="new-article-descrption">' + rowData[i].content + '</p>' +
+                                '<div class="new-article-meta">' +
+                                    '<span class="date"><i></i><span>' + rowData[i].createTime + '</span></span>' +
+                                    '<span class="userName"><i></i><span>' + rowData[i].userName + '</span></span>' +
+                                    '<span class="view"><i></i><span>' + rowData[i].viewNums + '</span></span>' +
+                                    '<span class="comment"><i></i><span>' + rowData[i].commentNums + '</span></span>' +
+                                    '<span class="collection"><i></i><span>' + rowData[i].collectionNums + '</span></span>' +
+                                    '<span class="columnName"><i></i><span>' + rowData[i].columnName + '</span></span>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                    )
+                }
+            }
+        }
+    })
+
+    $.ajax({
         url: "/back/blogServices/pageBlogInfoByColl",
         contentType: "application/json",
         type: "post",

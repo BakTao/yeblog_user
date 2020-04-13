@@ -14,6 +14,8 @@ public class BlogDTO {
 
     private String userId; //用户Id
 
+    private String userName; //用户名字
+
     private String columnId; //专栏id
 
     private String newColumnId; //专栏id
@@ -40,4 +42,5 @@ public class BlogDTO {
 
     private String viewNums; //观看数
 
+    private String commentNums; //评论数
 }

@@ -38,4 +38,11 @@ public interface IBlogService {
      * @return
      */
     IPage<BlogDTO> pageBlogInfoByView(BlogQO blogQO);
+
+    /**
+     * 获取前15新博客信息
+     * @param blogQO
+     * @return
+     */
+    IPage<BlogDTO> pageBlogInfoByNew(BlogQO blogQO);
 }
