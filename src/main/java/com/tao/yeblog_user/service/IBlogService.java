@@ -7,6 +7,8 @@ import com.tao.yeblog_user.model.qo.BlogQO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 博客管理Service
  */
@@ -45,4 +47,24 @@ public interface IBlogService {
      * @return
      */
     IPage<BlogDTO> pageBlogInfoByNew(BlogQO blogQO);
+
+    /**
+     * 新增用户信息
+     * @param blogDTO
+     */
+    String createBlog(BlogDTO blogDTO);
+
+    /**
+     * 删除用户信息
+     * @param blogDTO
+     * @return
+     */
+    String deleteBlog(BlogDTO blogDTO);
+
+    /**
+     * 新增用户信息
+     * @param blogDTO
+     * @return
+     */
+    String createBlogView(BlogDTO blogDTO, HttpServletRequest request);
 }

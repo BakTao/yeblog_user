@@ -18,5 +18,19 @@ public interface ICommentService {
      */
     IPage<CommentDTO> pageCommentInfo(CommentQO commentQO);
 
+    /**
+     * 新增评论信息
+     * @param commentDTO
+     * @return
+     */
+    String createComment(CommentDTO commentDTO);
+
+    /**
+     * 新增评论的评论信息
+     * @param commentDTO
+     * @return
+     */
+    String createReplyComment(CommentDTO commentDTO);
+
 
 }

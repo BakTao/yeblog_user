@@ -29,5 +29,18 @@ public interface CommentMapper {
      */
     List<CommentDTO> listReplyCommentInfo(CommentQO commentQO);
 
+    /**
+     * 新增评论信息
+     * @param commentDTO
+     * @return
+     */
+    void createComment(CommentDTO commentDTO);
+
+    /**
+     * 新增评论的评论信息
+     * @param commentDTO
+     * @return
+     */
+    void createReplyComment(CommentDTO commentDTO);
 
 }

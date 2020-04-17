@@ -1,6 +1,5 @@
 package com.tao.yeblog_user.service.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tao.yeblog_user.common.IPage;
@@ -10,8 +9,13 @@ import com.tao.yeblog_user.dao.BlogMapper;
 import com.tao.yeblog_user.model.dto.BlogDTO;
 import com.tao.yeblog_user.model.qo.BlogQO;
 import com.tao.yeblog_user.service.IBlogService;
+import com.tao.yeblog_user.utils.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class BlogService implements  IBlogService {
@@ -128,5 +132,35 @@ public class BlogService implements  IBlogService {
         page.setData(pageInfo.getList());
 
         return page;
+    }
+
+    @Override
+    public String createBlog(BlogDTO blogDTO) {
+        String blogId = "b" + blogDTO.getType() + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        blogDTO.setBlogId(blogId);
+        blogMapper.createBlog(blogDTO);
+        return "success";
+    }
+
+    @Override
+    public String deleteBlog(BlogDTO blogDTO) {
+        return "success";
+    }
+
+    @Override
+    public String createBlogView(BlogDTO blogDTO, HttpServletRequest request) {
+        String ip = IpUtil.getIpAddr(request);
+        BlogQO blogQO = new BlogQO();
+        blogQO.setIp(ip);
+        blogQO.setBlogId(blogDTO.getBlogId());
+
+        BlogDTO data = blogMapper.getBlogView(blogQO);
+        if(data == null){
+            blogDTO.setIp(ip);
+            blogMapper.createBlogView(blogDTO);
+            return "success";
+        }else{
+            return "no update";
+        }
     }
 }

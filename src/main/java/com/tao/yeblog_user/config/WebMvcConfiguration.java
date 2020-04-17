@@ -1,5 +1,8 @@
 package com.tao.yeblog_user.config;
 
+import com.tao.yeblog_user.dao.UserMapper;
+import com.tao.yeblog_user.model.dto.UserDTO;
+import com.tao.yeblog_user.model.qo.UserQO;
 import com.tao.yeblog_user.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -23,18 +26,22 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Bean
-    public LoginInterceptor getLoginInterceptor(){
-        return new LoginInterceptor();
+    public UserLoginInterceptor getUserLoginInterceptor(){
+        return new UserLoginInterceptor();
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //登录请求不拦截
-//        registry.addInterceptor(getLoginInterceptor()).excludePathPatterns("/back/loginServices/adminLogin");
+        registry.addInterceptor(getUserLoginInterceptor()).addPathPatterns(
+                "/back/userLoginServices/checkLogin"
+        );
     }
 
-    protected class LoginInterceptor extends HandlerInterceptorAdapter {
+    protected class UserLoginInterceptor extends HandlerInterceptorAdapter {
         @Override
         public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
             String header = request.getHeader("Authorization");
@@ -51,7 +58,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
             try{
                 //解析token
                 claims = jwtUtil.parseToken(token);
-            }catch (ExpiredJwtException e){
+            }catch (Exception e){
                 response.setStatus(603);
                 response.sendError(603, "登录信息过期，请重新登录");
                 return false;
@@ -63,9 +70,17 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 return false;
             }
 
-            //String userId = claims.getId();
+            String userId = claims.getId();
 
-            //System.out.println(userId);
+            UserQO userQO = new UserQO();
+            userQO.setLoginId(userId);
+
+            UserDTO userInfo = userMapper.getUserInfo(userQO);
+            if("0".equals(userInfo.getEnable())){
+                response.sendError(605, "用户被封禁,封禁时间到:" + userInfo.getUnableTime());
+                return false;
+            }
+
             return true;
         }
     }

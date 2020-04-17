@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 博客管理Controller
  */
@@ -71,5 +73,33 @@ public class BlogController {
         return Response.successData(blogService.pageBlogInfoByNew(blogQO));
     }
 
+    /**
+     * 新增博客信息
+     * @param blogDTO
+     * @return
+     */
+    @PostMapping("/createBlog")
+    public Response<String> createBlog(@RequestBody BlogDTO blogDTO){
+        return Response.successData(blogService.createBlog(blogDTO));
+    }
 
+    /**
+     * 删除博客信息
+     * @param blogDTO
+     * @return
+     */
+    @PostMapping("/deleteBlog")
+    public Response<String> deleteBlog(@RequestBody BlogDTO blogDTO){
+        return Response.successData(blogService.deleteBlog(blogDTO));
+    }
+
+    /**
+     * 新增博客点击
+     * @param blogDTO
+     * @return
+     */
+    @PostMapping("/createBlogView")
+    public Response<String> createBlogView(@RequestBody BlogDTO blogDTO, HttpServletRequest request){
+        return Response.successData(blogService.createBlogView(blogDTO, request));
+    }
 }

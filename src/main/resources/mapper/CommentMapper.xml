@@ -52,4 +52,40 @@
         where t1.commentid = #{commentId}
         order by time asc
     </select>
+
+    <insert id="createComment" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
+      insert into blog_comment
+      (id,
+      userid,
+      blogid,
+      time,
+      content,
+      enable
+      )
+      select
+      uuid(),
+      t2.id,
+      (select t1.id from blog t1 where t1.blogid = #{blogId}),
+      sysdate(),
+      #{content},
+      "1" from blog_user t2  where t2.loginid = #{userId}
+
+    </insert>
+
+    <insert id="createReplyComment" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
+      insert into comment_reply
+      (commentid,
+      userid,
+      replyuserid,
+      content,
+      time
+      )
+      select
+      #{id},
+      t2.id,
+      (select t1.id from blog_user t1 where t1.loginid = #{replyUserId}),
+      #{content},
+      sysdate() from blog_user t2 where t2.loginid = #{userId}
+
+    </insert>
 </mapper>

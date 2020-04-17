@@ -26,9 +26,9 @@ public class BackController {
         return "profile";
     }
 
-    @RequestMapping("/set")
-    public String set(){
-        return "set";
+    @RequestMapping("/schedule")
+    public String schedule(){
+        return "schedule";
     }
 
     @RequestMapping("/article/{articleId}")
@@ -36,9 +36,19 @@ public class BackController {
         return "article";
     }
 
-
-    @RequestMapping("/test")
-    public String test(){
-        return "test";
+    @RequestMapping("/room/{userId}")
+    public String room(){
+        return "room";
     }
+
+    @RequestMapping("/createBlog")
+    public String createBlog(){
+        return "createBlog";
+    }
+
+    @RequestMapping("/login")
+    public String login(){
+        return "login";
+    }
+
 }

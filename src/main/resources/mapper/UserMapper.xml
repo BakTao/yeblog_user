@@ -137,13 +137,44 @@
           t.reason = "",
           t.unabletime = null,
         </if>
+        <if test="logIp != null and logIp != '' ">
+            t.lastlogip = #{logIp},
+        </if>
+        <if test="logTime != null and logTime != '' ">
+            t.lastlogtime = sysdate(),
+        </if>
+        <if test="newPassword != null and newPassword != '' ">
+            t.password = #{newPassword},
+        </if>
       </set>
       <where>
         <if test="loginId != null and loginId != ''">
           and t.loginid = #{loginId}
         </if>
+        <if test="password != null and password != '' ">
+            and t.password = #{password}
+        </if>
       </where>
 
     </update>
+
+    <select id="getUserInfo" parameterType="com.tao.yeblog_user.model.qo.UserQO"
+              resultType="com.tao.yeblog_user.model.dto.UserDTO">
+        select t.name name,
+        t.loginid loginId,
+        t.password password,
+        t.lastlogip lastLogIp,
+        t.lastlogtime lastLogTime,
+        t.enable enable,
+        t.unabletime unableTime
+        from blog_user t
+        where 1=1
+        <if test="loginId != null and loginId != '' ">
+            and t.loginid = #{loginId}
+        </if>
+        <if test="password != null and password != '' ">
+            and t.password = #{password}
+        </if>
+    </select>
 
 </mapper>

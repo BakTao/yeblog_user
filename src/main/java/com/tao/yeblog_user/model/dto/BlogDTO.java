@@ -43,4 +43,6 @@ public class BlogDTO {
     private String viewNums; //观看数
 
     private String commentNums; //评论数
+
+    private String ip; //ip
 }

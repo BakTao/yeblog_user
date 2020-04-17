@@ -46,4 +46,32 @@ public interface BlogMapper {
      * @return
      */
     Page<BlogDTO> pageBlogInfoByNew(BlogQO blogQO);
+
+    /**
+     * 新增博客信息
+     * @param blogDTO
+     * @return
+     */
+    void createBlog(BlogDTO blogDTO);
+
+    /**
+     * 删除博客信息
+     * @param blogDTO
+     * @return
+     */
+    void deleteBlog(BlogDTO blogDTO);
+
+    /**
+     * 查询博客是否点击
+     * @param blogQO
+     * @return
+     */
+    BlogDTO getBlogView(BlogQO blogQO);
+
+    /**
+     * 新增博客点击
+     * @param blogDTO
+     * @return
+     */
+    void createBlogView(BlogDTO blogDTO);
 }

@@ -1,7 +1,9 @@
 package com.tao.yeblog_user.service;
 
 import com.tao.yeblog_user.common.IPage;
+import com.tao.yeblog_user.model.dto.AdminUserDTO;
 import com.tao.yeblog_user.model.dto.UserDTO;
+import com.tao.yeblog_user.model.qo.AdminUserQO;
 import com.tao.yeblog_user.model.qo.UserQO;
 
 /**
@@ -22,4 +24,11 @@ public interface IUserService {
      * @return
      */
     String updateUserInfo(UserDTO userDTO);
+
+    /**
+     * 获得用户信息
+     * @param userQO
+     * @return
+     */
+    UserDTO getUserInfo(UserQO userQO);
 }

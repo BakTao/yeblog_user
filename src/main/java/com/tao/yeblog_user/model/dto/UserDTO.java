@@ -14,6 +14,8 @@ public class UserDTO {
 
     private String password; //密码
 
+    private String newPassword; //新密码
+
     private String sex;     //性别
 
     private String phone;   //手机号码
@@ -23,6 +25,12 @@ public class UserDTO {
     private String lastLogIp;   //上次登录ip
 
     private String lastLogTime; //上次登录时间
+
+    private String logIp;   //本次登录ip
+
+    private String logTime; //本次登录时间
+
+    private String token; //token
 
     private String userPhoto; //头像
 

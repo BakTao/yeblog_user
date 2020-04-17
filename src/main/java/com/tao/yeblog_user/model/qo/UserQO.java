@@ -13,6 +13,8 @@ public class UserQO extends BasePage {
 
     private String loginId; //登录Id
 
+    private String password; //密码
+
     private String sex;     //性别
 
     private String phone;   //手机号码
@@ -30,5 +32,15 @@ public class UserQO extends BasePage {
     private String blogCountQ;   //博客数起
 
     private String blogCountZ;   //博客数止
+
+    private String lastLogIp;   //上次登录ip
+
+    private String lastLogTime; //上次登录时间
+
+    private String token;       //登录令牌
+
+    private String logIp;   //本次登录ip
+
+    private String logTime; //本次登录时间
 
 }

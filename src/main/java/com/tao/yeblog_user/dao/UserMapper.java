@@ -1,7 +1,9 @@
 package com.tao.yeblog_user.dao;
 
 import com.github.pagehelper.Page;
+import com.tao.yeblog_user.model.dto.AdminUserDTO;
 import com.tao.yeblog_user.model.dto.UserDTO;
+import com.tao.yeblog_user.model.qo.AdminUserQO;
 import com.tao.yeblog_user.model.qo.UserQO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -24,5 +26,12 @@ public interface UserMapper {
      * @return
      */
     void updateUserInfo(UserDTO userDTO);
+
+    /**
+     * 获得用户信息
+     * @param userQO
+     * @return
+     */
+    UserDTO getUserInfo(UserQO userQO);
 
 }

@@ -122,7 +122,7 @@
             select t6.*, count(t8.blogid) viewNums
             from
             (
-              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, case when t1.type="0" then "原创" when t1.type="1" then "转载" end as type, t1.content content, t4.url cover, date_format(t1.createtime, '%Y年%m月%d日') createTime, count(t5.blogid) collectionNums
+              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, case when t1.type="0" then "原创" when t1.type="1" then "转载" end as type, t1.content content, t4.url cover, date_format(t1.createtime, '%Y年%m月%d日') createTime,t1.createtime AllCreateTime, count(t5.blogid) collectionNums
               from blog t1
               left join blog_user t2 on t1.userid= t2.id
               left join yeblog_db.column t3 on t1.columnid= t3.id
@@ -141,7 +141,7 @@
         left join blog_comment t10 on t9.id= t10.blogid
         left join comment_reply t11 on t10.id= t11.commentid
         group by t9.id
-        order by t9.createtime desc
+        order by t9.AllCreatetime desc
     </select>
 
     <update id="updateBlogInfo" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
@@ -168,5 +168,61 @@
         and t.columnid = (select id from yeblog_db.column where columnid = #{columnId})
       </if>
     </update>
+
+    <insert id="createBlog" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
+      insert into blog
+      (id,
+      blogid,
+      userid,
+      columnid,
+      title,
+      type,
+      enable,
+      content,
+      cover,
+      createtime,
+      reason
+      )
+      select
+      uuid(),
+      #{blogId},
+      (select t1.id from blog_user t1 where t1.loginid = #{userId}),
+      t2.id,
+      #{title},
+      #{type},
+      #{enable},
+      #{content},
+      #{cover},
+      sysdate(),
+      null from yeblog_db.column t2  where t2.columnid = #{columnId}
+
+    </insert>
+
+    <select id="getBlogView" parameterType="com.tao.yeblog_user.model.qo.BlogQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogDTO">
+      select t1.ip ip,
+      t1.blogid blogId,
+      t1.time createTime
+      from
+      blog_view t1
+      where 1=1
+      and t1.ip = #{ip}
+      and blogid = (select t2.id from blog t2 where t2.blogid = #{blogId})
+      and date_format(t1.time,"%Y-%m-%d") = date_format(sysdate(),"%Y-%m-%d")
+    </select>
+
+
+    <insert id="createBlogView" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
+      insert into blog_view
+      (ip,
+      blogid,
+      time
+      )
+      select
+      #{ip},
+      t1.id,
+      sysdate() from blog t1 where t1.blogid = #{blogId}
+
+    </insert>
 
 </mapper>

@@ -6,7 +6,9 @@ import com.tao.yeblog_user.common.IPage;
 import com.tao.yeblog_user.common.PageDefaultImpl;
 import com.tao.yeblog_user.common.Pager;
 import com.tao.yeblog_user.dao.UserMapper;
+import com.tao.yeblog_user.model.dto.AdminUserDTO;
 import com.tao.yeblog_user.model.dto.UserDTO;
+import com.tao.yeblog_user.model.qo.AdminUserQO;
 import com.tao.yeblog_user.model.qo.UserQO;
 import com.tao.yeblog_user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +47,10 @@ public class UserService implements IUserService {
     public String updateUserInfo(UserDTO userDTO) {
         userMapper.updateUserInfo(userDTO);
         return "success";
+    }
+
+    @Override
+    public UserDTO getUserInfo(UserQO userQO) {
+        return userMapper.getUserInfo(userQO);
     }
 }

@@ -34,5 +34,24 @@ public class CommentController {
         return Response.successData(commentService.pageCommentInfo(commentQO));
     }
 
+    /**
+     * 新增评论信息
+     * @param commentDTO
+     * @return
+     */
+    @PostMapping("/createComment")
+    public Response<String> createComment(@RequestBody CommentDTO commentDTO){
+        return Response.successData(commentService.createComment(commentDTO));
+    }
+
+    /**
+     * 新增评论的评论信息
+     * @param commentDTO
+     * @return
+     */
+    @PostMapping("/createReplyComment")
+    public Response<String> createReplyComment(@RequestBody CommentDTO commentDTO){
+        return Response.successData(commentService.createReplyComment(commentDTO));
+    }
 
 }

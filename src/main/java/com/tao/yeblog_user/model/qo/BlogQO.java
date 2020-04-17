@@ -44,4 +44,8 @@ public class BlogQO extends BasePage {
     private String commentNumsQ; //评论数起
 
     private String commentNumsZ; //评论数止
+
+    private String ip; //ip
+
+    private String time; //时间
 }
