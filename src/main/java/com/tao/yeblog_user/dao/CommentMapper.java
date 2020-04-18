@@ -43,4 +43,18 @@ public interface CommentMapper {
      */
     void createReplyComment(CommentDTO commentDTO);
 
+    /**
+     * 新增评论点赞
+     * @param commentDTO
+     * @return
+     */
+    void createCommentPraise(CommentDTO commentDTO);
+
+    /**
+     * 删除评论点赞
+     * @param commentDTO
+     * @return
+     */
+    void deleteCommentPraise(CommentDTO commentDTO);
+
 }

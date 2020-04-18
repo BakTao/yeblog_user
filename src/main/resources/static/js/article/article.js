@@ -1,6 +1,6 @@
 var url = window.location.href
 var blogId;
-queryComment(1);
+queryComment(1,"time");
 
 $.ajax({
     url: "/back/blogServices/createBlogView",
@@ -15,7 +15,7 @@ $.ajax({
     url: "/back/blogServices/pageBlogInfo",
     contentType: "application/json",
     type: "post",
-    data: JSON.stringify({"blogId":url.substr(url.lastIndexOf("/")+1)}),
+    data: JSON.stringify({"blogId":url.substr(url.lastIndexOf("/")+1),"ifCollection": localStorage.getItem("loginId")}),
     success: function (data) {
         var rowData = data.body.data[0];
         blogId = rowData.blogId;
@@ -33,7 +33,16 @@ $.ajax({
 
         editormd.markdownToHTML("blogContent");
 
-        $(".collectionIcon i").text("收藏");
+        if(rowData.hasOwnProperty("ifCollection")){
+            if(rowData.ifCollection == "true"){
+                $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i>已收藏</i></a>");
+            }else{
+                $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+            }
+        }else{
+            $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+
+        }
         $(".collectionNums span").text(rowData.collectionNums);
 
         $(".detail-meta .date").text("本文发布于" + rowData.createTime);
@@ -48,36 +57,85 @@ $.ajax({
 })
 
 //查询评论
-function queryComment(pageIndex){
+function queryComment(pageIndex,sort){
     $.ajax({
         url: "/back/commentServices/pageCommentInfo",
         contentType: "application/json",
         type: "post",
-        data: JSON.stringify({"blogId":url.substr(url.lastIndexOf("/")+1),"sort":"time","pageIndex":pageIndex}),
+        data: JSON.stringify({"blogId":url.substr(url.lastIndexOf("/")+1),"sort":sort,"pageIndex":pageIndex,"ifPraise": localStorage.getItem("loginId")}),
         success: function (data) {
             $("ul.list-box").empty();
             var rowData = data.body.data;
             for(var i=0; i<rowData.length; i++){
                 var userPhoto = rowData[i].userPhoto?(uploadUrl+rowData[i].userPhoto):'/static/img/logo.png';
-                $(".comment-list ul.list-box").append('<li class="comment-item">' +
-                    '<div class="userPhoto"><img src="' + userPhoto + '"></div>' +
-                    '<div class="comment-body">' +
-                    '<div class="comment-header">' +
-                    '<a href="/room/' + rowData[i].userId + '" target="_blank">' + rowData[i].userName +'</a>' +
-                    '<span class="floor">' + rowData[i].rank +'</span> ' +
-                    '</div>' +
-                    '<div class="comment-content">' + rowData[i].content +
-                    '</div>' +
-                    '<div class="comment-foot">' +
-                    '<span class="time">' + rowData[i].time + '</span>' +
-                    '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i></i><span>回复</span></a>' +
-                    '<a href="javascript:;" class="like"><i></i><span>赞' + rowData[i].praiseNums + '</span></a>' +
-                    '</div>' +
-                    '</div>' +
-                    '<div class="reply-list reply-list' + i + '"><ul class="reply-list-box"></ul></div>' +
-                    '<div class="createReplyClass"></div>' +
-                    '</li>'
-                )
+
+                if(rowData[i].hasOwnProperty("ifPraise")){
+                    if(rowData[i].ifPraise == "true"){
+                        $(".comment-list ul.list-box").append('<li class="comment-item">' +
+                            '<div class="userPhoto"><img src="' + userPhoto + '"></div>' +
+                            '<div class="comment-body">' +
+                            '<div class="comment-header">' +
+                            '<a href="/room/' + rowData[i].userId + '" target="_blank">' + rowData[i].userName +'</a>' +
+                            '<span class="floor">' + rowData[i].rank +'</span> ' +
+                            '</div>' +
+                            '<div class="comment-content">' + rowData[i].content +
+                            '</div>' +
+                            '<div class="comment-foot">' +
+                            '<span class="time">' + rowData[i].time + '</span>' +
+                            '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i></i><span>回复</span></a>' +
+                            '<div class="like"><a href="javascript:;" onclick="losePraise(\'' + rowData[i].id + '\',' + i +',this)"><i>已赞</i></a></div><span class="praiseCount praiseCount' + i + '">' + rowData[i].praiseNums + '</span>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="reply-list reply-list' + i + '"><ul class="reply-list-box"></ul></div>' +
+                            '<div class="createReplyClass"></div>' +
+                            '</li>'
+                        )
+                    }else{
+                        $(".comment-list ul.list-box").append('<li class="comment-item">' +
+                            '<div class="userPhoto"><img src="' + userPhoto + '"></div>' +
+                            '<div class="comment-body">' +
+                            '<div class="comment-header">' +
+                            '<a href="/room/' + rowData[i].userId + '" target="_blank">' + rowData[i].userName +'</a>' +
+                            '<span class="floor">' + rowData[i].rank +'</span> ' +
+                            '</div>' +
+                            '<div class="comment-content">' + rowData[i].content +
+                            '</div>' +
+                            '<div class="comment-foot">' +
+                            '<span class="time">' + rowData[i].time + '</span>' +
+                            '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i></i><span>回复</span></a>' +
+                            '<div class="like"><a href="javascript:;" onclick="toPraise(\'' + rowData[i].id + '\',' + i +',this)"><i>赞</i></a></div><span class="praiseCount praiseCount'+ i +'">' + rowData[i].praiseNums + '</span>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="reply-list reply-list' + i + '"><ul class="reply-list-box"></ul></div>' +
+                            '<div class="createReplyClass"></div>' +
+                            '</li>'
+                        )
+                    }
+                }else{
+                    $(".comment-list ul.list-box").append('<li class="comment-item">' +
+                        '<div class="userPhoto"><img src="' + userPhoto + '"></div>' +
+                        '<div class="comment-body">' +
+                        '<div class="comment-header">' +
+                        '<a href="/room/' + rowData[i].userId + '" target="_blank">' + rowData[i].userName +'</a>' +
+                        '<span class="floor">' + rowData[i].rank +'</span> ' +
+                        '</div>' +
+                        '<div class="comment-content">' + rowData[i].content +
+                        '</div>' +
+                        '<div class="comment-foot">' +
+                        '<span class="time">' + rowData[i].time + '</span>' +
+                        '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i></i><span>回复</span></a>' +
+                        '<div class="like"><a href="javascript:;" onclick="toPraise(\'' + rowData[i].id + '\',' + i +',this)"><i>赞</i></a></div><span class="praiseCount praiseCount' + i + '">' + rowData[i].praiseNums + '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="reply-list reply-list' + i + '"><ul class="reply-list-box"></ul></div>' +
+                        '<div class="createReplyClass"></div>' +
+                        '</li>'
+                    )
+                }
+
+
+
+
                 var replyData = rowData[i].comments;
 
                 if(replyData != null && replyData.length != 0){
@@ -161,28 +219,32 @@ if(localStorage.getItem('token')){
     )
 
     $("#createComment").on("click",function () {
-        checkLogin();
+        if(!checkLogin()){
 
-        $.ajax({
-            url: "/back/commentServices/createComment",
-            type: "post",
-            contentType: "application/json",
-            data: JSON.stringify({
-                "content": $("textarea[name=comment]").val(),
-                "userId": localStorage.getItem("loginId"),
-                "blogId": blogId
+        }
+        else{
 
-            }),
-            success: function (data) {
-                if(data.body == "success"){
-                    alertmsgFtm("新增成功");
-                    //$(window).attr('location', url)
-                }else{
-                    alertmsgFtm("操作失败,请稍后再试")
+            $.ajax({
+                url: "/back/commentServices/createComment",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "content": $("textarea[name=comment]").val(),
+                    "userId": localStorage.getItem("loginId"),
+                    "blogId": blogId
+
+                }),
+                success: function (data) {
+                    if(data.body == "success"){
+                        alertmsgFtm("新增成功");
+                        //$(window).attr('location', url)
+                    }else{
+                        alertmsgFtm("操作失败,请稍后再试")
+                    }
+
                 }
-
-            }
-        })
+            })
+        }
     })
 }
 else{
@@ -214,33 +276,37 @@ function replyCommentFirst(id,obj){
             )
 
             $("#createReplyCommentFirst").on("click",function () {
-                checkLogin();
+                if(!checkLogin()){
 
-                $.ajax({
-                    url: "/back/commentServices/createReplyComment",
-                    type: "post",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        "id": id,
-                        "content": $("textarea[name=replyCommentFirst]").val(),
-                        "userId": localStorage.getItem("loginId"),
-                        "replyUserId": "",
-                        "blogId": blogId
+                }
 
-                    }),
-                    success: function (data) {
-                        if(data.body == "success"){
-                            alertmsgFtm("新增成功");
-                            setTimeout(function(){
-                                $(window).attr('location', url);
-                                },3000
-                            );
-                        }else{
-                            alertmsgFtm("操作失败,请稍后再试")
+                else{
+                    $.ajax({
+                        url: "/back/commentServices/createReplyComment",
+                        type: "post",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            "id": id,
+                            "content": $("textarea[name=replyCommentFirst]").val(),
+                            "userId": localStorage.getItem("loginId"),
+                            "replyUserId": "",
+                            "blogId": blogId
+
+                        }),
+                        success: function (data) {
+                            if(data.body == "success"){
+                                alertmsgFtm("新增成功");
+                                setTimeout(function(){
+                                        $(window).attr('location', url);
+                                    },2500
+                                );
+                            }else{
+                                alertmsgFtm("操作失败,请稍后再试")
+                            }
+
                         }
-
-                    }
-                })
+                    })
+                }
             })
         }
         else{
@@ -278,33 +344,35 @@ function replyComment(id,userId,obj){
             )
 
             $("#createReplyComment").on("click",function () {
-                checkLogin();
+                if(!checkLogin()){
 
-                $.ajax({
-                    url: "/back/commentServices/createReplyComment",
-                    type: "post",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        "id": id,
-                        "content": $("textarea[name=replyComment]").val(),
-                        "userId": localStorage.getItem("loginId"),
-                        "replyUserId": userId,
-                        "blogId": blogId
+                }else{
+                    $.ajax({
+                        url: "/back/commentServices/createReplyComment",
+                        type: "post",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            "id": id,
+                            "content": $("textarea[name=replyComment]").val(),
+                            "userId": localStorage.getItem("loginId"),
+                            "replyUserId": userId,
+                            "blogId": blogId
 
-                    }),
-                    success: function (data) {
-                        if(data.body == "success"){
-                            alertmsgFtm("新增成功");
-                            setTimeout(function(){
-                                    $(window).attr('location', url);
-                                },3000
-                            );
-                        }else{
-                            alertmsgFtm("操作失败,请稍后再试")
+                        }),
+                        success: function (data) {
+                            if(data.body == "success"){
+                                alertmsgFtm("新增成功");
+                                setTimeout(function(){
+                                        $(window).attr('location', url);
+                                    },2500
+                                );
+                            }else{
+                                alertmsgFtm("操作失败,请稍后再试")
+                            }
+
                         }
-
-                    }
-                })
+                    })
+                }
             })
         }
         else{
@@ -325,3 +393,122 @@ function replyComment(id,userId,obj){
     }
 }
 
+function toCollection() {
+    if(!checkLogin()){
+
+    }
+
+    else{
+        $.ajax({
+            url: "/back/blogServices/createBlogCollection",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "userId": localStorage.getItem("loginId"),
+                "blogId": blogId
+
+            }),
+            success: function (data) {
+                if(data.body == "success"){
+                    alertmsgFtm("收藏成功");
+
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i>已收藏</i></a>");
+                    $(".collectionNums span").text(Number($(".collectionNums span").text())+1);
+
+                }else{
+                    alertmsgFtm("操作失败,请稍后再试")
+                }
+
+            }
+        })
+    }
+}
+
+function loseCollection() {
+    if(!checkLogin()){
+
+    }
+    else{
+        $.ajax({
+            url: "/back/blogServices/deleteBlogCollection",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "userId": localStorage.getItem("loginId"),
+                "blogId": blogId
+
+            }),
+            success: function (data) {
+                if(data.body == "success"){
+                    alertmsgFtm("取消收藏成功");
+
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+                    $(".collectionNums span").text(Number($(".collectionNums span").text())-1);
+                }else{
+                    alertmsgFtm("操作失败,请稍后再试")
+                }
+
+            }
+        })
+    }
+
+}
+
+function toPraise(id,i,obj) {
+    if(!checkLogin()){
+
+    }
+
+    else{
+        $.ajax({
+            url: "/back/commentServices/createCommentPraise",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "userId": localStorage.getItem("loginId"),
+                "id": id
+
+            }),
+            success: function (data) {
+                if(data.body == "success"){
+                    alertmsgFtm("点赞成功");
+
+                    $(obj).parent().html('<a href="javascript:;" onclick="losePraise(\'' + id + '\',' + i +',this)"><i>已赞</i></a>')
+                    $(".praiseCount"+i).text(Number($(".praiseCount"+i).text()) +1)
+                }else{
+                    alertmsgFtm("操作失败,请稍后再试")
+                }
+
+            }
+        })
+    }
+}
+
+function losePraise(id,i,obj) {
+    if(!checkLogin()){
+
+    }
+    else{
+        $.ajax({
+            url: "/back/commentServices/deleteCommentPraise",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "userId": localStorage.getItem("loginId"),
+                "id": id
+            }),
+            success: function (data) {
+                if(data.body == "success"){
+                    alertmsgFtm("取消点赞成功");
+
+                    $(obj).parent().html('<a href="javascript:;" onclick="toPraise(\'' + id + '\',' + i +',this)"><i>赞</i></a>')
+                    $(".praiseCount"+i).text(Number($(".praiseCount"+i).text()) -1)
+                }else{
+                    alertmsgFtm("操作失败,请稍后再试")
+                }
+
+            }
+        })
+    }
+
+}

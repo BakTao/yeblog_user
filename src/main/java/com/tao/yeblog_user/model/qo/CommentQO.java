@@ -26,4 +26,6 @@ public class CommentQO extends BasePage {
     private String praiseNumsZ; //点赞数止
 
     private String sort; //排序
+
+    private String ifPraise;   //是否点赞
 }

@@ -45,4 +45,6 @@ public class BlogDTO {
     private String commentNums; //评论数
 
     private String ip; //ip
+
+    private String ifCollection; //是否收藏
 }

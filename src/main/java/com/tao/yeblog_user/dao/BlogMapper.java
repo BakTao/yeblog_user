@@ -74,4 +74,18 @@ public interface BlogMapper {
      * @return
      */
     void createBlogView(BlogDTO blogDTO);
+
+    /**
+     * 新增用户信息
+     * @param blogDTO
+     * @return
+     */
+    void createBlogCollection(BlogDTO blogDTO);
+
+    /**
+     * 删除用户信息
+     * @param blogDTO
+     * @return
+     */
+    void deleteBlogCollection(BlogDTO blogDTO);
 }

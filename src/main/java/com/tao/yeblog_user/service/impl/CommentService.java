@@ -67,4 +67,16 @@ public class CommentService implements ICommentService {
         commentMapper.createReplyComment(commentDTO);
         return "success";
     }
+
+    @Override
+    public String createCommentPraise(CommentDTO commentDTO) {
+        commentMapper.createCommentPraise(commentDTO);
+        return "success";
+    }
+
+    @Override
+    public String deleteCommentPraise(CommentDTO commentDTO) {
+        commentMapper.deleteCommentPraise(commentDTO);
+        return "success";
+    }
 }

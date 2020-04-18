@@ -54,4 +54,23 @@ public class CommentController {
         return Response.successData(commentService.createReplyComment(commentDTO));
     }
 
+    /**
+     * 新增评论点赞
+     * @param commentDTO
+     * @return
+     */
+    @PostMapping("/createCommentPraise")
+    public Response<String> createCommentPraise(@RequestBody CommentDTO commentDTO){
+        return Response.successData(commentService.createCommentPraise(commentDTO));
+    }
+
+    /**
+     * 删除评论点赞
+     * @param commentDTO
+     * @return
+     */
+    @PostMapping("/deleteCommentPraise")
+    public Response<String> deleteCommentPraise(@RequestBody CommentDTO commentDTO){
+        return Response.successData(commentService.deleteCommentPraise(commentDTO));
+    }
 }

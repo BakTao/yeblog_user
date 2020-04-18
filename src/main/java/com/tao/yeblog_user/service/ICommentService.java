@@ -32,5 +32,17 @@ public interface ICommentService {
      */
     String createReplyComment(CommentDTO commentDTO);
 
+    /**
+     * 新增评论点赞
+     * @param commentDTO
+     * @return
+     */
+    String createCommentPraise(CommentDTO commentDTO);
 
+    /**
+     * 删除评论点赞
+     * @param commentDTO
+     * @return
+     */
+    String deleteCommentPraise(CommentDTO commentDTO);
 }

@@ -5,6 +5,9 @@
     <select id="pageCommentInfo" parameterType="com.tao.yeblog_user.model.qo.CommentQO"
             resultType="com.tao.yeblog_user.model.dto.CommentDTO">
         select t.*
+        <if test="ifPraise != null and ifPraise != ''">
+        , if(t6.userid is null, "false", "true") ifPraise
+        </if>
         from
         (
             select t5.*,(@i:= @i+ 1) as rank
@@ -31,6 +34,14 @@
             ) t5,
             (SELECT @i:= 0) as i
         ) t
+        <if test="ifPraise != null and ifPraise != ''">
+        left join
+        (
+          select *
+          from comment_praise
+          where userid = (select id from blog_user where loginid = #{ifPraise})
+        ) t6 on t.id = t6.commentid
+        </if>
         where t.enable= "1"
         order by ${sort} desc
 
@@ -88,4 +99,24 @@
       sysdate() from blog_user t2 where t2.loginid = #{userId}
 
     </insert>
+
+    <insert id="createCommentPraise" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
+      insert into comment_praise
+      (commentid,
+      userid,
+      time
+      )
+      select
+      #{id},
+      t1.id,
+      sysdate() from blog_user t1 where t1.loginid = #{userId}
+
+    </insert>
+
+    <delete id="deleteCommentPraise" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
+      delete from comment_praise
+      where commentid = #{id}
+      and userid =  (select t1.id from blog_user t1 where t1.loginid = #{userId})
+
+    </delete>
 </mapper>

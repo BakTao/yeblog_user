@@ -48,4 +48,6 @@ public class BlogQO extends BasePage {
     private String ip; //ip
 
     private String time; //时间
+
+    private String ifCollection; //是否收藏
 }

@@ -102,4 +102,24 @@ public class BlogController {
     public Response<String> createBlogView(@RequestBody BlogDTO blogDTO, HttpServletRequest request){
         return Response.successData(blogService.createBlogView(blogDTO, request));
     }
+
+    /**
+     * 新增博客收藏
+     * @param blogDTO
+     * @return
+     */
+    @PostMapping("/createBlogCollection")
+    public Response<String> createBlogCollection(@RequestBody BlogDTO blogDTO){
+        return Response.successData(blogService.createBlogCollection(blogDTO));
+    }
+
+    /**
+     * 删除博客收藏
+     * @param blogDTO
+     * @return
+     */
+    @PostMapping("/deleteBlogCollection")
+    public Response<String> deleteBlogCollection(@RequestBody BlogDTO blogDTO){
+        return Response.successData(blogService.deleteBlogCollection(blogDTO));
+    }
 }

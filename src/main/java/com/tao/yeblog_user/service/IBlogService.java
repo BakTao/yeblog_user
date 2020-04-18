@@ -51,6 +51,7 @@ public interface IBlogService {
     /**
      * 新增用户信息
      * @param blogDTO
+     * @return
      */
     String createBlog(BlogDTO blogDTO);
 
@@ -67,4 +68,18 @@ public interface IBlogService {
      * @return
      */
     String createBlogView(BlogDTO blogDTO, HttpServletRequest request);
+
+    /**
+     * 新增用户信息
+     * @param blogDTO
+     * @return
+     */
+    String createBlogCollection(BlogDTO blogDTO);
+
+    /**
+     * 删除用户信息
+     * @param blogDTO
+     * @return
+     */
+    String deleteBlogCollection(BlogDTO blogDTO);
 }

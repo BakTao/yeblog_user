@@ -4,7 +4,11 @@
 
     <select id="pageBlogInfo" parameterType="com.tao.yeblog_user.model.qo.BlogQO"
             resultType="com.tao.yeblog_user.model.dto.BlogDTO">
-      select t.* from
+      select t.*
+      <if test="ifCollection !=null and ifCollection != ''">
+        , if(t10.userid is null,"false","true") ifCollection
+      </if>
+      from
       (
         select t9.*,
         count(distinct t10.id) + count(t11.commentid) commentNums
@@ -22,7 +26,7 @@
               left join(
                 select t7.*
                 from blog_view t7
-                group by t7.ip, day(t7.time)
+                group by t7.ip, t7.blogid, day(t7.time)
               ) t8 on t6.id= t8.blogid
             group by t6.blogId
         ) t9
@@ -31,6 +35,14 @@
         group by t9.id
         order by t9.createtime desc
       ) t
+      <if test="ifCollection !=null and ifCollection != ''">
+        left join
+        (
+          select *
+          from user_collection
+          where userid = (select id from blog_user where loginid = "ozlt2yeonv")
+        ) t10 on t10.blogid = t.id
+      </if>
       where 1=1
       <if test="title !=null and title != ''">
         and t.title like (concat('%',#{title},'%'))
@@ -134,7 +146,7 @@
               left join(
                 select t7.*
                 from blog_view t7
-                group by t7.ip, day(t7.time)
+                group by t7.ip, t7.blogid, day(t7.time)
               ) t8 on t6.id= t8.blogid
             group by t6.blogId
         ) t9
@@ -224,5 +236,25 @@
       sysdate() from blog t1 where t1.blogid = #{blogId}
 
     </insert>
+
+    <insert id="createBlogCollection" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
+      insert into user_collection
+      (userid,
+      blogid,
+      time
+      )
+      select
+      (select t1.id from blog_user t1 where t1.loginid = #{userId}),
+      t2.id,
+      sysdate() from blog t2 where t2.blogid = #{blogId}
+
+    </insert>
+
+    <delete id="deleteBlogCollection" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
+      delete from user_collection
+      where userid = (select t1.id from blog_user t1 where t1.loginid = #{userId})
+      and blogid = (select t2.id from blog t2 where t2.blogid = #{blogId})
+
+    </delete>
 
 </mapper>

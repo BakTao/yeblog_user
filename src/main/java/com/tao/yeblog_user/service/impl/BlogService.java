@@ -163,4 +163,16 @@ public class BlogService implements  IBlogService {
             return "no update";
         }
     }
+
+    @Override
+    public String createBlogCollection(BlogDTO blogDTO) {
+        blogMapper.createBlogCollection(blogDTO);
+        return "success";
+    }
+
+    @Override
+    public String deleteBlogCollection(BlogDTO blogDTO) {
+        blogMapper.deleteBlogCollection(blogDTO);
+        return "success";
+    }
 }

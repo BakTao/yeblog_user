@@ -35,4 +35,7 @@ public class CommentDTO {
     private String praiseNums; //评论数
 
     private List<CommentDTO> comments;
+
+    private String ifPraise;   //是否点赞
+
 }
