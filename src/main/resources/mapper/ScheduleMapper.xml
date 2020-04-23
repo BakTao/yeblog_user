@@ -54,4 +54,26 @@
         </where>
     </delete>
 
+    <insert id="createSchedule" parameterType="com.tao.yeblog_user.model.dto.ScheduleDTO">
+     insert into schedule
+      (id,
+      scheduleid,
+      userid,
+      title,
+      type,
+      content,
+      createtime,
+      finishtime
+      )
+      select
+      uuid(),
+      #{scheduleId},
+      t1.id,
+      #{title},
+      "0",
+      #{content},
+      sysdate(),
+      null from blog_user t1 where t1.loginid = #{userId}
+    </insert>
+
 </mapper>

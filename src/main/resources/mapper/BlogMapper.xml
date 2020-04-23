@@ -16,7 +16,7 @@
             select t6.*, count(t8.blogid) viewNums
             from
             (
-              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, t1.type type, t1.enable enable, t1.content content, t4.url cover, t1.createtime createTime, count(t5.blogid) collectionNums
+              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, t1.type type, t1.enable enable,t1.reason reason, t1.content content, t4.url cover, t1.createtime createTime, count(t5.blogid) collectionNums
               from blog t1
               left join blog_user t2 on t1.userid= t2.id
               left join yeblog_db.column t3 on t1.columnid= t3.id
@@ -40,7 +40,7 @@
         (
           select *
           from user_collection
-          where userid = (select id from blog_user where loginid = "ozlt2yeonv")
+          where userid = (select id from blog_user where loginid = #{ifCollection})
         ) t10 on t10.blogid = t.id
       </if>
       where 1=1
@@ -92,6 +92,22 @@
       <if test="commentNumsZ !=null and commentNumsZ != ''">
         and t.commentNums &lt;= #{commentNumsZ}
       </if>
+      <if test="blogOrder !=null and blogOrder != ''">
+        <choose>
+            <when test="blogOrder == '0'.toString()">
+                order by createTime desc
+            </when>
+            <when test="blogOrder == '1'.toString()">
+                order by collectionNums desc
+            </when>
+            <when test="blogOrder == '2'.toString()">
+                order by viewNums desc
+            </when>
+            <when test="blogOrder == '3'.toString()">
+                order by commentNums desc
+            </when>
+        </choose>
+      </if>
     </select>
 
     <select id="pageBlogInfoByColl" parameterType="com.tao.yeblog_user.model.qo.BlogQO"
@@ -106,7 +122,7 @@
 		order by collectionNums desc
     </select>
 
-      <select id="pageBlogInfoByView" parameterType="com.tao.yeblog_user.model.qo.BlogQO"
+    <select id="pageBlogInfoByView" parameterType="com.tao.yeblog_user.model.qo.BlogQO"
               resultType="com.tao.yeblog_user.model.dto.BlogDTO">
         select t.blogId blogId,
         t.title title,
@@ -155,6 +171,51 @@
         group by t9.id
         order by t9.AllCreatetime desc
     </select>
+
+    <select id="pageCollectionBlog" parameterType="com.tao.yeblog_user.model.qo.BlogQO"
+            resultType="com.tao.yeblog_user.model.dto.BlogDTO">
+        select t.blogid id,t10.* from
+        (
+          select t1.*
+          from user_collection t1
+          where t1.userid = (
+            select id
+            from blog_user
+            where loginid = #{userId}
+          )
+        ) t left join
+        (
+            select t9.*,
+            count(distinct t10.id) + count(t11.commentid) commentNums
+            from(
+                select t6.*, count(t8.blogid) viewNums
+                from
+                (
+                  select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, t1.type type, t1.enable enable,t1.reason reason, t1.content content, t4.url cover, t1.createtime createTime, count(t5.blogid) collectionNums
+                  from blog t1
+                  left join blog_user t2 on t1.userid= t2.id
+                  left join yeblog_db.column t3 on t1.columnid= t3.id
+                  left join sys_file t4 on t1.cover= t4.id
+                  left join user_collection t5 on t1.id= t5.blogid
+                  group by t1.id) t6
+                  left join(
+                    select t7.*
+                    from blog_view t7
+                    group by t7.ip, t7.blogid, day(t7.time)
+                  ) t8 on t6.id= t8.blogid
+                group by t6.blogId
+            ) t9
+            left join blog_comment t10 on t9.id= t10.blogid
+            left join comment_reply t11 on t10.id= t11.commentid
+            group by t9.id
+            order by t9.createtime desc
+        ) t10 on t10.id = t.blogid
+        where 1=1
+        <if test="enable !=null and enable != ''">
+            and t10.enable = #{enable}
+        </if>
+    </select>
+
 
     <update id="updateBlogInfo" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
       update blog t
@@ -253,7 +314,19 @@
     <delete id="deleteBlogCollection" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
       delete from user_collection
       where userid = (select t1.id from blog_user t1 where t1.loginid = #{userId})
-      and blogid = (select t2.id from blog t2 where t2.blogid = #{blogId})
+      <if test="id != null and id != ''">
+          and blogid = #{id}
+      </if>
+      <if test="blogId != null and blogId != ''">
+          and blogid = (select t2.id from blog t2 where t2.blogid = #{blogId})
+      </if>
+    </delete>
+
+
+    <delete id="deleteBlog" parameterType="com.tao.yeblog_user.model.dto.BlogDTO">
+      delete from blog
+      where userid = (select t1.id from blog_user t1 where t1.loginid = #{userId})
+      and blogid = #{blogId}
 
     </delete>
 

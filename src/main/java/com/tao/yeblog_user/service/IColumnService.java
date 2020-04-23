@@ -34,6 +34,21 @@ public interface IColumnService {
     List<SelectDTO> listColumnInfoAll(ColumnQO columnQO);
 
     /**
+     * 获取专栏信息(分页)
+     * @param columnQO
+     * @return
+     */
+    IPage<ColumnDTO> pageBlogColumnInfo(ColumnQO columnQO);
+
+
+    /**
+     * 获取专栏信息(包含全部)
+     * @param columnQO
+     * @return
+     */
+    List<ColumnDTO> listBlogColumnInfoAll(ColumnQO columnQO);
+
+    /**
      * 增加专栏信息
      * @param columnDTO
      * @return

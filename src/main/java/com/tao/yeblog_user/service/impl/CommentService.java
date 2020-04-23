@@ -57,6 +57,55 @@ public class CommentService implements ICommentService {
     }
 
     @Override
+    public IPage<CommentDTO> pageUserCommentInfo(CommentQO commentQO) {
+
+        PageDefaultImpl<CommentDTO> page = new PageDefaultImpl<>();
+
+        PageHelper.startPage(commentQO.getPageIndex(),commentQO.getPageSize());
+        PageInfo<CommentDTO> pageInfo = new PageInfo<>(commentMapper.pageUserCommentInfo(commentQO));
+
+        Pager pager = new Pager();
+        pager.setPageIndex(pageInfo.getPageNum());
+        pager.setPageSize(pageInfo.getPageSize());
+        pager.setPageCount(pageInfo.getPages());
+        pager.setRecordCount(pageInfo.getTotal());
+        pager.setPrePageIndex(pageInfo.getPrePage());
+        pager.setNextPageIndex(pageInfo.getNextPage());
+        pager.setExistsPrePage(pageInfo.isHasPreviousPage());
+        pager.setExistsNextPage(pageInfo.isHasNextPage());
+
+        page.setPager(pager);
+        page.setData(pageInfo.getList());
+
+        return page;
+    }
+
+    @Override
+    public IPage<CommentDTO> pagePraiseCommentInfo(CommentQO commentQO) {
+
+        PageDefaultImpl<CommentDTO> page = new PageDefaultImpl<>();
+
+        PageHelper.startPage(commentQO.getPageIndex(),commentQO.getPageSize());
+
+        PageInfo<CommentDTO> pageInfo = new PageInfo<>(commentMapper.pagePraiseCommentInfo(commentQO));
+
+        Pager pager = new Pager();
+        pager.setPageIndex(pageInfo.getPageNum());
+        pager.setPageSize(pageInfo.getPageSize());
+        pager.setPageCount(pageInfo.getPages());
+        pager.setRecordCount(pageInfo.getTotal());
+        pager.setPrePageIndex(pageInfo.getPrePage());
+        pager.setNextPageIndex(pageInfo.getNextPage());
+        pager.setExistsPrePage(pageInfo.isHasPreviousPage());
+        pager.setExistsNextPage(pageInfo.isHasNextPage());
+
+        page.setPager(pager);
+        page.setData(pageInfo.getList());
+
+        return page;
+    }
+
+    @Override
     public String createComment(CommentDTO commentDTO) {
         commentMapper.createComment(commentDTO);
         return "success";
@@ -77,6 +126,18 @@ public class CommentService implements ICommentService {
     @Override
     public String deleteCommentPraise(CommentDTO commentDTO) {
         commentMapper.deleteCommentPraise(commentDTO);
+        return "success";
+    }
+
+    @Override
+    public String deleteComment(CommentDTO commentDTO) {
+        commentMapper.deleteComment(commentDTO);
+        return "success";
+    }
+
+    @Override
+    public String deleteReplyComment(CommentDTO commentDTO) {
+        commentMapper.deleteReplyComment(commentDTO);
         return "success";
     }
 }

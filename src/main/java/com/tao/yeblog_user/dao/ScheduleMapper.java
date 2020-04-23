@@ -32,4 +32,11 @@ public interface ScheduleMapper {
      */
     void deleteSchedule(ScheduleDTO scheduleDTO);
 
+    /**
+     * 创建事项信息
+     * @param scheduleDTO
+     * @return
+     */
+    void createSchedule(ScheduleDTO scheduleDTO);
+
 }

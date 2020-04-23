@@ -50,4 +50,6 @@ public class BlogQO extends BasePage {
     private String time; //时间
 
     private String ifCollection; //是否收藏
+
+    private String blogOrder; //博客排序
 }

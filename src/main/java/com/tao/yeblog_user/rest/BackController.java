@@ -16,6 +16,11 @@ public class BackController {
         return "column";
     }
 
+    @RequestMapping("/column/{columnId}")
+    public String columnId(){
+        return "columnId";
+    }
+
     @RequestMapping("/shop")
     public String shop(){
         return "shop";
@@ -49,6 +54,11 @@ public class BackController {
     @RequestMapping("/login")
     public String login(){
         return "login";
+    }
+
+    @RequestMapping("/404")
+    public String notFound(){
+        return "404";
     }
 
 }

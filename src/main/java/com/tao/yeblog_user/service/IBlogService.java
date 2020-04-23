@@ -22,6 +22,13 @@ public interface IBlogService {
     IPage<BlogDTO> pageBlogInfo(BlogQO blogQO);
 
     /**
+     * 获取用户的收藏信息
+     * @param blogQO
+     * @return
+     */
+    IPage<BlogDTO> pageCollectionBlog(BlogQO blogQO);
+
+    /**
      * 更新用户信息
      * @param blogDTO
      */

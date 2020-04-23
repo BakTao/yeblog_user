@@ -22,6 +22,10 @@ public class UserService implements IUserService {
 
     @Override
     public IPage<UserDTO> pageUserInfo(UserQO userQO) {
+        if(userQO.getBlogType() != null && !"".equals(userQO.getBlogType())){
+            userQO.setBlogTypes(userQO.getBlogType().split(","));
+        }
+
         PageDefaultImpl<UserDTO> page = new PageDefaultImpl<>();
 
         PageHelper.startPage(userQO.getPageIndex(),userQO.getPageSize());

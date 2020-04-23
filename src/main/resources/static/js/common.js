@@ -16,11 +16,38 @@ function checkLogin() {
         },
         error: function(xhr){
             errorLogin($.parseJSON(xhr.responseText));
+            return false;
         },
         success: function(data){
             localStorage.setItem('loginId', data.body.loginId)
         }
     })
+    return "ok";
+}
+
+function checkLogin2() {
+    if(!localStorage.getItem('token')){
+        errorLogin({
+            "status":602
+        })
+        return false;
+    }
+
+    $.ajax({
+        type:"get",
+        url:"/back/userLoginServices/checkLogin2",
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+        },
+        success: function(data){
+            localStorage.setItem('loginId', data.body.loginId);
+
+        }
+    })
+    return "ok";
 }
 
 function previewImg(obj) {

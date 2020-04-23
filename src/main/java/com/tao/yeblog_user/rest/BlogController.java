@@ -34,6 +34,16 @@ public class BlogController {
     }
 
     /**
+     * 获取用户的收藏博客信息
+     * @param blogQO
+     * @return
+     */
+    @PostMapping("/pageCollectionBlog")
+    public Response<IPage<BlogDTO>> pageCollectionBlog(@RequestBody BlogQO blogQO){
+        return Response.successData(blogService.pageCollectionBlog(blogQO));
+    }
+
+    /**
      * 更新博客信息
      * @param blogDTO
      * @return

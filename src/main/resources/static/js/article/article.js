@@ -1,13 +1,5 @@
 var url = window.location.href
 var blogId;
-queryComment(1,"time");
-
-$.ajax({
-    url: "/back/blogServices/createBlogView",
-    contentType: "application/json",
-    type: "post",
-    data: JSON.stringify({"blogId":url.substr(url.lastIndexOf("/")+1)})
-})
 
 
 //查询博客信息
@@ -18,43 +10,123 @@ $.ajax({
     data: JSON.stringify({"blogId":url.substr(url.lastIndexOf("/")+1),"ifCollection": localStorage.getItem("loginId")}),
     success: function (data) {
         var rowData = data.body.data[0];
-        blogId = rowData.blogId;
-
-        var url = rowData.cover?(uploadUrl+rowData.cover):'/static/img/logo.png';
-        var type = (rowData.type == "0")?'原创':'转载';
-        $(".detail-type span").text(type);
-        $(".user span").text(rowData.userName);
-        $(".date span").text(rowData.createTime);
-        $(".viewNums span").text(rowData.viewNums);
-        $('title').text('YeBlog - 博客 - ' + rowData.title);
-        $(".detail-title h2").text(rowData.title);
-        $("img.detail-cover").attr("src",url);
-        $(".detail-content").append(rowData.content);
-
-        editormd.markdownToHTML("blogContent");
-
-        if(rowData.hasOwnProperty("ifCollection")){
-            if(rowData.ifCollection == "true"){
-                $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i>已收藏</i></a>");
+        if(rowData.enable == "0"){
+            $(window).attr('location', '/404');
+        }else if(rowData.enable == "2" || rowData.type == "2"){
+            var loginId = localStorage.getItem("loginId");
+            if(rowData.userId != loginId){
+                $(window).attr('location', '/404');
             }else{
-                $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+                blogId = rowData.blogId;
+
+                var url = rowData.cover?(uploadUrl+rowData.cover):'/static/img/logo.png';
+                var type = (rowData.type == "0")?'原创':(rowData.type == "1"?'转载':'草稿');
+                var enable = rowData.enable == "2"?"未审核":"";
+                $(".detail-type span").text(type);
+                $(".user span").text(rowData.userName);
+                $(".date span").text(rowData.createTime);
+                $('title').text('YeBlog - 博客 - ' + rowData.title);
+                $(".detail-title h2").text(rowData.title);
+                $("img.detail-cover").attr("src",url);
+                $(".detail-content").append(rowData.content);
+
+                editormd.markdownToHTML("blogContent");
+
             }
         }else{
-            $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+            blogId = rowData.blogId;
 
+            var url = rowData.cover?(uploadUrl+rowData.cover):'/static/img/logo.png';
+            var type = (rowData.type == "0")?'原创':'转载';
+            $(".detail-type span").text(type);
+            $(".user span").text(rowData.userName);
+            $(".date span").text(rowData.createTime);
+            $(".viewNums span").text(rowData.viewNums);
+            $('title').text('YeBlog - 博客 - ' + rowData.title);
+            $(".detail-title h2").text(rowData.title);
+            $("img.detail-cover").attr("src",url);
+            $(".detail-content").append(rowData.content);
+
+            editormd.markdownToHTML("blogContent");
+
+            $(".detail").append('<div class="collectionBtn">' +
+                '<div class="collectionIcon"></div>' +
+                '<div class="collectionNums"><span></span></div>' +
+                '</div>\n' +
+                '<div class="detail-meta">' +
+                '<p class=\'item\'><span class="date">本文发布于</span><span class="viewNums">,被观看了</span></p>' +
+                '<p class=\'item\'><span class="userName">本文作者:</span><a class="userNamea" href="" target="_blank"></a></p>' +
+                '<p class=\'item\'><span class="columnName">本文专栏:</span><a class="columnNamea" href="" target="_blank"></a></p>' +
+                '</div>' +
+                '<div class="detail-comment">' +
+                '<div class="comment-box">' +
+                '<div class="comment-create">' +
+                '<form class="layui-form" action="">' +
+                '</form>' +
+                '</div>' +
+                '<div class="comment-top">' +
+                '<div class="total">' +
+                '<div class="count">' +
+                '<strong class="count">' +
+                '</strong>' +
+                '<span>条评论</span>' +
+                '</div>' +
+                '</div>' +
+                '<div class="sort">' +
+                '<a href="javascript:;" class="sort-btn1" onclick="queryComment(1,\'time\');">最新</a>' +
+                '<a href="javascript:;" class="sort-btn2" onclick="queryComment(1,\'praiseNums\');">最热</a>' +
+                '</div>' +
+                '</div>' +
+                '<div class="comment-list">' +
+                '<ul class="list-box">' +
+                '</ul>' +
+                '</div>' +
+                '</div>' +
+                '<div id="commentPage"></div>' +
+                '</div>'
+            )
+
+            if(rowData.hasOwnProperty("ifCollection")){
+                if(rowData.ifCollection == "true"){
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i>已收藏</i></a>");
+                }else{
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+                }
+            }else{
+                $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+
+            }
+            $(".collectionNums span").text(rowData.collectionNums);
+
+            $(".detail-meta .date").text("本文发布于" + rowData.createTime);
+            $(".detail-meta .viewNums").text(",被观看了" + rowData.viewNums);
+            $(".userNamea").attr("href","/room/" + rowData.userId);
+            $(".userNamea").text(rowData.userName);
+            $(".columnNamea").attr("href","/column/" + rowData.columnId);
+            $(".columnNamea").text(rowData.columnName);
+
+            $(".total strong").text(rowData.commentNums);
+
+            createCommentHtml();
+            addView();
+            queryComment(1,"time");
         }
-        $(".collectionNums span").text(rowData.collectionNums);
 
-        $(".detail-meta .date").text("本文发布于" + rowData.createTime);
-        $(".detail-meta .viewNums").text(",被观看了" + rowData.viewNums);
-        $(".userNamea").attr("href","/room/" + rowData.userId);
-        $(".userNamea").text(rowData.userName);
-        $(".columnNamea").attr("href","/column/" + rowData.columnId);
-        $(".columnNamea").text(rowData.columnName);
 
-        $(".total strong").text(rowData.commentNums);
+
+
     }
 })
+
+//添加点击量
+function addView() {
+    $.ajax({
+        url: "/back/blogServices/createBlogView",
+        contentType: "application/json",
+        type: "post",
+        data: JSON.stringify({"blogId":url.substr(url.lastIndexOf("/")+1)})
+    })
+}
 
 //查询评论
 function queryComment(pageIndex,sort){
@@ -206,58 +278,73 @@ function showCommentPage(count,pageIndex){
 }
 
 //判断是否有用户信息做不同的操作
-if(localStorage.getItem('token')){
-    $(".comment-create form").html('<div class="layui-form-item layui-form-text">' +
-        '<div class="layui-input-block">' +
-        '<textarea placeholder="请输入内容" name="comment" class="layui-textarea"></textarea>' +
-        '</div>' +
-        '</div>' +
-        '<div class="layui-form-item">' +
-        '<div class="layui-input-block">'+
-        '<button type="button" id="createComment" class="layui-btn">发送</button>' +
-        '</div></div>'
-    )
+function createCommentHtml(){
+    if(localStorage.getItem('token')){
+        $(".comment-create form").html('<div class="layui-form-item layui-form-text">' +
+            '<div class="layui-input-block">' +
+            '<textarea placeholder="请输入内容" name="comment" class="layui-textarea"></textarea>' +
+            '</div>' +
+            '</div>' +
+            '<div class="layui-form-item">' +
+            '<div class="layui-input-block">'+
+            '<button type="button" id="createComment" class="layui-btn">发送</button>' +
+            '</div></div>'
+        )
 
-    $("#createComment").on("click",function () {
-        if(!checkLogin()){
+        $("#createComment").on("click",function () {
+            if(checkLogin() != "ok"){
 
-        }
-        else{
-
-            $.ajax({
-                url: "/back/commentServices/createComment",
-                type: "post",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    "content": $("textarea[name=comment]").val(),
-                    "userId": localStorage.getItem("loginId"),
-                    "blogId": blogId
-
-                }),
-                success: function (data) {
-                    if(data.body == "success"){
-                        alertmsgFtm("新增成功");
-                        //$(window).attr('location', url)
-                    }else{
-                        alertmsgFtm("操作失败,请稍后再试")
-                    }
-
+            }
+            else{
+                var content = $("textarea[name=comment]").val();
+                if(content == ''){
+                    layer.open({
+                        offset: "auto"
+                        ,content: '<p>内容不能为空</p>'
+                        ,btn: '关闭'
+                        ,btnAlign: 'c'
+                        ,yes: function(){
+                            layer.closeAll();
+                        }
+                    });
+                    return false;
                 }
-            })
-        }
-    })
-}
-else{
-    $(".comment-create form").html('<div class="layui-form-item layui-form-text">' +
-        '<div class="layui-input-block">' +
-        '<textarea placeholder="你未登录,无法评论,请登录!" class="layui-textarea" readonly=""></textarea>' +
-        '</div>' +
-        '</div>' +
-        '<div class="layui-form-item">' +
-        '<div class="layui-input-block">'+
-        '<button type="button" id="createComment" class="layui-btn layui-btn-disabled">发送</button>' +
-        '</div></div>'
-    )
+
+                $.ajax({
+                    url: "/back/commentServices/createComment",
+                    type: "post",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "content": content,
+                        "userId": localStorage.getItem("loginId"),
+                        "blogId": blogId
+
+                    }),
+                    success: function (data) {
+                        if(data.body == "success"){
+                            alertmsgFtm("新增成功");
+                            //$(window).attr('location', url)
+                        }else{
+                            alertmsgFtm("操作失败,请稍后再试")
+                        }
+
+                    }
+                })
+            }
+        })
+    }
+    else{
+        $(".comment-create form").html('<div class="layui-form-item layui-form-text">' +
+            '<div class="layui-input-block">' +
+            '<textarea placeholder="你未登录,无法评论,请登录!" class="layui-textarea" readonly=""></textarea>' +
+            '</div>' +
+            '</div>' +
+            '<div class="layui-form-item">' +
+            '<div class="layui-input-block">'+
+            '<button type="button" id="createComment" class="layui-btn layui-btn-disabled">发送</button>' +
+            '</div></div>'
+        )
+    }
 }
 
 function replyCommentFirst(id,obj){
@@ -276,7 +363,7 @@ function replyCommentFirst(id,obj){
             )
 
             $("#createReplyCommentFirst").on("click",function () {
-                if(!checkLogin()){
+                if(checkLogin() != "ok"){
 
                 }
 
@@ -344,7 +431,7 @@ function replyComment(id,userId,obj){
             )
 
             $("#createReplyComment").on("click",function () {
-                if(!checkLogin()){
+                if(checkLogin() != "ok"){
 
                 }else{
                     $.ajax({
@@ -394,7 +481,7 @@ function replyComment(id,userId,obj){
 }
 
 function toCollection() {
-    if(!checkLogin()){
+    if(checkLogin() != "ok"){
 
     }
 
@@ -425,7 +512,7 @@ function toCollection() {
 }
 
 function loseCollection() {
-    if(!checkLogin()){
+    if(checkLogin() != "ok"){
 
     }
     else{
@@ -455,7 +542,7 @@ function loseCollection() {
 }
 
 function toPraise(id,i,obj) {
-    if(!checkLogin()){
+    if(checkLogin() != "ok"){
 
     }
 
@@ -485,7 +572,7 @@ function toPraise(id,i,obj) {
 }
 
 function losePraise(id,i,obj) {
-    if(!checkLogin()){
+    if(checkLogin() != "ok"){
 
     }
     else{

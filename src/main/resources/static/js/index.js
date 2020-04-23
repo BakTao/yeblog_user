@@ -26,9 +26,6 @@
 layui.use(['carousel', 'form'], function() {
     var carousel = layui.carousel;
 
-
-
-
     $.ajax({
         url: "/back/blogServices/pageBlogInfoByView",
         contentType: "application/json",
@@ -74,13 +71,13 @@ layui.use(['carousel', 'form'], function() {
                         '<div class="new-article-item">' +
                             '<div class="new-article-content">' +
                                 '<div class="new-article-cover">' +
-                                    '<a href="article/' + rowData[i].blogId +'" target="_blank">' +
+                                    '<a href="/article/' + rowData[i].blogId +'" target="_blank">' +
                                         '<span>' + rowData[i].type +'</span><img src="'+ uploadUrl + rowData[i].cover + '">' +
                                     '</a>' +
                                 '</div>' +
                                 '<div class="new-article-body">' +
                                     '<h5 class="new-article-title">' +
-                                        '<a href="article/' + rowData[i].blogId +'"  target="_blank">' + rowData[i].title + '</a>' +
+                                        '<a href="/article/' + rowData[i].blogId +'"  target="_blank">' + rowData[i].title + '</a>' +
                                     '</h5>' +
                                     '<p class="new-article-descrption">' + rowData[i].content + '</p>' +
                                     '<div class="new-article-meta">' +
@@ -100,13 +97,13 @@ layui.use(['carousel', 'form'], function() {
                     '<div class="new-article-item">' +
                         '<div class="new-article-content">' +
                             '<div class="new-article-cover">' +
-                                '<a href="article/' + rowData[i].blogId +'" target="_blank">' +
+                                '<a href="/article/' + rowData[i].blogId +'" target="_blank">' +
                                     '<span>' + rowData[i].type +'</span><img src="/static/img/logo.png">' +
                                 '</a>' +
                             '</div>' +
                             '<div class="new-article-body">' +
                                 '<h5 class="new-article-title">' +
-                                    '<a href="article/' + rowData[i].blogId +'" target="_blank">' + rowData[i].title + '</a>' +
+                                    '<a href="/article/' + rowData[i].blogId +'" target="_blank">' + rowData[i].title + '</a>' +
                                 '</h5>' +
                                 '<p class="new-article-descrption">' + rowData[i].content + '</p>' +
                                 '<div class="new-article-meta">' +

@@ -55,6 +55,26 @@ public class ColumnController {
     }
 
     /**
+     * 获取专栏信息(分页)
+     * @param columnQO
+     * @return
+     */
+    @PostMapping("/pageBlogColumnInfo")
+    public Response<IPage<ColumnDTO>> pageBlogColumnInfo(@RequestBody ColumnQO columnQO){
+        return Response.successData(columnService.pageBlogColumnInfo(columnQO));
+    }
+
+    /**
+     * 获取专栏信息(包含全部)
+     * @param columnQO
+     * @return
+     */
+    @PostMapping("/listBlogColumnInfoAll")
+    public Response<List<ColumnDTO>> listBlogColumnInfoAll(@RequestBody ColumnQO columnQO){
+        return Response.successData(columnService.listBlogColumnInfoAll(columnQO));
+    }
+
+    /**
      * 新增专栏信息
      * @param columnDTO
      * @return

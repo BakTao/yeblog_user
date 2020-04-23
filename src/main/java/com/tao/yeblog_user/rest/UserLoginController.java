@@ -99,6 +99,26 @@ public class UserLoginController {
         return Response.successData(userService.getUserInfo(userQO));
     }
 
+    /**
+     * 检查登录2
+     * @param
+     * @return
+     */
+    @RequestMapping("/checkLogin2")
+    public Response<UserDTO> checkLogin2(HttpServletRequest request){
+        String header = request.getHeader("Authorization");
+
+        String token = header.substring(3);
+
+        //解析token
+        Claims claims = jwtUtil.parseToken(token);
+
+        UserQO userQO = new UserQO();
+        userQO.setLoginId(claims.getId());
+
+        return Response.successData(userService.getUserInfo(userQO));
+    }
+
 
     @RequestMapping("/test")
     public Response<String> test(){

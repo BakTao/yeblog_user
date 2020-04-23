@@ -12,6 +12,9 @@ import com.tao.yeblog_user.service.IScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Service
 public class ScheduleService implements IScheduleService {
 
@@ -60,6 +63,16 @@ public class ScheduleService implements IScheduleService {
             scheduleDTO.setScheduleIds(scheduleDTO.getScheduleId().split(","));
         }
         scheduleMapper.deleteSchedule(scheduleDTO);
+        return "success";
+    }
+
+    @Override
+    public String createSchedule(ScheduleDTO scheduleDTO) {
+        String scheduleId = "s" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+
+        scheduleDTO.setScheduleId(scheduleId);
+
+        scheduleMapper.createSchedule(scheduleDTO);
         return "success";
     }
 }

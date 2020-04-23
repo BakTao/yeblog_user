@@ -19,6 +19,13 @@ public interface BlogMapper {
     Page<BlogDTO> pageBlogInfo(BlogQO blogQO);
 
     /**
+     * 获取用户的收藏博客信息
+     * @param blogQO
+     * @return
+     */
+    Page<BlogDTO> pageCollectionBlog(BlogQO blogQO);
+
+    /**
      * 更新博客信息
      * @param blogDTO
      * @return

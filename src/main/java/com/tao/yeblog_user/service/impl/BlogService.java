@@ -54,6 +54,36 @@ public class BlogService implements  IBlogService {
     }
 
     @Override
+    public IPage<BlogDTO> pageCollectionBlog(BlogQO blogQO) {
+        if(blogQO.getType() != null && !"".equals(blogQO.getType())){
+            blogQO.setTypes(blogQO.getType().split(","));
+        }
+        if(blogQO.getColumnId() != null && !"".equals(blogQO.getColumnId())){
+            blogQO.setColumnIds(blogQO.getColumnId().split(","));
+        }
+
+        PageDefaultImpl<BlogDTO> page = new PageDefaultImpl<>();
+
+        PageHelper.startPage(blogQO.getPageIndex(),blogQO.getPageSize());
+        PageInfo<BlogDTO> pageInfo = new PageInfo<>(blogMapper.pageCollectionBlog(blogQO));
+
+        Pager pager = new Pager();
+        pager.setPageIndex(pageInfo.getPageNum());
+        pager.setPageSize(pageInfo.getPageSize());
+        pager.setPageCount(pageInfo.getPages());
+        pager.setRecordCount(pageInfo.getTotal());
+        pager.setPrePageIndex(pageInfo.getPrePage());
+        pager.setNextPageIndex(pageInfo.getNextPage());
+        pager.setExistsPrePage(pageInfo.isHasPreviousPage());
+        pager.setExistsNextPage(pageInfo.isHasNextPage());
+
+        page.setPager(pager);
+        page.setData(pageInfo.getList());
+
+        return page;
+    }
+
+    @Override
     public String updateBlogInfo(BlogDTO blogDTO) {
 
         if(blogDTO.getBlogId() != null && !"".equals(blogDTO.getBlogId())){
@@ -144,6 +174,7 @@ public class BlogService implements  IBlogService {
 
     @Override
     public String deleteBlog(BlogDTO blogDTO) {
+        blogMapper.deleteBlog(blogDTO);
         return "success";
     }
 

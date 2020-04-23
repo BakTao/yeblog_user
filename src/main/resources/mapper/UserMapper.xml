@@ -4,49 +4,92 @@
 
     <select id="pageUserInfo" parameterType="com.tao.yeblog_user.model.qo.UserQO"
             resultType="com.tao.yeblog_user.model.dto.UserDTO">
-      select * from
+      select t.* from (
+      select t23.*,count(t24.userid) commentPraiseNums from (
+      select t21.*,count(t22.userid) + t21.commentNums commentNumsHj from (
+      select t19.*,count(t20.id) commentNums from (
+      select t17.*,count(t18.blogid) collectionNums from
       (
-      select t1.name name,
-      t1.sex sex,
-      t1.loginid loginId,
-      t1.password password,
-      t1.lastlogip lastLogIp,
-      t1.lastlogtime lastLogTime,
-      t1.userphoto userPhoto,
-      t1.regtime regTime,
-      t1.phone phone,
-      t1.email email,
-      t1.enable enable,
-      t1.reason reason,
-      t1.unabletime unableTime,
-      count(t2.id) blogCountHj,
-      count(t6.id) ownBlogCountHj,
-      count(t10.id) noOwnBlogCountHj,
-      count(t14.id) testBlogCountHj,
-      concat(count(t2.id) , '(' , count(t3.id) , '/', count(t4.id) , '/', count(t5.id) , ') (有效|未审核|作废)') blogCount ,
-      concat(count(t6.id) , '(' , count(t7.id) , '/', count(t8.id) , '/', count(t9.id) , ') (有效|未审核|作废)') ownBlogCount,
-      concat(count(t10.id) , '(' , count(t11.id) , '/' , count(t12.id) , '/' , count(t13.id) , ') (有效|未审核|作废)') noOwnBlogCount,
-      concat(count(t14.id) , '(' , count(t15.id) , '/' , count(t16.id) , ') (有效|作废)') testBlogCount
-      from blog_user t1
-      left join blog t2 on t1.id = t2.userid
-      left join (select * from blog where `enable` = '1') t3 on t2.id = t3.id
-      left join (select * from blog where `enable` = '2') t4 on t2.id = t4.id
-      left join (select * from blog where `enable` = '0') t5 on t2.id = t5.id
+        select t1.id id,
+        t1.name name,
+        t1.sex sex,
+        t1.loginid loginId,
+        t1.password password,
+        t1.lastlogip lastLogIp,
+        t1.lastlogtime lastLogTime,
+        tt.url userPhoto,
+        t1.regtime regTime,
+        t1.phone phone,
+        t1.email email,
+        t1.enable enable,
+        t1.reason reason,
+        t1.unabletime unableTime,
+        count(t2.id) blogCountHj,
+        count(t6.id) ownBlogCountHj,
+        count(t10.id) noOwnBlogCountHj,
+        count(t14.id) testBlogCountHj,
+        concat(count(t2.id) , '(' , count(t3.id) , '/', count(t4.id) , '/', count(t5.id) , ') (有效|未审核|作废)') blogCount ,
+        concat(count(t6.id) , '(' , count(t7.id) , '/', count(t8.id) , '/', count(t9.id) , ') (有效|未审核|作废)') ownBlogCount,
+        concat(count(t10.id) , '(' , count(t11.id) , '/' , count(t12.id) , '/' , count(t13.id) , ') (有效|未审核|作废)') noOwnBlogCount,
+        concat(count(t14.id) , '(' , count(t15.id) , '/' , count(t16.id) , ') (有效|作废)') testBlogCount
+        from blog_user t1
+        left join
+        (
+          select * from blog
+          where 1=1
+          <if test="blogEnable != null and blogEnable != ''">
+            and enable = #{blogEnable}
+          </if>
+          <if test="blogType != null and blogType != ''">
+            and type in
+            <foreach collection="blogTypes" item="blogType" open="(" close=")" separator=",">
+              #{blogType}
+            </foreach>
+          </if>
+        ) t2 on t1.id = t2.userid
+        left join sys_file tt on t1.userphoto = tt.id
+        left join (select * from blog where `enable` = '1') t3 on t2.id = t3.id
+        left join (select * from blog where `enable` = '2') t4 on t2.id = t4.id
+        left join (select * from blog where `enable` = '0') t5 on t2.id = t5.id
 
-      left join (select * from blog where `type` = '0') t6 on t2.id = t6.id
-      left join (select * from blog where `type` = '0' and `enable` = '1') t7 on t2.id = t7.id
-      left join (select * from blog where `type` = '0' and `enable` = '2') t8 on t2.id = t8.id
-      left join (select * from blog where `type` = '0' and `enable` = '0') t9 on t2.id = t9.id
+        left join (select * from blog where `type` = '0') t6 on t2.id = t6.id
+        left join (select * from blog where `type` = '0' and `enable` = '1') t7 on t2.id = t7.id
+        left join (select * from blog where `type` = '0' and `enable` = '2') t8 on t2.id = t8.id
+        left join (select * from blog where `type` = '0' and `enable` = '0') t9 on t2.id = t9.id
 
-      left join (select * from blog where `type` = '1') t10 on t2.id = t10.id
-      left join (select * from blog where `type` = '1' and `enable` = '1') t11 on t2.id = t11.id
-      left join (select * from blog where `type` = '1' and `enable` = '2') t12 on t2.id = t12.id
-      left join (select * from blog where `type` = '1' and `enable` = '0') t13 on t2.id = t13.id
+        left join (select * from blog where `type` = '1') t10 on t2.id = t10.id
+        left join (select * from blog where `type` = '1' and `enable` = '1') t11 on t2.id = t11.id
+        left join (select * from blog where `type` = '1' and `enable` = '2') t12 on t2.id = t12.id
+        left join (select * from blog where `type` = '1' and `enable` = '0') t13 on t2.id = t13.id
 
-      left join (select * from blog where `type` = '2') t14 on t2.id = t14.id
-      left join (select * from blog where `type` = '2' and `enable` = '1') t15 on t2.id = t15.id
-      left join (select * from blog where `type` = '2' and `enable` = '2') t16 on t2.id = t16.id
-      group by t1.id
+        left join (select * from blog where `type` = '2') t14 on t2.id = t14.id
+        left join (select * from blog where `type` = '2' and `enable` = '1') t15 on t2.id = t15.id
+        left join (select * from blog where `type` = '2' and `enable` = '2') t16 on t2.id = t16.id
+        group by t1.id
+      ) t17
+
+      left join (
+        select tt.*
+        from user_collection tt
+        <if test="blogEnable != null and blogEnable != ''">
+          inner join (
+            select * from blog where enable = "1"
+          ) ttt on tt.blogid = ttt.id
+        </if>
+      ) t18 on t17.id = t18.userid
+      group by t17.id
+      ) t19
+
+      left join blog_comment t20 on t19.id = t20.userid
+      group by t19.id
+      ) t21
+
+      left join comment_reply t22 on t21.id = t22.userid
+      group by t21.id
+      ) t23
+
+      left join comment_praise t24 on t23.id = t24.userid
+      group by t23.id
       ) t
       where 1=1
       <if test="name !=null and name != ''">

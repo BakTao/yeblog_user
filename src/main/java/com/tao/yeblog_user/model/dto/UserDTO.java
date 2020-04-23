@@ -54,4 +54,11 @@ public class UserDTO {
 
     private String unableDay;   //封禁时间
 
+    private String collectionNums;   //收藏数
+
+    private String commentNumsHj;   //评论数
+
+    private String commentPraiseNums;   //评论点赞数
+
+
 }

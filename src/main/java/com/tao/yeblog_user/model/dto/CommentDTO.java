@@ -12,6 +12,8 @@ public class CommentDTO {
 
     private String id;      //id
 
+    private String title;   //标题
+
     private String blogId;  //博客id
 
     private String userId; //用户Id
@@ -27,6 +29,8 @@ public class CommentDTO {
     private String userPhoto; //头像
 
     private String enable; //是否有效
+
+    private String reason; //原因
 
     private String time; //创建时间
 

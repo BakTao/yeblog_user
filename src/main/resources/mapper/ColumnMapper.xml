@@ -95,6 +95,48 @@
       ) t
     </select>
 
+    <select id="listBlogColumnInfoAll" parameterType="com.tao.yeblog_user.model.qo.ColumnQO"
+                resultType="com.tao.yeblog_user.model.dto.ColumnDTO">
+      select sum(t.blogCount) blogCount
+      from
+      (
+          select t1.columnid columnId,
+          t1.name columnName,
+          count(t2.id) blogCount
+          from yeblog_db.column t1
+          left join
+          (
+            select *
+            from blog
+            where type &lt;> '2'
+            and enable = '1'
+          ) t2 on t2.columnid = t1.id
+          group by t1.id
+      ) t
+    </select>
+
+    <select id="pageBlogColumnInfo" parameterType="com.tao.yeblog_user.model.qo.ColumnQO"
+            resultType="com.tao.yeblog_user.model.dto.ColumnDTO">
+      select t.* from (
+        select t.*,(@i:= @i+ 1) as rank from
+        (
+          select t1.columnid,
+          t1.name columnName,
+          count(t2.id) blogCount
+          from yeblog_db.column t1
+          left join
+          (
+            select *
+            from blog
+            where type &lt;> '2'
+            and enable = '1'
+          ) t2 on t2.columnid = t1.id
+          group by t1.id
+          order by blogCount desc
+        ) t,(SELECT @i:= 0) as i
+      ) t
+    </select>
+
     <insert id="createColumn" parameterType="com.tao.yeblog_user.model.dto.ColumnDTO">
       insert into yeblog_db.column
       (

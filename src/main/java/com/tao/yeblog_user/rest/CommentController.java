@@ -35,6 +35,26 @@ public class CommentController {
     }
 
     /**
+     * 获取用户的评论信息
+     * @param commentQO
+     * @return
+     */
+    @PostMapping("/pageUserCommentInfo")
+    public Response<IPage<CommentDTO>> pageUserCommentInfo(@RequestBody CommentQO commentQO){
+        return Response.successData(commentService.pageUserCommentInfo(commentQO));
+    }
+
+    /**
+     * 获取用户的点赞评论信息
+     * @param commentQO
+     * @return
+     */
+    @PostMapping("/pagePraiseCommentInfo")
+    public Response<IPage<CommentDTO>> pagePraiseCommentInfo(@RequestBody CommentQO commentQO){
+        return Response.successData(commentService.pagePraiseCommentInfo(commentQO));
+    }
+
+    /**
      * 新增评论信息
      * @param commentDTO
      * @return
@@ -72,5 +92,25 @@ public class CommentController {
     @PostMapping("/deleteCommentPraise")
     public Response<String> deleteCommentPraise(@RequestBody CommentDTO commentDTO){
         return Response.successData(commentService.deleteCommentPraise(commentDTO));
+    }
+
+    /**
+     * 删除评论
+     * @param commentDTO
+     * @return
+     */
+    @PostMapping("/deleteComment")
+    public Response<String> deleteComment(@RequestBody CommentDTO commentDTO){
+        return Response.successData(commentService.deleteComment(commentDTO));
+    }
+
+    /**
+     * 删除评论的评论
+     * @param commentDTO
+     * @return
+     */
+    @PostMapping("/deleteReplyComment")
+    public Response<String> deleteReplyComment(@RequestBody CommentDTO commentDTO){
+        return Response.successData(commentService.deleteReplyComment(commentDTO));
     }
 }

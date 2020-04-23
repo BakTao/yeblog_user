@@ -19,6 +19,21 @@ public interface ICommentService {
     IPage<CommentDTO> pageCommentInfo(CommentQO commentQO);
 
     /**
+     * 获取用户的评论信息
+     * @param commentQO
+     * @return
+     */
+    IPage<CommentDTO> pageUserCommentInfo(CommentQO commentQO);
+
+    /**
+     * 获取用户的点赞评论信息
+     * @param commentQO
+     * @return
+     */
+    IPage<CommentDTO> pagePraiseCommentInfo(CommentQO commentQO);
+
+
+    /**
      * 新增评论信息
      * @param commentDTO
      * @return
@@ -45,4 +60,18 @@ public interface ICommentService {
      * @return
      */
     String deleteCommentPraise(CommentDTO commentDTO);
+
+    /**
+     * 删除评论
+     * @param commentDTO
+     * @return
+     */
+    String deleteComment(CommentDTO commentDTO);
+
+    /**
+     * 删除评论的评论
+     * @param commentDTO
+     * @return
+     */
+    String deleteReplyComment(CommentDTO commentDTO);
 }

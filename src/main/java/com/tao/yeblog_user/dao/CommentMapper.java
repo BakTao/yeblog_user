@@ -23,6 +23,20 @@ public interface CommentMapper {
     Page<CommentDTO> pageCommentInfo(CommentQO commentQO);
 
     /**
+     * 获取用户的评论信息
+     * @param commentQO
+     * @return
+     */
+    Page<CommentDTO> pageUserCommentInfo(CommentQO commentQO);
+
+    /**
+     * 获取用户的点赞评论信息
+     * @param commentQO
+     * @return
+     */
+    Page<CommentDTO> pagePraiseCommentInfo(CommentQO commentQO);
+
+    /**
      * 获取评论信息
      * @param commentQO
      * @return
@@ -56,5 +70,19 @@ public interface CommentMapper {
      * @return
      */
     void deleteCommentPraise(CommentDTO commentDTO);
+
+    /**
+     * 删除评论
+     * @param commentDTO
+     * @return
+     */
+    void deleteComment(CommentDTO commentDTO);
+
+    /**
+     * 删除评论的评论
+     * @param commentDTO
+     * @return
+     */
+    void deleteReplyComment(CommentDTO commentDTO);
 
 }

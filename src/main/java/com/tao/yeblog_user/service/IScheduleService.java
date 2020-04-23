@@ -30,4 +30,11 @@ public interface IScheduleService {
      */
     String deleteSchedule(ScheduleDTO scheduleDTO);
 
+    /**
+     * 创建事项信息
+     * @param scheduleDTO
+     * @return
+     */
+    String createSchedule(ScheduleDTO scheduleDTO);
+
 }

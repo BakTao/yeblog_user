@@ -30,5 +30,8 @@ public class ColumnDTO {
 
     private String blogCount12; //博客数量(转载未审核)
 
+    private Integer rank; //排名
+
+
 
 }

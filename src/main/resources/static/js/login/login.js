@@ -32,7 +32,9 @@ $("#loginBtn").on("click",function () {
                 return false;
             }
             else{
+                localStorage.clear();
                 localStorage.setItem('token', data.body.token)
+                localStorage.setItem('loginId', data.body.loginId)
                 $(window).attr('location', '/')
             }
         },

@@ -34,10 +34,18 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return new UserLoginInterceptor();
     }
 
+    @Bean
+    public UserLoginInterceptor2 getUserLoginInterceptor2(){
+        return new UserLoginInterceptor2();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getUserLoginInterceptor()).addPathPatterns(
                 "/back/userLoginServices/checkLogin"
+        );
+        registry.addInterceptor(getUserLoginInterceptor2()).addPathPatterns(
+                "/back/userLoginServices/checkLogin2"
         );
     }
 
@@ -78,6 +86,39 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
             UserDTO userInfo = userMapper.getUserInfo(userQO);
             if("0".equals(userInfo.getEnable())){
                 response.sendError(605, "用户被封禁,封禁时间到:" + userInfo.getUnableTime());
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    protected class UserLoginInterceptor2 extends HandlerInterceptorAdapter {
+        @Override
+        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+            String header = request.getHeader("Authorization");
+
+            if(header == null || !header.startsWith("ym:")){
+                response.setStatus(602);
+                response.sendError(602, "用户未登录,请重新登录");
+                return false;
+            }
+
+            String token = header.substring(3);
+
+            Claims claims = null;
+            try{
+                //解析token
+                claims = jwtUtil.parseToken(token);
+            }catch (Exception e){
+                response.setStatus(603);
+                response.sendError(603, "登录信息过期，请重新登录");
+                return false;
+            }
+
+            if(claims == null){
+                response.setStatus(602);
+                response.sendError(602, "用户未登录,请重新登录");
                 return false;
             }
 

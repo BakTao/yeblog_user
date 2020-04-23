@@ -57,6 +57,34 @@ public class ColumnService implements IColumnService {
     }
 
     @Override
+    public IPage<ColumnDTO> pageBlogColumnInfo(ColumnQO columnQO) {
+        PageDefaultImpl<ColumnDTO> page = new PageDefaultImpl<>();
+
+        PageHelper.startPage(columnQO.getPageIndex(),columnQO.getPageSize());
+        PageInfo<ColumnDTO> pageInfo = new PageInfo<>(columnMapper.pageBlogColumnInfo(columnQO));
+
+        Pager pager = new Pager();
+        pager.setPageIndex(pageInfo.getPageNum());
+        pager.setPageSize(pageInfo.getPageSize());
+        pager.setPageCount(pageInfo.getPages());
+        pager.setRecordCount(pageInfo.getTotal());
+        pager.setPrePageIndex(pageInfo.getPrePage());
+        pager.setNextPageIndex(pageInfo.getNextPage());
+        pager.setExistsPrePage(pageInfo.isHasPreviousPage());
+        pager.setExistsNextPage(pageInfo.isHasNextPage());
+
+        page.setPager(pager);
+        page.setData(pageInfo.getList());
+
+        return page;
+    }
+
+    @Override
+    public List<ColumnDTO> listBlogColumnInfoAll(ColumnQO columnQO) {
+        return columnMapper.listBlogColumnInfoAll(columnQO);
+    }
+
+    @Override
     public String createColumn(ColumnDTO columnDTO) {
         String columnId = 'c' + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
         columnDTO.setColumnId(columnId);

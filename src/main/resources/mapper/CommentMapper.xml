@@ -49,7 +49,8 @@
 
     <select id="listReplyCommentInfo" parameterType="com.tao.yeblog_user.model.qo.CommentQO"
                 resultType="com.tao.yeblog_user.model.dto.CommentDTO">
-        select t2.loginid userId,
+        select t1.id id,
+        t2.loginid userId,
         t2.name userName,
         t4.url userPhoto,
         t3.loginid replyUserId,
@@ -62,6 +63,89 @@
         left join sys_file t4 on t2.userphoto = t4.id
         where t1.commentid = #{commentId}
         order by time asc
+    </select>
+
+    <select id="pageUserCommentInfo" parameterType="com.tao.yeblog_user.model.qo.CommentQO"
+            resultType="com.tao.yeblog_user.model.dto.CommentDTO">
+        select t.* from
+        (
+            select t3.*,
+            count(t4.userid) praiseNums
+            from(
+                select t1.id id,
+                null replyUserId,
+                null replyUserName,
+                t1.time time,
+                t1.content content,
+                t1.enable enable,
+                t1.reason reason,
+                t2.title title,
+                t2.blogid blogId
+                from blog_comment t1
+                left join blog t2 on t1.blogid= t2.id
+                where t1.userid=(
+                  select id
+                  from blog_user
+                  where loginid= #{userId}
+                )
+            ) t3
+            left join comment_praise t4 on t3.id= t4.commentid
+            group by t3.id
+            union
+            select t1.id,
+                   t4.loginid,
+                   t4.name,
+                   t1.time,
+                   t1.content,
+                   t1.enable,
+                   t1.reason,
+                   t3.title,
+                   t3.blogid,
+                   null
+            from comment_reply t1
+            left join blog_comment t2 on t1.commentid= t2.id
+            left join blog t3 on t2.blogid= t3.id
+            left join blog_user t4 on t1.replyuserid= t4.id
+            where t1.userid=(
+                select id
+                from blog_user
+                where loginid= #{userId}
+            )
+        ) t
+        order by t.time desc
+    </select>
+
+    <select id="pagePraiseCommentInfo" parameterType="com.tao.yeblog_user.model.qo.CommentQO"
+            resultType="com.tao.yeblog_user.model.dto.CommentDTO">
+        select t.* from (
+            select t5.*,
+            count(t6.userid) praiseNums
+            from
+            (
+                select t2.id id,
+                       t1.time praiseTime,
+                       t3.blogid blogId,
+                       t3.title title,
+                       t4.loginid userId,
+                       t4.name userName,
+                       t2.time time,
+                       t2.content content,
+                       t2.enable enable,
+                       t2.reason reason
+                from comment_praise t1
+                left join blog_comment t2 on t1.commentid= t2.id
+                left join blog t3 on t2.blogid= t3.id
+                left join blog_user t4 on t2.userid= t4.id
+                where t1.userid=(
+                  select id
+                  from blog_user
+                  where loginid= #{userId}
+                )
+            ) t5
+            left join comment_praise t6 on t5.id= t6.commentid
+            group by t5.id
+        ) t
+        order by t.praiseTime desc
     </select>
 
     <insert id="createComment" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
@@ -85,13 +169,15 @@
 
     <insert id="createReplyComment" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
       insert into comment_reply
-      (commentid,
+      (id,
+      commentid,
       userid,
       replyuserid,
       content,
       time
       )
       select
+      uuid(),
       #{id},
       t2.id,
       (select t1.id from blog_user t1 where t1.loginid = #{replyUserId}),
@@ -116,6 +202,20 @@
     <delete id="deleteCommentPraise" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
       delete from comment_praise
       where commentid = #{id}
+      and userid =  (select t1.id from blog_user t1 where t1.loginid = #{userId})
+
+    </delete>
+
+    <delete id="deleteComment" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
+      delete from blog_comment
+      where id = #{id}
+      and userid =  (select t1.id from blog_user t1 where t1.loginid = #{userId})
+
+    </delete>
+
+    <delete id="deleteReplyComment" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
+      delete from comment_reply
+      where id = #{id}
       and userid =  (select t1.id from blog_user t1 where t1.loginid = #{userId})
 
     </delete>

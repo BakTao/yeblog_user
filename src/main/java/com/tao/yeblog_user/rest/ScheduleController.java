@@ -56,4 +56,16 @@ public class ScheduleController {
         }
         return Response.successData(scheduleService.deleteSchedule(scheduleDTO));
     }
+
+
+    /**
+     * 创建事项信息
+     *
+     * @param scheduleDTO
+     * @return
+     */
+    @PostMapping("/createSchedule")
+    public Response<String> createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+        return Response.successData(scheduleService.createSchedule(scheduleDTO));
+    }
 }
