@@ -16,4 +16,6 @@ public class FileDTO {
     private String fileSize;    //文件大小
 
     private String fileName;    //文件名
+
+
 }

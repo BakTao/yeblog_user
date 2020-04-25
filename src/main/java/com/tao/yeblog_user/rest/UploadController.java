@@ -1,17 +1,22 @@
 package com.tao.yeblog_user.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tao.yeblog_user.common.Response;
 import com.tao.yeblog_user.model.dto.FileDTO;
 import com.tao.yeblog_user.service.IUploadService;
 import io.minio.MinioClient;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -69,5 +74,45 @@ public class UploadController {
             e.printStackTrace();
         }
         return new Response("701","上传失败,请稍后再试");
+    }
+
+    @PostMapping("/blogFileUpload")
+    public Map<String,Object> blogFileUpload(@RequestParam(value = "editormd-image-file") MultipartFile file) {
+        Map<String,Object> map = new HashMap<>();
+
+        if (file == null || file.isEmpty() || file.getSize() == 0) {
+            map.put("success",0);
+            map.put("message","上传失败,文件为空");
+            map.put("url","");
+            return map;
+        }
+
+        try {
+            MinioClient minioClient = new MinioClient(url, accessKey, secretKey);
+
+            if (!minioClient.bucketExists("yeblog")) {
+                minioClient.makeBucket("yeblog");
+            }
+
+            String fileName = file.getOriginalFilename();
+            String uuid = UUID.randomUUID().toString();
+            String newName ="blog/"+ uuid.replaceAll("-", "")
+                    + fileName.substring(fileName.lastIndexOf("."));
+
+            InputStream inputStream = file.getInputStream();	//获取file的inputStream
+            minioClient.putObject("yeblog", newName, inputStream, "application/octet-stream");	//上传
+            inputStream.close();
+
+            map.put("success",1);
+            map.put("message","上传成功");
+            map.put("url","http://169.254.211.25:9000/yeblog/"+newName);
+            return map;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("success",0);
+        map.put("message","上传失败,请稍后再试");
+        map.put("url","");
+        return map;
     }
 }

@@ -11,7 +11,10 @@ layui.use(['form','upload'], function () {
         width  : "100%",
         height : "800px",
         path   : "/static/modules/editor.md-master/lib/",
-        saveHTMLToTextarea : true
+        saveHTMLToTextarea : true,
+        imageUpload    : true,
+        imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL : "/back/uploadServices/blogFileUpload"
     });
 
 
