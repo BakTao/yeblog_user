@@ -26,6 +26,13 @@ public interface BlogMapper {
     Page<BlogDTO> pageCollectionBlog(BlogQO blogQO);
 
     /**
+     * 获取博客的封面信息
+     * @param blogQO
+     * @return
+     */
+    BlogDTO getBlogCover(BlogQO blogQO);
+
+    /**
      * 更新博客信息
      * @param blogDTO
      * @return

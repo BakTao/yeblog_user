@@ -29,6 +29,8 @@ public class BlogDTO {
 
     private String content; //内容
 
+    private String contentmd; //内容
+
     private String cover; //封面
 
     private String enable; //是否有效
@@ -48,4 +50,6 @@ public class BlogDTO {
     private String ip; //ip
 
     private String ifCollection; //是否收藏
+
+    private String fileName; //文件名称
 }

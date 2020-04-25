@@ -19,4 +19,9 @@
       )
     </insert>
 
+    <delete id="deleteUploadFile" parameterType="com.tao.yeblog_user.model.dto.FileDTO">
+      delete from sys_file
+      where id = #{fileId}
+    </delete>
+
 </mapper>

@@ -7,6 +7,7 @@ import com.tao.yeblog_user.common.PageDefaultImpl;
 import com.tao.yeblog_user.common.Pager;
 import com.tao.yeblog_user.dao.BlogMapper;
 import com.tao.yeblog_user.model.dto.BlogDTO;
+import com.tao.yeblog_user.model.dto.FileDTO;
 import com.tao.yeblog_user.model.qo.BlogQO;
 import com.tao.yeblog_user.service.IBlogService;
 import com.tao.yeblog_user.utils.IpUtil;
@@ -22,6 +23,9 @@ public class BlogService implements  IBlogService {
 
     @Autowired
     private BlogMapper blogMapper;
+
+    @Autowired
+    private UploadService uploadService;
 
     @Override
     public IPage<BlogDTO> pageBlogInfo(BlogQO blogQO) {
@@ -85,11 +89,23 @@ public class BlogService implements  IBlogService {
 
     @Override
     public String updateBlogInfo(BlogDTO blogDTO) {
-
         if(blogDTO.getBlogId() != null && !"".equals(blogDTO.getBlogId())){
             blogDTO.setBlogIds(blogDTO.getBlogId().split(","));
         }
 
+        if(blogDTO.getCover() != null && !"".equals(blogDTO.getCover())){
+            BlogQO blogQO = new BlogQO();
+            blogQO.setBlogId(blogDTO.getBlogId());
+            BlogDTO data = blogMapper.getBlogCover(blogQO);
+
+            if(data.getCover() != null && !"".equals(data.getCover())){
+                FileDTO fileDTO = new FileDTO();
+                fileDTO.setFileId(data.getCover());
+                fileDTO.setFileName("file/" + data.getFileName().substring(data.getFileName().lastIndexOf("/")+1));
+
+                uploadService.deleteUploadFile(fileDTO);
+            }
+        }
         blogMapper.updateBlogInfo(blogDTO);
 
         return "success";
@@ -174,6 +190,17 @@ public class BlogService implements  IBlogService {
 
     @Override
     public String deleteBlog(BlogDTO blogDTO) {
+        BlogQO blogQO = new BlogQO();
+        blogQO.setBlogId(blogDTO.getBlogId());
+        BlogDTO data = blogMapper.getBlogCover(blogQO);
+
+        if(data.getCover() != null && !"".equals(data.getCover())){
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setFileId(data.getCover());
+            fileDTO.setFileName("file/" + data.getFileName().substring(data.getFileName().lastIndexOf("/")+1));
+
+            uploadService.deleteUploadFile(fileDTO);
+        }
         blogMapper.deleteBlog(blogDTO);
         return "success";
     }

@@ -51,6 +51,11 @@ public class BackController {
         return "createBlog";
     }
 
+    @RequestMapping("/editBlog/{blogId}")
+    public String editBlog(){
+        return "editBlog";
+    }
+
     @RequestMapping("/login")
     public String login(){
         return "login";

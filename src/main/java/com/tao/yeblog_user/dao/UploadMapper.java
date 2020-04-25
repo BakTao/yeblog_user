@@ -15,4 +15,11 @@ public interface UploadMapper {
      * @return
      */
     void saveUploadFile(FileDTO fileDTO);
+
+    /**
+     * 删除文件信息
+     * @param fileDTO
+     * @return
+     */
+    void deleteUploadFile(FileDTO fileDTO);
 }

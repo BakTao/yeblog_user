@@ -374,33 +374,43 @@ function getBCData(type,pageIndex){
                 $(".main .list").empty();
 
                 for(var i=0; i<rowData.length; i++){
-                    if(rowData[i].enable == "0") {
-                        $(".main .list").append(
-                            '<div class="comment-item">' +
-                            '<div>' +
-                            '<span><a href="/room/' + rowData[i].userId +'">' + rowData[i].userName + '</a></span>' +
-                            '<span>回复:</span>' +
-                            '<span><a href="/article/' + rowData[i].blogId + '">' + rowData[i].title + '</a></span>' +
-                            '<span>点赞数:' + rowData[i].praiseNums + '</span>' +
-                            '</div>' +
-                            '<div><span>无效</span><span>原因:' + rowData[i].reason + '</span>' +
-                            '</div>' +
-                            '<div><span>' + rowData[i].content + '</span></div>' +
-                            '<div>'  +
-                            '<button onclick="deletePraComment(\'' + rowData[i].id + '\');">删除</button>' +
-                            '</div>' +
-                            '</div>'
-                        )
+                    if(rowData[i].content) {
+                        if (rowData[i].enable == "0") {
+                            $(".main .list").append(
+                                '<div class="comment-item">' +
+                                '<div>' +
+                                '<span><a href="/room/' + rowData[i].userId + '">' + rowData[i].userName + '</a></span>' +
+                                '<span>回复:</span>' +
+                                '<span><a href="/article/' + rowData[i].blogId + '">' + rowData[i].title + '</a></span>' +
+                                '<span>点赞数:' + rowData[i].praiseNums + '</span>' +
+                                '</div>' +
+                                '<div><span>无效</span><span>原因:' + rowData[i].reason + '</span>' +
+                                '</div>' +
+                                '<div><span>' + rowData[i].content + '</span></div>' +
+                                '<div>' +
+                                '<button onclick="deletePraComment(\'' + rowData[i].id + '\');">删除</button>' +
+                                '</div>' +
+                                '</div>'
+                            )
+                        } else {
+                            $(".main .list").append(
+                                '<div class="comment-item">' +
+                                '<div>' +
+                                '<span><a href="/room/' + rowData[i].userId + '">' + rowData[i].userName + '</a></span>' +
+                                '<span>回复:</span>' +
+                                '<span><a href="/article/' + rowData[i].blogId + '">' + rowData[i].title + '</a></span>' +
+                                '<span>点赞数:' + rowData[i].praiseNums + '</span>' +
+                                '</div>' +
+                                '<div><span>' + rowData[i].content + '</span></div>' +
+                                '<div>' +
+                                '<button onclick="deletePraComment(\'' + rowData[i].id + '\');">删除</button>' +
+                                '</div>' +
+                                '</div>'
+                            )
+                        }
                     }else{
                         $(".main .list").append(
-                            '<div class="comment-item">' +
-                            '<div>' +
-                            '<span><a href="/room/' + rowData[i].userId +'">' + rowData[i].userName + '</a></span>' +
-                            '<span>回复:</span>' +
-                            '<span><a href="/article/' + rowData[i].blogId + '">' + rowData[i].title + '</a></span>' +
-                            '<span>点赞数:' + rowData[i].praiseNums + '</span>' +
-                            '</div>' +
-                            '<div><span>' + rowData[i].content + '</span></div>' +
+                            '<div class="comment-item">评论已被删除' +
                             '<div>'  +
                             '<button onclick="deletePraComment(\'' + rowData[i].id + '\');">删除</button>' +
                             '</div>' +
@@ -436,7 +446,7 @@ function showPage(type,count,pageIndex){
 }
 
 function editBlog(id){
-
+    $(window).attr('location', '/editBlog/'+id);
 }
 
 function deleteBlog(id){

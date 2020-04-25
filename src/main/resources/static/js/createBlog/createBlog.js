@@ -60,7 +60,9 @@ layui.use(['form','upload'], function () {
 
 
     $("#createBtn").on("click",function () {
-        var content = editor.getHTML();
+        var content = editor.getPreviewedHTML();
+        var contentmd = editor.getMarkdown();
+
         if(content == ''){
             layer.open({
                 offset: "auto"
@@ -120,6 +122,7 @@ layui.use(['form','upload'], function () {
             data: JSON.stringify({
                 "title": title,
                 "content": content,
+                "contentmd": contentmd,
                 "enable": enable,
                 "type": type,
                 "columnId": column,
@@ -139,6 +142,5 @@ layui.use(['form','upload'], function () {
         })
 
     })
-
 
 });

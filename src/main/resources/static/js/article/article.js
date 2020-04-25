@@ -52,11 +52,11 @@ $.ajax({
             $(".detail").append('<div class="collectionBtn">' +
                 '<div class="collectionIcon"></div>' +
                 '<div class="collectionNums"><span></span></div>' +
-                '</div>\n' +
+                '</div>' +
                 '<div class="detail-meta">' +
-                '<p class=\'item\'><span class="date">本文发布于</span><span class="viewNums">,被观看了</span></p>' +
-                '<p class=\'item\'><span class="userName">本文作者:</span><a class="userNamea" href="" target="_blank"></a></p>' +
-                '<p class=\'item\'><span class="columnName">本文专栏:</span><a class="columnNamea" href="" target="_blank"></a></p>' +
+                '<p class="item"><span class="date">本文发布于</span><span class="viewNums">,被观看了</span></p>' +
+                '<p class="item"><span class="userName">本文作者:</span><a class="userNamea" href="" target="_blank"></a></p>' +
+                '<p class="item"><span class="columnName">本文专栏:</span><a class="columnNamea" href="" target="_blank"></a></p>' +
                 '</div>' +
                 '<div class="detail-comment">' +
                 '<div class="comment-box">' +

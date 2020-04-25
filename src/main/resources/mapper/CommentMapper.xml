@@ -122,7 +122,7 @@
             count(t6.userid) praiseNums
             from
             (
-                select t2.id id,
+                select t1.commentid id,
                        t1.time praiseTime,
                        t3.blogid blogId,
                        t3.title title,
