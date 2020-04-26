@@ -1,7 +1,9 @@
 body{
     margin: 0;
 }
-
+.layui-layer-btn .layui-layer-btn0 {
+    color: #fff !important;
+}
 .header{
     position: fixed;
     width: 100%;

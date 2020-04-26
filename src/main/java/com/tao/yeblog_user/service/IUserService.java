@@ -31,4 +31,11 @@ public interface IUserService {
      * @return
      */
     UserDTO getUserInfo(UserQO userQO);
+
+    /**
+     * 创建用户信息
+     * @param userDTO
+     * @return
+     */
+    void createUser(UserDTO userDTO);
 }

@@ -34,4 +34,10 @@ public interface UserMapper {
      */
     UserDTO getUserInfo(UserQO userQO);
 
+    /**
+     * 创建用户信息
+     * @param userDTO
+     * @return
+     */
+    void createUser(UserDTO userDTO);
 }

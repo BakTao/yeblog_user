@@ -57,4 +57,10 @@ public class UserService implements IUserService {
     public UserDTO getUserInfo(UserQO userQO) {
         return userMapper.getUserInfo(userQO);
     }
+
+
+    @Override
+    public void createUser(UserDTO userDTO) {
+        userMapper.createUser(userDTO);
+    }
 }

@@ -197,6 +197,9 @@
         <if test="password != null and password != '' ">
             and t.password = #{password}
         </if>
+        <if test="phone != null and phone != '' ">
+            and t.phone = #{phone}
+        </if>
       </where>
 
     </update>
@@ -218,6 +221,33 @@
         <if test="password != null and password != '' ">
             and t.password = #{password}
         </if>
+        <if test="phone != null and phone != '' ">
+            and t.phone = #{phone}
+        </if>
     </select>
 
+    <insert id="createUser" parameterType="com.tao.yeblog_user.model.dto.UserDTO">
+      insert into blog_user
+      (
+          id,
+          name,
+          sex,
+          loginid,
+          password,
+          regtime,
+          phone,
+          enable
+      )
+      values
+      (
+          uuid(),
+          #{loginId},
+          "男",
+          #{loginId},
+          #{password},
+          sysdate(),
+          #{phone},
+          "1"
+      )
+    </insert>
 </mapper>

@@ -1,0 +1,15 @@
+.layui-layer-btn .layui-layer-btn0 {
+    color: #fff !important;
+}
+#sendCodeBtn{
+    width: 25%;
+    background-color: #fa7a50;
+    color: #FFFFFF;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    border-radius: 20px;
+}
+.input-group .form-control:not(:first-child):not(:last-child), .input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child) {
+    border-radius: 0px 30px 30px 0px;
+}

@@ -60,5 +60,8 @@ public class UserDTO {
 
     private String commentPraiseNums;   //评论点赞数
 
+    private String verifyCode;   //验证码
+
+
 
 }

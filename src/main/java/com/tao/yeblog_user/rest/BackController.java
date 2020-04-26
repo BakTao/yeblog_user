@@ -61,6 +61,16 @@ public class BackController {
         return "login";
     }
 
+    @RequestMapping("/register")
+    public String register(){
+        return "register";
+    }
+
+    @RequestMapping("/forget")
+    public String forget(){
+        return "forget";
+    }
+
     @RequestMapping("/404")
     public String notFound(){
         return "404";
