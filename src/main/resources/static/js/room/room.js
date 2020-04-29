@@ -16,7 +16,6 @@ $.ajax({
             $(".room-count .blogCount .avalue").text(rowData.blogCountHj + "篇")
             $(".room-count .blogCollCount .avalue").text(rowData.collectionNums + "篇")
             $(".room-user .room-photo").attr("src", userPhoto)
-            $(".room-user .room-loginId .value").text(rowData.loginId)
             $(".room-user .room-name .value").text(rowData.name)
             $(".room-user .room-sex .value").text(rowData.sex)
 

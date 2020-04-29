@@ -8,6 +8,7 @@
       t1.name goodsName,
       t1.nums nums,
       t1.buynums buyNums,
+      if(t1.nums-buynums&lt;0, 0, t1.nums-buynums) leftNums,
       t1.price price,
       t3.url photo,
       t1.type type,
@@ -58,6 +59,19 @@
       <if test="priceZ !=null and priceZ != ''">
         and t1.price &lt;= #{priceZ}
       </if>
+      <if test="shopOrder != null and shopOrder != ''">
+        <choose>
+            <when test="shopOrder == '0'.toString()">
+                order by goodsId desc
+            </when>
+            <when test="shopOrder == '1'.toString()">
+                order by buyNums desc
+            </when>
+            <when test="shopOrder == '2'.toString()">
+                order by price desc
+            </when>
+        </choose>
+      </if>
     </select>
 
     <select id="listCategoryInfo" resultType="com.tao.yeblog_user.model.dto.SelectDTO">
@@ -66,6 +80,43 @@
       from yeblog_db.category t1
       where 1=1
       order by t1.categoryid
+    </select>
+
+    <select id="listShopCarInfo" parameterType="com.tao.yeblog_user.model.qo.ShopQO"
+            resultType="com.tao.yeblog_user.model.dto.ShopDTO">
+      select t3.goodsid goodsId,
+      t3.name goodsName,
+      t1.nums nums,
+      t3.price price,
+      (t1.nums * t3.price) priceCount
+      from shopcar_shop t1
+      left join blog_user t2 on t1.userid = t2.id
+      left join shop t3 on t1.goodsid = t3.id
+      where 1=1
+      <if test="userId !=null and userId != ''">
+         and t2.loginid = #{userId}
+      </if>
+      <if test="goodsId !=null and goodsId != ''">
+         and t3.goodsid = #{goodsId}
+      </if>
+    </select>
+
+    <select id="getShopCarPrice" parameterType="com.tao.yeblog_user.model.qo.ShopQO"
+            resultType="com.tao.yeblog_user.model.dto.ShopDTO">
+      select sum((t1.nums * t3.price)) orderPriceCount
+      from shopcar_shop t1
+      left join blog_user t2 on t1.userid = t2.id
+      left join shop t3 on t1.goodsid = t3.id
+      where t2.loginid = #{userId}
+    </select>
+
+    <select id="checkShopCar" parameterType="com.tao.yeblog_user.model.qo.ShopQO"
+            resultType="com.tao.yeblog_user.model.dto.ShopDTO">
+      select  if(t1.nums > (t3.nums-t3.buynums),"true","false") checkNums
+      from shopcar_shop t1
+      left join blog_user t2 on t1.userid = t2.id
+      left join shop t3 on t1.goodsid = t3.id
+      where t2.loginid = #{userId}
     </select>
 
     <insert id="createCategory" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
@@ -96,7 +147,18 @@
 
     </delete>
 
+    <delete id="deleteShopCar" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
+        delete from shopcar_shop
+        <where>
+        <if test="userId !=null and userId != ''">
+            and userid = (select id from blog_user where loginid = #{userId})
+        </if>
+        <if test="goodsId !=null and goodsId != ''">
+            and goodsid = (select id from shop where goodsid = #{goodsId})
+        </if>
+        </where>
 
+    </delete>
 
     <update id="updateShopInfo" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
       update shop t
@@ -168,4 +230,33 @@
       t.id from category t where t.categoryid = #{categoryId}
 
     </insert>
+
+    <insert id="createShopCar" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
+      insert into shopcar_shop
+      (userid,
+      goodsid,
+      nums
+      )
+      select
+      t2.id,
+      (select id from shop where goodsid = #{goodsId}),
+      1 from blog_user t2 where t2.loginid = #{userId}
+
+    </insert>
+
+    <update id="updateShopCarInfo" parameterType="com.tao.yeblog_user.model.dto.ShopDTO">
+      update shopcar_shop
+      <set>
+      <if test="add !=null and add != ''">
+          nums = nums+1,
+      </if>
+      <if test="sub !=null and sub != ''">
+          nums = if(nums>1 , nums-1, 1),
+      </if>
+      </set>
+      where userid = (select id from blog_user where loginid = #{userId})
+      and goodsid = (select id from shop where goodsid = #{goodsId})
+
+    </update>
+
 </mapper>

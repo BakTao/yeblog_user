@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.config;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tao.yeblog_user.dao.UserMapper;
 import com.tao.yeblog_user.model.dto.UserDTO;
 import com.tao.yeblog_user.model.qo.UserQO;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * 配置类
@@ -43,6 +45,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getUserLoginInterceptor()).addPathPatterns(
                 "/back/userLoginServices/checkLogin"
+                ,"/back/shopServices/checkShopCar"
         );
         registry.addInterceptor(getUserLoginInterceptor2()).addPathPatterns(
                 "/back/userLoginServices/checkLogin2"
@@ -89,6 +92,12 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 return false;
             }
 
+            HttpSession session = request.getSession();
+            JSONObject json = new JSONObject();
+            json.put("loginId", userId);
+            // 将认证码存入SESSION
+            session.setAttribute("UserInfo", json);
+
             return true;
         }
     }
@@ -121,7 +130,12 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 response.sendError(602, "用户未登录,请重新登录");
                 return false;
             }
-
+            String userId = claims.getId();
+            HttpSession session = request.getSession();
+            JSONObject json = new JSONObject();
+            json.put("loginId", userId);
+            // 将认证码存入SESSION
+            session.setAttribute("UserInfo", json);
             return true;
         }
     }

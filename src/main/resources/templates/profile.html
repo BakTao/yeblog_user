@@ -118,8 +118,42 @@
                                 <i></i>
                                 <span class="value2"></span>
                             </div>
+                            <div class="update">
+                                <button type="button" class="layui-btn layui-btn-primary" id="updateBtn">更新个人信息</button>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div id="UserInfo" style="display: none;">
+                    <form class="layui-form" lay-filter="UserInfoForm">
+                        <div class="layui-form-item">
+                             <label class="layui-form-label" style="padding: 9px 12px;">性别</label>
+                             <div class="layui-input-inline">
+                                 <input type="radio" name="sex" value="男" title="男" checked="">
+                                 <input type="radio" name="sex" value="女" title="女">
+                                 </div>
+                             </div>
+                         <div class="layui-form-item">
+                             <label class="layui-form-label" style="padding: 9px 12px;">名称</label>
+                             <div class="layui-input-inline">
+                                 <input type="text" name="name" placeholder="名称" autocomplete="off" class="layui-input">
+                                 </div>
+                            </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="padding: 9px 12px;">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" placeholder="邮箱" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" style="padding: 9px 12px;">头像</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-upload">
+                                    <input type="file" name="file" id="photo"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                 </div>
             </div>
             <div class="list">

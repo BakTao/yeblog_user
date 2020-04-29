@@ -12,7 +12,8 @@
       t1.address address,
       t1.remark remark,
       t1.expressid expressId,
-      t1.userphone userPhone
+      t1.userphone userPhone,
+      t1.name userName
       from yeblog_db.order t1
       left join blog_user t2 on t1.userid = t2.id
       where 1=1
@@ -47,8 +48,18 @@
       t1.nums nums,
       t2.price price,
       (t1.nums * t2.price) priceCount
+      <if test="enable != null and enable != ''">
+        <if test="enable == '3'.toString()">
+          ,	t3.url url
+        </if>
+      </if>
       from order_shop t1
       left join shop t2 on t1.goodsid = t2.id
+      <if test="enable != null and enable != ''">
+        <if test="enable == '3'.toString()">
+          left join sys_file t3 on t2.bookfile = t3.id
+        </if>
+      </if>
       where 1=1
       <if test="orderId !=null and orderId != ''">
         and t1.orderid = (select t3.id from yeblog_db.order t3 where t3.orderid = #{orderId})
@@ -102,6 +113,9 @@
         <if test="expressId != null and expressId != ''">
           t.expressid = #{expressId},
         </if>
+        <if test="enable != null and enable != ''">
+          t.enable = #{enable},
+        </if>
       </set>
       where 1=1
       <if test="orderId != null and orderId != ''">
@@ -109,4 +123,42 @@
       </if>
     </update>
 
+    <insert id="createOrder" parameterType="com.tao.yeblog_user.model.dto.OrderDTO">
+      insert into yeblog_db.order
+      (id,
+      orderid,
+      userid,
+      price,
+      enable,
+      createtime,
+      address,
+      userphone,
+      name
+      )
+      select
+      uuid(),
+      #{orderId},
+      t1.id,
+      #{price},
+      "1",
+      sysdate(),
+      t1.address,
+      t1.addressphone,
+      t1.addressname from blog_user t1 where t1.loginid = #{userId}
+
+    </insert>
+
+    <insert id="createOrderShop" parameterType="com.tao.yeblog_user.model.dto.OrderDTO">
+      insert into order_shop
+      (orderid,
+      goodsid,
+      nums
+      )
+      select
+      t1.id,
+      t2.goodsid,
+      t2.nums
+      from yeblog_db.order t1 left join shopcar_shop t2 on t1.userid = t2.userid where t1.orderid = #{orderId}
+
+    </insert>
 </mapper>

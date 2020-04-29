@@ -12,9 +12,13 @@ public class ShopDTO {
 
     private String goodsId; //商品Id
 
+    private String userId; //商品Id
+
     private String nums;     //数量
 
     private String buyNums;     //购买数量
+
+    private String leftNums;     //剩余数量
 
     private String price;   //价格
 
@@ -35,6 +39,16 @@ public class ShopDTO {
     private String bookFileName;    //电子物品名称
 
     private String enable;  //是否生效
+
+    private String priceCount;  //商品总价
+
+    private String orderPriceCount;  //订单商品总价
+
+    private String add;  //加
+
+    private String sub;  //减
+
+    private String checkNums;  //检查是否足够
 
 
 }

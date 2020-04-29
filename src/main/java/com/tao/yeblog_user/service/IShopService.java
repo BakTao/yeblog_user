@@ -53,4 +53,46 @@ public interface IShopService {
      * @return
      */
     String deleteCategory(ShopDTO shopDTO);
+
+    /**
+     * 获取购物车信息
+     * @param shopQO
+     * @return
+     */
+    List<ShopDTO> listShopCarInfo(ShopQO shopQO);
+
+    /**
+     * 删除购物车信息
+     * @param shopDTO
+     * @return
+     */
+    String deleteShopCar(ShopDTO shopDTO);
+
+    /**
+     * 添加购物车信息
+     * @param shopDTO
+     * @return
+     */
+    String createShopCar(ShopDTO shopDTO);
+
+    /**
+     * 更新购物车信息
+     * @param shopDTO
+     * @return
+     */
+    String updateShopCarInfo(ShopDTO shopDTO);
+
+    /**
+     * 获取购物车总价
+     * @param shopQO
+     * @return
+     */
+    ShopDTO getShopCarPrice(ShopQO shopQO);
+
+    /**
+     * 检查购物车信息
+     * @param shopQO
+     * @return
+     */
+    String checkShopCar(ShopQO shopQO);
 }

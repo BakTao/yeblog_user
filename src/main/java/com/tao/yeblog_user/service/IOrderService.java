@@ -45,4 +45,11 @@ public interface IOrderService {
      * @return
      */
     String updateOrderInfo(OrderDTO orderDTO);
+
+    /**
+     * 生成订单信息
+     * @param orderDTO
+     * @return
+     */
+    String createOrder(OrderDTO orderDTO);
 }

@@ -57,6 +57,46 @@ public interface ShopMapper {
      */
     void createShop(ShopDTO shopDTO);
 
+    /**
+     * 获取购物车信息
+     * @param shopQO
+     * @return
+     */
+    List<ShopDTO> listShopCarInfo(ShopQO shopQO);
 
+    /**
+     * 删除购物车信息
+     * @param shopDTO
+     * @return
+     */
+    void deleteShopCar(ShopDTO shopDTO);
+
+    /**
+     * 添加购物车信息
+     * @param shopDTO
+     * @return
+     */
+    void createShopCar(ShopDTO shopDTO);
+
+    /**
+     * 更新购物车信息
+     * @param shopDTO
+     * @return
+     */
+    void updateShopCarInfo(ShopDTO shopDTO);
+
+    /**
+     * 获取购物车总价
+     * @param shopQO
+     * @return
+     */
+    ShopDTO getShopCarPrice(ShopQO shopQO);
+
+    /**
+     * 检查购物车信息
+     * @param shopQO
+     * @return
+     */
+    List<ShopDTO> checkShopCar(ShopQO shopQO);
 
 }

@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tao.yeblog_user.common.IPage;
 import com.tao.yeblog_user.common.Response;
 import com.tao.yeblog_user.model.dto.SelectDTO;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -61,6 +63,9 @@ public class ShopController {
      */
     @PostMapping("/deleteCategory")
     public Response deleteCategory(@RequestBody ShopDTO shopDTO){
+        if(shopDTO.getCategoryId() == null || "".equals(shopDTO.getCategoryId())){
+            return new Response<>("001","类别ID不能为空");
+        }
         return Response.successData(shopService.deleteCategory(shopDTO));
     }
 
@@ -83,4 +88,63 @@ public class ShopController {
     public Response<String> createShop(@RequestBody ShopDTO shopDTO){
         return Response.successData(shopService.createShop(shopDTO));
     }
+
+    /**
+     * 获取购物车信息
+     * @param shopQO
+     * @return
+     */
+    @PostMapping("/listShopCarInfo")
+    public Response<List<ShopDTO>> listShopCarInfo(@RequestBody ShopQO shopQO){
+        return Response.successData(shopService.listShopCarInfo(shopQO));
+    }
+
+    /**
+     * 删除购物车信息
+     * @param shopDTO
+     * @return
+     */
+    @PostMapping("/deleteShopCar")
+    public Response deleteShopCar(@RequestBody ShopDTO shopDTO){
+        if(shopDTO.getUserId() == null || "".equals(shopDTO.getUserId())){
+            return new Response<>("001","用户ID不能为空");
+        }
+        if(shopDTO.getGoodsId() == null || "".equals(shopDTO.getGoodsId())){
+            return new Response<>("002","商品ID不能为空");
+        }
+        return Response.successData(shopService.deleteShopCar(shopDTO));
+    }
+
+    /**
+     * 添加购物车信息
+     * @param shopDTO
+     * @return
+     */
+    @PostMapping("/createShopCar")
+    public Response createShopCar(@RequestBody ShopDTO shopDTO){
+        return Response.successData(shopService.createShopCar(shopDTO));
+    }
+
+    /**
+     * 更新购物车信息
+     * @param shopDTO
+     * @return
+     */
+    @PostMapping("/updateShopCarInfo")
+    public Response updateShopCarInfo(@RequestBody ShopDTO shopDTO){
+        return Response.successData(shopService.updateShopCarInfo(shopDTO));
+    }
+
+    /**
+     * 检查购物车信息
+     * @param shopQO
+     * @return
+     */
+    @PostMapping("/checkShopCar")
+    public Response checkShopCar(@RequestBody ShopQO shopQO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        shopQO.setUserId(json.getString("loginId"));
+        return Response.successData(shopService.checkShopCar(shopQO));
+    }
+
 }

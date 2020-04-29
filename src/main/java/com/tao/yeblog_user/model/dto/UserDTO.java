@@ -62,6 +62,12 @@ public class UserDTO {
 
     private String verifyCode;   //验证码
 
+    private String address;         //收货地址
+
+    private String addressPhone;   //收货手机
+
+    private String addressName;   //收货名称
+
 
 
 }

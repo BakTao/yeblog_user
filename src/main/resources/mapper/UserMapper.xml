@@ -24,6 +24,9 @@
         t1.enable enable,
         t1.reason reason,
         t1.unabletime unableTime,
+        t1.address address,
+        t1.addressphone addressPhone,
+        t1.addressname addressName,
         count(t2.id) blogCountHj,
         count(t6.id) ownBlogCountHj,
         count(t10.id) noOwnBlogCountHj,
@@ -188,6 +191,27 @@
         </if>
         <if test="newPassword != null and newPassword != '' ">
             t.password = #{newPassword},
+        </if>
+        <if test="email != null and email != '' ">
+            t.email = #{email},
+        </if>
+        <if test="name != null and name != '' ">
+            t.name = #{name},
+        </if>
+        <if test="userPhoto != null and userPhoto != '' ">
+            t.userphoto = #{userPhoto},
+        </if>
+        <if test="sex != null and sex != '' ">
+            t.sex = #{sex},
+        </if>
+        <if test="address != null and address != '' ">
+            t.address = #{address},
+        </if>
+        <if test="addressPhone != null and addressPhone != '' ">
+            t.addressphone = #{addressPhone},
+        </if>
+        <if test="addressName != null and addressName != '' ">
+            t.addressname = #{addressName},
         </if>
       </set>
       <where>

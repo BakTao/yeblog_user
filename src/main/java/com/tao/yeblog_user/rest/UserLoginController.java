@@ -84,6 +84,12 @@ public class UserLoginController {
 
         userService.updateUserInfo(updateInfo);
 
+        HttpSession session = request.getSession();
+        JSONObject json = new JSONObject();
+        json.put("loginId", userDTO.getLoginId());
+        // 将认证码存入SESSION
+        session.setAttribute("UserInfo", json);
+
         //获取token
         String token = jwtUtil.getToken(userDTO.getLoginId(), userDTO.getName(), new HashMap<>());
         userDTO.setToken(token);

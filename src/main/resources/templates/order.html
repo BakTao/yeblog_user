@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/static/img/logo.png">
-    <title>YeBlog - 博客 - 个人中心</title>
+    <title>YeBlog - 博客 - 我的订单</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <link href="/static/modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/static/modules/layui/css/layui.css" rel="stylesheet" />
@@ -46,44 +46,23 @@
             </nav>
         </div>
         <div class="main">
-            <div class="room">
-                <div class="room-user">
-                    <div class="top">
-                        <img src="/static/img/logo.png">
-                    </div>
-                    <img src="/static/img/logo.png" class="room-photo">
-                    <div class="bottom">
-                        <div class="room-name">
-                            <i></i>
-                            <span class="value"></span>
-                        </div>
-                        <div class="room-sex">
-                            <i></i>
-                            <span class="value"></span>
-                        </div>
-                        <div class="room-enable">
-                            <i></i>
-                            <span class="value"></span>
-                        </div>
-                    </div>
-                    <div class="room-count">
-                        <div class="blogCount">
-                            <i></i>
-                            <span>TA发表的博客:</span>
+            <div>
+                <table id="orderTable">
+                    <thead>
+                        <tr>
+                            <th>订单Id</th>
+                            <th>订单价格</th>
+                            <th>订单时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                            <a href="javascript:;" class="avalue" onclick="getBCData('blog',1)"></a>
-                        </div>
-                        <div class="blogCollCount">
-                            <i></i>
-                            <span>TA收藏的博客:</span>
+                    </tbody>
+                </table>
+                <div id="page">
 
-                            <a href="javascript:;" class="avalue" onclick="getBCData('collBlog',1)"></a>
-                        </div>
-                    </div>
                 </div>
-            </div>
-            <div class="list">
-
             </div>
         </div>
     </div>
@@ -94,6 +73,6 @@
 <script src="/static/modules/layui/layui.js" type="text/javascript"></script>
 
 <script src="/static/js/common.js" type="text/javascript"></script>
-<script src="/static/js/room/room.js" type="text/javascript"></script>
+<script src="/static/js/shop/order.js" type="text/javascript"></script>
 
 </html>

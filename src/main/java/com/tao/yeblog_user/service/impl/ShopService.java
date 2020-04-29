@@ -86,4 +86,53 @@ public class ShopService implements IShopService {
         shopMapper.deleteCategory(shopDTO);
         return "success";
     }
+
+    @Override
+    public List<ShopDTO> listShopCarInfo(ShopQO shopQO) {
+        return shopMapper.listShopCarInfo(shopQO);
+    }
+
+    @Override
+    public String deleteShopCar(ShopDTO shopDTO) {
+        shopMapper.deleteShopCar(shopDTO);
+        return "success";
+    }
+
+    @Override
+    public String createShopCar(ShopDTO shopDTO) {
+        ShopQO shopQO = new ShopQO();
+        shopQO.setUserId(shopDTO.getUserId());
+        shopQO.setGoodsId(shopDTO.getGoodsId());
+        List<ShopDTO> list = shopMapper.listShopCarInfo(shopQO);
+        if(list.size() != 0){
+            shopDTO.setAdd("1");
+            shopMapper.updateShopCarInfo(shopDTO);
+        }
+        else{
+            shopMapper.createShopCar(shopDTO);
+        }
+        return "success";
+    }
+
+    @Override
+    public String updateShopCarInfo(ShopDTO shopDTO) {
+        shopMapper.updateShopCarInfo(shopDTO);
+        return "success";
+    }
+
+    @Override
+    public ShopDTO getShopCarPrice(ShopQO shopQO) {
+        return shopMapper.getShopCarPrice(shopQO);
+    }
+
+    @Override
+    public String checkShopCar(ShopQO shopQO) {
+        List<ShopDTO> list = shopMapper.checkShopCar(shopQO);
+        for(int i=0; i<list.size(); i++){
+            if("true".equals(list.get(i).getCheckNums())){
+                return "error";
+            }
+        }
+        return "success";
+    }
 }

@@ -20,6 +20,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.3.49.ALL</version>
+        </dependency>
+        <dependency>
           <groupId>com.zhenzikj</groupId>
           <artifactId>zhenzisms</artifactId>
           <version>1.0.4</version>

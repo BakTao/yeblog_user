@@ -31,6 +31,21 @@ public class BackController {
         return "profile";
     }
 
+    @RequestMapping("/order")
+    public String order(){
+        return "order";
+    }
+
+    @RequestMapping("/shopCar")
+    public String shopCar(){
+        return "shopCar";
+    }
+
+    @RequestMapping("/order/{orederId}")
+    public String showOrder(){
+        return "showOrder";
+    }
+
     @RequestMapping("/schedule")
     public String schedule(){
         return "schedule";

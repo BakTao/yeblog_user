@@ -13,6 +13,8 @@ public class ShopQO extends BasePage {
 
     private String goodsId; //商品Id
 
+    private String userId; //用户Id
+
     private String numsQ;     //数量起
 
     private String buyNumsQ;     //购买数量起
@@ -32,5 +34,8 @@ public class ShopQO extends BasePage {
     private String categoryId;  //类别ID
 
     private String[] categoryIds;  //类别ID数组
+
+    private String shopOrder;  //排序
+
 
 }

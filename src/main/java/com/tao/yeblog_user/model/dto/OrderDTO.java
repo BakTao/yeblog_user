@@ -22,6 +22,8 @@ public class OrderDTO {
 
     private String userPhone;   //手机
 
+    private String userName;        //姓名
+
     private String remark;   //备注
 
     private String expressId;   //物流id
@@ -31,6 +33,8 @@ public class OrderDTO {
     private String goodsName;     //商品名称
 
     private String nums;     //商品数量
+
+    private String url;     //商品链接
 
     private String priceCount;     //订单总价
 

@@ -1,30 +1,100 @@
 checkLogin();
-$.ajax({
-    url: "/back/userServices/pageUserInfo",
-    contentType: "application/json",
-    type: "post",
-    data: JSON.stringify({"loginId": localStorage.getItem("loginId")}),
-    success: function (data) {
-        var rowData = data.body.data[0];
-        var userPhoto = rowData.userPhoto ? (uploadUrl + rowData.userPhoto) : '/static/img/logo.png';
+layui.use(['layer','upload','form'], function () {
+    var layer = layui.layer
+        ,form = layui.form
+        ,upload = layui.upload;
 
-        $(".profile-user1 .mail .value").text(rowData.email)
-        $(".profile-user1 .phone .value").text(rowData.phone)
-        $(".profile-user1 .lastIP .value").text(rowData.lastLogIp)
-        $(".profile-user1 .lastTime .value").text(rowData.lastLogTime)
-        $(".profile-user1 .blogCount .avalue").text(rowData.blogCountHj + "篇")
-        $(".profile-user1 .blogCollCount .avalue").text(rowData.collectionNums + "篇")
-        $(".profile-user1 .commentCount .avalue").text(rowData.commentNumsHj + "条")
-        $(".profile-user1 .commentPraCount .avalue").text(rowData.commentPraiseNums + "条")
+    form.render();
 
-        $(".profile-user2 .profile-photo").attr("src", userPhoto)
-        $(".profile-user2 .profile-loginId .value2").text(rowData.loginId)
-        $(".profile-user2 .profile-name .value2").text(rowData.name)
-        $(".profile-user2 .profile-sex .value2").text(rowData.sex)
+    $.ajax({
+        url: "/back/userServices/pageUserInfo",
+        contentType: "application/json",
+        type: "post",
+        data: JSON.stringify({"loginId": localStorage.getItem("loginId")}),
+        success: function (data) {
+            var rowData = data.body.data[0];
+            var userPhoto = rowData.userPhoto ? (uploadUrl + rowData.userPhoto) : '/static/img/logo.png';
 
+            $(".profile-user1 .mail .value").text(rowData.email)
+            $(".profile-user1 .phone .value").text(rowData.phone)
+            $(".profile-user1 .lastIP .value").text(rowData.lastLogIp)
+            $(".profile-user1 .lastTime .value").text(rowData.lastLogTime)
+            $(".profile-user1 .blogCount .avalue").text(rowData.blogCountHj + "篇")
+            $(".profile-user1 .blogCollCount .avalue").text(rowData.collectionNums + "篇")
+            $(".profile-user1 .commentCount .avalue").text(rowData.commentNumsHj + "条")
+            $(".profile-user1 .commentPraCount .avalue").text(rowData.commentPraiseNums + "条")
 
-    }
-})
+            $(".profile-user2 .profile-photo").attr("src", userPhoto)
+            $(".profile-user2 .profile-loginId .value2").text(rowData.loginId)
+            $(".profile-user2 .profile-name .value2").text(rowData.name)
+            $(".profile-user2 .profile-sex .value2").text(rowData.sex)
+
+            form.val('UserInfoForm', {
+                "name": rowData.name
+                , "sex": rowData.sex
+                , "email": rowData.email
+            });
+        }
+    })
+
+    var photo;
+
+    upload.render({
+        elem: '#photo'
+        , accept: 'file' //普通文件
+        , url: '/back/uploadServices/fileUpload'
+        , before: function (obj) {
+            checkLogin();
+            layer.msg('上传中');
+        }
+        , done: function (res) {
+            if (res.head.code != "0") {
+                alertmsgFtmIndex(res.head.msg);
+                return false;
+            }
+            //上传成功
+            photo = res.body.fileId;
+            layer.msg('上传成功');
+        }
+    });
+
+    $("#updateBtn").on("click",function () {
+        layer.open({
+            type: 1
+            , area: ['30%', '55%']
+            , offset: 'auto'
+            , content: $("#UserInfo")
+            , btn: ['更新','关闭']
+            , btnAlign: 'c'
+            , yes: function () {
+                $.ajax({
+                    url: "/back/userServices/updateUserInfo",
+                    contentType: "application/json",
+                    type: "post",
+                    data: JSON.stringify({
+                        "loginId": localStorage.getItem("loginId")
+                        ,"name":$("input[name=name]").val()
+                        ,"email":$("input[name=email]").val()
+                        ,"sex":$('input[name="sex"]:checked').val()
+                        ,"userPhoto":photo
+                    }),
+                    success: function (data) {
+                        if(data.body == 'success'){
+                            alertmsgFtm("更新成功");
+                            setTimeout(function () {
+                                $(window).attr('location', '/profile')
+                            }, 2000);
+                        }else{
+                            alertmsgFtmIndex("更新失败,请稍后再试");
+                        }
+                    }
+                })
+            }
+        });
+
+    });
+
+});
 
 function getBCData(type,pageIndex){
 
@@ -618,3 +688,4 @@ function deleteReplyComment(id) {
         });
     })
 }
+

@@ -41,5 +41,18 @@ public interface OrderMapper {
      */
     void updateOrderInfo(OrderDTO orderDTO);
 
+    /**
+     * 生成订单信息
+     * @param orderDTO
+     * @return
+     */
+    void createOrder(OrderDTO orderDTO);
+
+    /**
+     * 生成订单商品信息
+     * @param orderDTO
+     * @return
+     */
+    void createOrderShop(OrderDTO orderDTO);
 
 }
