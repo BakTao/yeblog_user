@@ -10,12 +10,12 @@ $.ajax({
     success: function (data) {
         var rowData = data.body[0];
         $(".main .column-all").append(
-            '<div>' +
+            '<div class="column-title">' +
             '<span class="columnRank">排名</span>' +
             '<span class="columnName">专栏名称</span>' +
             '<span class="blogCount">博客数</span>' +
             '</div>'+
-            '<div>' +
+            '<div class="column-list-all">' +
             '<span class="columnName"><a href="/column/all">全部</a></span>' +
             '<span class="blogCount">' + rowData.blogCount + '</span>' +
             '</div>'
@@ -36,7 +36,7 @@ function queryColumn(pageIndex){
             $(".main .column-list").empty();
             for(var i=0; i<rowData.length; i++){
                 $(".main .column-list").append('<li>' +
-                    '<div>' +
+                    '<div class="column-item">' +
                     '<span class="columnRank">' + rowData[i].rank + '</span>' +
                     '<span class="columnName"><a href="/column/' + rowData[i].columnId +'">' + rowData[i].columnName + '</a></span>' +
                     '<span class="blogCount">' + rowData[i].blogCount + '</span>' +
@@ -59,9 +59,9 @@ function showColumnPage(count,pageIndex){
 
         //完整功能
         laypage.render({
-            elem: 'page',
+            elem: 'columnPage',
             count: count,
-            theme: '#009587',
+            theme: '#53e8b8',
             curr : pageIndex,
             jump: function(obj,first){
                 if(!first){

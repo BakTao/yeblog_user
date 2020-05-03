@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tao.yeblog_user.common.IPage;
 import com.tao.yeblog_user.common.Response;
 import com.tao.yeblog_user.model.dto.ScheduleDTO;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 事项管理Controller
@@ -65,7 +68,9 @@ public class ScheduleController {
      * @return
      */
     @PostMapping("/createSchedule")
-    public Response<String> createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+    public Response<String> createSchedule(@RequestBody ScheduleDTO scheduleDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        scheduleDTO.setUserId(json.getString("loginId"));
         return Response.successData(scheduleService.createSchedule(scheduleDTO));
     }
 }

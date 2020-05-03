@@ -46,6 +46,23 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(getUserLoginInterceptor()).addPathPatterns(
                 "/back/userLoginServices/checkLogin"
                 ,"/back/shopServices/checkShopCar"
+                ,"/back/commentServices/createComment"
+                ,"/back/commentServices/deleteComment"
+                ,"/back/commentServices/createReplyComment"
+                ,"/back/commentServices/deleteReplyComment"
+                ,"/back/blogServices/createBlogCollection"
+                ,"/back/blogServices/deleteBlogCollection"
+                ,"/back/commentServices/createCommentPraise"
+                ,"/back/commentServices/deleteCommentPraise"
+                ,"/back/blogServices/createBlog"
+                ,"/back/userServices/updateUserInfo"
+                ,"/back/blogServices/deleteBlog"
+                ,"/back/scheduleServices/createSchedule"
+                ,"/back/orderServices/pageOrderInfo"
+                ,"/back/shopServices/createShopCar"
+                ,"/back/shopServices/listShopCarInfo"
+                ,"/back/shopServices/deleteShopCar"
+                ,"/back/shopServices/updateShopCarInfo"
         );
         registry.addInterceptor(getUserLoginInterceptor2()).addPathPatterns(
                 "/back/userLoginServices/checkLogin2"

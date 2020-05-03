@@ -10,6 +10,7 @@ layui.use(['form','upload'], function () {
     var editor = editormd("blog-editor", {
         width  : "100%",
         height : "800px",
+        toolbarAutoFixed     : false,   //取消工具栏置顶
         path   : "/static/modules/editor.md-master/lib/",
         saveHTMLToTextarea : true,
         imageUpload    : true,
@@ -129,10 +130,16 @@ layui.use(['form','upload'], function () {
                 "enable": enable,
                 "type": type,
                 "columnId": column,
-                "userId": localStorage.getItem('loginId'),
                 "cover": cover
 
             }),
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+            },
+            error: function(xhr){
+                errorLogin($.parseJSON(xhr.responseText));
+                return false;
+            },
             success: function (data) {
                 if(data.body == "success"){
                     alertmsgFtm("新增成功");

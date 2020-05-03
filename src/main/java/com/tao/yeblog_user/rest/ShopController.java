@@ -95,7 +95,9 @@ public class ShopController {
      * @return
      */
     @PostMapping("/listShopCarInfo")
-    public Response<List<ShopDTO>> listShopCarInfo(@RequestBody ShopQO shopQO){
+    public Response<List<ShopDTO>> listShopCarInfo(@RequestBody ShopQO shopQO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        shopQO.setUserId(json.getString("loginId"));
         return Response.successData(shopService.listShopCarInfo(shopQO));
     }
 
@@ -105,7 +107,10 @@ public class ShopController {
      * @return
      */
     @PostMapping("/deleteShopCar")
-    public Response deleteShopCar(@RequestBody ShopDTO shopDTO){
+    public Response deleteShopCar(@RequestBody ShopDTO shopDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        shopDTO.setUserId(json.getString("loginId"));
+
         if(shopDTO.getUserId() == null || "".equals(shopDTO.getUserId())){
             return new Response<>("001","用户ID不能为空");
         }
@@ -121,7 +126,9 @@ public class ShopController {
      * @return
      */
     @PostMapping("/createShopCar")
-    public Response createShopCar(@RequestBody ShopDTO shopDTO){
+    public Response createShopCar(@RequestBody ShopDTO shopDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        shopDTO.setUserId(json.getString("loginId"));
         return Response.successData(shopService.createShopCar(shopDTO));
     }
 
@@ -131,7 +138,9 @@ public class ShopController {
      * @return
      */
     @PostMapping("/updateShopCarInfo")
-    public Response updateShopCarInfo(@RequestBody ShopDTO shopDTO){
+    public Response updateShopCarInfo(@RequestBody ShopDTO shopDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        shopDTO.setUserId(json.getString("loginId"));
         return Response.successData(shopService.updateShopCarInfo(shopDTO));
     }
 

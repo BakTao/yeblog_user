@@ -9,7 +9,16 @@ function queryOrder(pageIndex) {
         url: "/back/orderServices/pageOrderInfo",
         contentType: "application/json",
         type: "post",
-        data: JSON.stringify({"userId": localStorage.getItem("loginId"),"pageIndex":pageIndex}),
+        data: JSON.stringify({
+            "pageIndex":pageIndex
+        }),
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+            return false;
+        },
         success: function (data) {
             var rowData = data.body.data;
             $("#orderTable tbody").empty();

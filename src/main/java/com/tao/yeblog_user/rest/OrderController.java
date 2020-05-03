@@ -31,7 +31,9 @@ public class OrderController {
      */
     @ResponseBody
     @PostMapping("/pageOrderInfo")
-    public Response<IPage<OrderDTO>> pageOrderInfo(@RequestBody OrderQO orderQO){
+    public Response<IPage<OrderDTO>> pageOrderInfo(@RequestBody OrderQO orderQO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        orderQO.setUserId(json.getString("loginId"));
         return Response.successData(orderService.pageOrderInfo(orderQO));
     }
 

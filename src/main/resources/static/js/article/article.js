@@ -21,10 +21,13 @@ $.ajax({
 
                 var url = rowData.cover?(uploadUrl+rowData.cover):'/static/img/logo.png';
                 var type = (rowData.type == "0")?'原创':(rowData.type == "1"?'转载':'草稿');
+                var typeClass = (rowData.type == "0")?'ownType':(rowData.type == "1"?'noOwnType':'testOwnType');
                 var enable = rowData.enable == "2"?"未审核":"";
+
                 $(".detail-type span").text(type);
-                $(".user span").text(rowData.userName);
-                $(".date span").text(rowData.createTime);
+                $(".detail-type").addClass(typeClass);
+                $(".user").append(rowData.userName);
+                $(".date").append(rowData.createTime);
                 $('title').text('YeBlog - 博客 - ' + rowData.title);
                 $(".detail-title h2").text(rowData.title);
                 $("img.detail-cover").attr("src",url);
@@ -38,10 +41,14 @@ $.ajax({
 
             var url = rowData.cover?(uploadUrl+rowData.cover):'/static/img/logo.png';
             var type = (rowData.type == "0")?'原创':'转载';
+            var typeClass = (rowData.type == "0")?'ownType':'noOwnType';
+
             $(".detail-type span").text(type);
-            $(".user span").text(rowData.userName);
-            $(".date span").text(rowData.createTime);
-            $(".viewNums span").text(rowData.viewNums);
+            $(".detail-type").addClass(typeClass);
+
+            $(".user").append(rowData.userName);
+            $(".date").append(rowData.createTime);
+            $(".viewNums").append(rowData.viewNums);
             $('title').text('YeBlog - 博客 - ' + rowData.title);
             $(".detail-title h2").text(rowData.title);
             $("img.detail-cover").attr("src",url);
@@ -49,10 +56,10 @@ $.ajax({
 
             editormd.markdownToHTML("blogContent");
 
-            $(".detail").append('<div class="collectionBtn">' +
+            $(".main").append('<div class="detail-collection"><div class="collectionBtn">' +
                 '<div class="collectionIcon"></div>' +
                 '<div class="collectionNums"><span></span></div>' +
-                '</div>' +
+                '</div></div>' +
                 '<div class="detail-meta">' +
                 '<p class="item"><span class="date">本文发布于</span><span class="viewNums">,被观看了</span></p>' +
                 '<p class="item"><span class="userName">本文作者:</span><a class="userNamea" href="" target="_blank"></a></p>' +
@@ -73,8 +80,8 @@ $.ajax({
                 '</div>' +
                 '</div>' +
                 '<div class="sort">' +
-                '<a href="javascript:;" class="sort-btn1" onclick="queryComment(1,\'time\');">最新</a>' +
-                '<a href="javascript:;" class="sort-btn2" onclick="queryComment(1,\'praiseNums\');">最热</a>' +
+                '<a href="javascript:;" class="sort-btn1" onclick="queryComment(1,\'time\');"><i class="fa fa-caret-square-o-down" aria-hidden="true"></i>最新</a>' +
+                '<a href="javascript:;" class="sort-btn2" onclick="queryComment(1,\'praiseNums\');"><i class="fa fa-caret-square-o-down" aria-hidden="true"></i>最热</a>' +
                 '</div>' +
                 '</div>' +
                 '<div class="comment-list">' +
@@ -88,18 +95,18 @@ $.ajax({
 
             if(rowData.hasOwnProperty("ifCollection")){
                 if(rowData.ifCollection == "true"){
-                    $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i>已收藏</i></a>");
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i class=\"fa fa-heart\" aria-hidden=\"true\"></i>已收藏</a>");
                 }else{
-                    $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i class=\"fa fa-heart-o\" aria-hidden=\"true\"></i>收藏</i></a>");
                 }
             }else{
-                $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+                $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i class=\"fa fa-heart-o\" aria-hidden=\"true\"></i>收藏</i></a>");
 
             }
             $(".collectionNums span").text(rowData.collectionNums);
 
             $(".detail-meta .date").text("本文发布于" + rowData.createTime);
-            $(".detail-meta .viewNums").text(",被观看了" + rowData.viewNums);
+            $(".detail-meta .viewNums").text(",被观看了" + rowData.viewNums+"次");
             $(".userNamea").attr("href","/room/" + rowData.userId);
             $(".userNamea").text(rowData.userName);
             $(".columnNamea").attr("href","/column/" + rowData.columnId);
@@ -130,6 +137,15 @@ function addView() {
 
 //查询评论
 function queryComment(pageIndex,sort){
+    if(sort == "time"){
+        $(".comment-top a.sort-btn1").css("color","red");
+        $(".comment-top a.sort-btn2").css("color","black");
+    }else{
+        $(".comment-top a.sort-btn2").css("color","red");
+        $(".comment-top a.sort-btn1").css("color","black");
+    }
+
+
     $.ajax({
         url: "/back/commentServices/pageCommentInfo",
         contentType: "application/json",
@@ -143,19 +159,20 @@ function queryComment(pageIndex,sort){
 
                 if(rowData[i].hasOwnProperty("ifPraise")){
                     if(rowData[i].ifPraise == "true"){
-                        $(".comment-list ul.list-box").append('<li class="comment-item">' +
+                        $(".comment-list ul.list-box").append('<li class="comment-item"><div class="comment-item-area">' +
                             '<div class="userPhoto"><img src="' + userPhoto + '"></div>' +
                             '<div class="comment-body">' +
                             '<div class="comment-header">' +
                             '<a href="/room/' + rowData[i].userId + '" target="_blank">' + rowData[i].userName +'</a>' +
-                            '<span class="floor">' + rowData[i].rank +'</span> ' +
+                            '<span class="floor">#' + rowData[i].rank +'</span> ' +
                             '</div>' +
                             '<div class="comment-content">' + rowData[i].content +
                             '</div>' +
                             '<div class="comment-foot">' +
-                            '<span class="time">' + rowData[i].time + '</span>' +
-                            '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i></i><span>回复</span></a>' +
-                            '<div class="like"><a href="javascript:;" onclick="losePraise(\'' + rowData[i].id + '\',' + i +',this)"><i>已赞</i></a></div><span class="praiseCount praiseCount' + i + '">' + rowData[i].praiseNums + '</span>' +
+                            '<span class="time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + rowData[i].time + '</span>' +
+                            '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                            '<div class="like"><a href="javascript:;" onclick="losePraise(\'' + rowData[i].id + '\',' + i +',this)"><i class="fa fa-thumbs-up" aria-hidden="true"></i>已赞</a></div><span class="praiseCount praiseCount' + i + '">' + rowData[i].praiseNums + '</span>' +
+                            '</div>' +
                             '</div>' +
                             '</div>' +
                             '<div class="reply-list reply-list' + i + '"><ul class="reply-list-box"></ul></div>' +
@@ -163,19 +180,20 @@ function queryComment(pageIndex,sort){
                             '</li>'
                         )
                     }else{
-                        $(".comment-list ul.list-box").append('<li class="comment-item">' +
+                        $(".comment-list ul.list-box").append('<li class="comment-item"><div class="comment-item-area">' +
                             '<div class="userPhoto"><img src="' + userPhoto + '"></div>' +
                             '<div class="comment-body">' +
                             '<div class="comment-header">' +
                             '<a href="/room/' + rowData[i].userId + '" target="_blank">' + rowData[i].userName +'</a>' +
-                            '<span class="floor">' + rowData[i].rank +'</span> ' +
+                            '<span class="floor">#' + rowData[i].rank +'</span> ' +
                             '</div>' +
                             '<div class="comment-content">' + rowData[i].content +
                             '</div>' +
                             '<div class="comment-foot">' +
-                            '<span class="time">' + rowData[i].time + '</span>' +
-                            '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i></i><span>回复</span></a>' +
-                            '<div class="like"><a href="javascript:;" onclick="toPraise(\'' + rowData[i].id + '\',' + i +',this)"><i>赞</i></a></div><span class="praiseCount praiseCount'+ i +'">' + rowData[i].praiseNums + '</span>' +
+                            '<span class="time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + rowData[i].time + '</span>' +
+                            '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                            '<div class="like"><a href="javascript:;" onclick="toPraise(\'' + rowData[i].id + '\',' + i +',this)"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>赞</a></div><span class="praiseCount praiseCount'+ i +'">' + rowData[i].praiseNums + '</span>' +
+                            '</div>' +
                             '</div>' +
                             '</div>' +
                             '<div class="reply-list reply-list' + i + '"><ul class="reply-list-box"></ul></div>' +
@@ -184,19 +202,20 @@ function queryComment(pageIndex,sort){
                         )
                     }
                 }else{
-                    $(".comment-list ul.list-box").append('<li class="comment-item">' +
+                    $(".comment-list ul.list-box").append('<li class="comment-item"><div class="comment-item-area">' +
                         '<div class="userPhoto"><img src="' + userPhoto + '"></div>' +
                         '<div class="comment-body">' +
                         '<div class="comment-header">' +
                         '<a href="/room/' + rowData[i].userId + '" target="_blank">' + rowData[i].userName +'</a>' +
-                        '<span class="floor">' + rowData[i].rank +'</span> ' +
+                        '<span class="floor">#' + rowData[i].rank +'</span> ' +
                         '</div>' +
                         '<div class="comment-content">' + rowData[i].content +
                         '</div>' +
                         '<div class="comment-foot">' +
-                        '<span class="time">' + rowData[i].time + '</span>' +
-                        '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i></i><span>回复</span></a>' +
-                        '<div class="like"><a href="javascript:;" onclick="toPraise(\'' + rowData[i].id + '\',' + i +',this)"><i>赞</i></a></div><span class="praiseCount praiseCount' + i + '">' + rowData[i].praiseNums + '</span>' +
+                        '<span class="time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + rowData[i].time + '</span>' +
+                        '<a href="javascript:;" class="reply" onclick="replyCommentFirst(\'' + rowData[i].id + '\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                        '<div class="like"><a href="javascript:;" onclick="toPraise(\'' + rowData[i].id + '\',' + i +',this)"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>赞</a></div><span class="praiseCount praiseCount' + i + '">' + rowData[i].praiseNums + '</span>' +
+                        '</div>' +
                         '</div>' +
                         '</div>' +
                         '<div class="reply-list reply-list' + i + '"><ul class="reply-list-box"></ul></div>' +
@@ -206,8 +225,6 @@ function queryComment(pageIndex,sort){
                 }
 
 
-
-
                 var replyData = rowData[i].comments;
 
                 if(replyData != null && replyData.length != 0){
@@ -215,6 +232,7 @@ function queryComment(pageIndex,sort){
                         var replyUserPhoto = replyData[j].userPhoto?(uploadUrl+replyData[j].userPhoto):'/static/img/logo.png';
                         if(replyData[j].replyUserId){
                             $(".reply-list" + i + " ul.reply-list-box").append('<li class="reply-comment-item">' +
+                                '<div class="reply-comment-item-area">' +
                                 '<div class="reply-userPhoto"><img src="' + replyUserPhoto + '"></div>' +
                                 '<div class="reply-comment-body">' +
                                 '<div class="reply-comment-header">' +
@@ -223,24 +241,27 @@ function queryComment(pageIndex,sort){
                                 '<div class="reply-comment-content"><span class="reply-user">回复 <a href="/room/' + replyData[j].replyUserId + '" target="_blank">' + replyData[j].replyUserName + ' : </a></span>' + replyData[j].content +
                                 '</div>' +
                                 '<div class="reply-comment-foot">' +
-                                '<span class="reply-time">' + replyData[j].time + '</span>' +
-                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyData[j].userId +'\',this)"><i></i><span>回复</span></a>' +
+                                '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyData[j].time + '</span>' +
+                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                                '</div>' +
                                 '</div>' +
                                 '</div>' +
                                 '</li>'
                             )
                         }else{
                             $(".reply-list" + i + " ul.reply-list-box").append('<li class="reply-comment-item">' +
+                                '<div class="reply-comment-item-area">' +
                                 '<div class="reply-userPhoto"><img src="' + replyUserPhoto + '"></div>' +
                                 '<div class="reply-comment-body">' +
                                 '<div class="reply-comment-header">' +
                                 '<a href="/room/' + replyData[j].userId + '" target="_blank">' + replyData[j].userName +'</a>' +
                                 '</div>' +
-                                '<div class="reply-comment-content"><span class="reply-user">回复 : </span>' + replyData[j].content +
+                                '<div class="reply-comment-content">' + replyData[j].content +
                                 '</div>' +
                                 '<div class="reply-comment-foot">' +
-                                '<span class="reply-time">' + replyData[j].time + '</span>' +
-                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyData[j].userId +'\',this)"><i></i><span>回复</span></a>' +
+                                '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyData[j].time + '</span>' +
+                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                                '</div>' +
                                 '</div>' +
                                 '</div>' +
                                 '</li>'
@@ -252,13 +273,13 @@ function queryComment(pageIndex,sort){
                     }
                 }
             }
-            showCommentPage(data.body.pager.recordCount,data.body.pager.pageIndex);
+            showCommentPage(data.body.pager.recordCount,data.body.pager.pageIndex,sort);
         }
     })
 }
 
 //分页
-function showCommentPage(count,pageIndex){
+function showCommentPage(count,pageIndex,sort){
     layui.use(['laypage'], function(){
         var laypage = layui.laypage;
 
@@ -266,11 +287,11 @@ function showCommentPage(count,pageIndex){
         laypage.render({
             elem: 'commentPage',
             count: count,
-            theme: '#009587',
+            theme: '#53e8b8',
             curr : pageIndex,
             jump: function(obj,first){
                 if(!first){
-                    queryComment(obj.curr);
+                    queryComment(obj.curr,sort);
                 }
             }
         });
@@ -281,14 +302,11 @@ function showCommentPage(count,pageIndex){
 function createCommentHtml(){
     if(localStorage.getItem('token')){
         $(".comment-create form").html('<div class="layui-form-item layui-form-text">' +
-            '<div class="layui-input-block">' +
+            '<div class="layui-input-inline">' +
             '<textarea placeholder="请输入内容" name="comment" class="layui-textarea"></textarea>' +
-            '</div>' +
-            '</div>' +
-            '<div class="layui-form-item">' +
-            '<div class="layui-input-block">'+
             '<button type="button" id="createComment" class="layui-btn">发送</button>' +
-            '</div></div>'
+            '</div>' +
+            '</div>'
         )
 
         $("#createComment").on("click",function () {
@@ -316,14 +334,22 @@ function createCommentHtml(){
                     contentType: "application/json",
                     data: JSON.stringify({
                         "content": content,
-                        "userId": localStorage.getItem("loginId"),
                         "blogId": blogId
 
                     }),
+                    beforeSend: function (XMLHttpRequest) {
+                        XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+                    },
+                    error: function(xhr){
+                        errorLogin($.parseJSON(xhr.responseText));
+                        return false;
+                    },
                     success: function (data) {
                         if(data.body == "success"){
                             alertmsgFtm("新增成功");
-                            //$(window).attr('location', url)
+                            setTimeout(function () {
+                                $(window).attr('location', url);
+                            },2500)
                         }else{
                             alertmsgFtm("操作失败,请稍后再试")
                         }
@@ -335,31 +361,25 @@ function createCommentHtml(){
     }
     else{
         $(".comment-create form").html('<div class="layui-form-item layui-form-text">' +
-            '<div class="layui-input-block">' +
+            '<div class="layui-input-inline">' +
             '<textarea placeholder="你未登录,无法评论,请登录!" class="layui-textarea" readonly=""></textarea>' +
+            '<button type="button" class="layui-btn layui-btn-disabled">发送</button>' +
             '</div>' +
-            '</div>' +
-            '<div class="layui-form-item">' +
-            '<div class="layui-input-block">'+
-            '<button type="button" id="createComment" class="layui-btn layui-btn-disabled">发送</button>' +
-            '</div></div>'
+            '</div>'
         )
     }
 }
 
 function replyCommentFirst(id,obj){
-    if($(obj).parent().parent().parent().find(".createReplyClass").html() == ""){
+    if($(obj).parent().parent().parent().parent().find(".createReplyClass").html() == ""){
 
         if(localStorage.getItem('token')){
-            $(obj).parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
-                '<div class="layui-input-block">' +
+            $(obj).parent().parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
+                '<div class="layui-input-inline">' +
                 '<textarea placeholder="请输入内容" name="replyCommentFirst" class="layui-textarea"></textarea>' +
-                '</div>' +
-                '</div>' +
-                '<div class="layui-form-item">' +
-                '<div class="layui-input-block">'+
                 '<button type="button" id="createReplyCommentFirst" class="layui-btn">发送</button>' +
-                '</div></div>'
+                '</div>' +
+                '</div>'
             )
 
             $("#createReplyCommentFirst").on("click",function () {
@@ -375,11 +395,17 @@ function replyCommentFirst(id,obj){
                         data: JSON.stringify({
                             "id": id,
                             "content": $("textarea[name=replyCommentFirst]").val(),
-                            "userId": localStorage.getItem("loginId"),
                             "replyUserId": "",
                             "blogId": blogId
 
                         }),
+                        beforeSend: function (XMLHttpRequest) {
+                            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+                        },
+                        error: function(xhr){
+                            errorLogin($.parseJSON(xhr.responseText));
+                            return false;
+                        },
                         success: function (data) {
                             if(data.body == "success"){
                                 alertmsgFtm("新增成功");
@@ -397,37 +423,31 @@ function replyCommentFirst(id,obj){
             })
         }
         else{
-            $(obj).parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
-                '<div class="layui-input-block">' +
+            $(obj).parent().parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
+                '<div class="layui-input-inline">' +
                 '<textarea placeholder="你未登录,无法评论,请登录!" class="layui-textarea" readonly=""></textarea>' +
+                '<button type="button" class="layui-btn layui-btn-disabled">发送</button>' +
                 '</div>' +
-                '</div>' +
-                '<div class="layui-form-item">' +
-                '<div class="layui-input-block">'+
-                '<button type="button" id="createReplyCommentFirst" class="layui-btn layui-btn-disabled">发送</button>' +
-                '</div></div>'
+                '</div>'
             )
         }
 
     }else{
-        $(obj).parent().parent().parent().find(".createReplyClass").html("")
+        $(obj).parent().parent().parent().parent().find(".createReplyClass").html("")
     }
 }
 
 function replyComment(id,userId,obj){
 
-    if($(obj).parent().parent().parent().parent().parent().parent().find(".createReplyClass").html() == ""){
+    if($(obj).parent().parent().parent().parent().parent().parent().parent().find(".createReplyClass").html() == ""){
 
         if(localStorage.getItem('token')){
-            $(obj).parent().parent().parent().parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
-                '<div class="layui-input-block">' +
+            $(obj).parent().parent().parent().parent().parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
+                '<div class="layui-input-inline">' +
                 '<textarea placeholder="请输入内容" name="replyComment" class="layui-textarea"></textarea>' +
-                '</div>' +
-                '</div>' +
-                '<div class="layui-form-item">' +
-                '<div class="layui-input-block">'+
                 '<button type="button" id="createReplyComment" class="layui-btn">发送</button>' +
-                '</div></div>'
+                '</div>' +
+                '</div>'
             )
 
             $("#createReplyComment").on("click",function () {
@@ -441,11 +461,17 @@ function replyComment(id,userId,obj){
                         data: JSON.stringify({
                             "id": id,
                             "content": $("textarea[name=replyComment]").val(),
-                            "userId": localStorage.getItem("loginId"),
                             "replyUserId": userId,
                             "blogId": blogId
 
                         }),
+                        beforeSend: function (XMLHttpRequest) {
+                            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+                        },
+                        error: function(xhr){
+                            errorLogin($.parseJSON(xhr.responseText));
+                            return false;
+                        },
                         success: function (data) {
                             if(data.body == "success"){
                                 alertmsgFtm("新增成功");
@@ -463,20 +489,17 @@ function replyComment(id,userId,obj){
             })
         }
         else{
-            $(obj).parent().parent().parent().parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
-                '<div class="layui-input-block">' +
+            $(obj).parent().parent().parent().parent().parent().parent().parent().find(".createReplyClass").html('<div class="layui-form-item layui-form-text">' +
+                '<div class="layui-input-inline">' +
                 '<textarea placeholder="你未登录,无法评论,请登录!" class="layui-textarea" readonly=""></textarea>' +
+                '<button type="button" class="layui-btn layui-btn-disabled">发送</button>' +
                 '</div>' +
-                '</div>' +
-                '<div class="layui-form-item">' +
-                '<div class="layui-input-block">'+
-                '<button type="button" id="createReplyComment" class="layui-btn layui-btn-disabled">发送</button>' +
-                '</div></div>'
+                '</div>'
             )
         }
 
     }else{
-        $(obj).parent().parent().parent().parent().parent().parent().find(".createReplyClass").html("")
+        $(obj).parent().parent().parent().parent().parent().parent().parent().find(".createReplyClass").html("")
     }
 }
 
@@ -491,15 +514,21 @@ function toCollection() {
             type: "post",
             contentType: "application/json",
             data: JSON.stringify({
-                "userId": localStorage.getItem("loginId"),
                 "blogId": blogId
 
             }),
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+            },
+            error: function(xhr){
+                errorLogin($.parseJSON(xhr.responseText));
+                return false;
+            },
             success: function (data) {
                 if(data.body == "success"){
                     alertmsgFtm("收藏成功");
 
-                    $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i>已收藏</i></a>");
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='loseCollection();'><i class=\"fa fa-heart\" aria-hidden=\"true\"></i>已收藏</a>");
                     $(".collectionNums span").text(Number($(".collectionNums span").text())+1);
 
                 }else{
@@ -521,15 +550,21 @@ function loseCollection() {
             type: "post",
             contentType: "application/json",
             data: JSON.stringify({
-                "userId": localStorage.getItem("loginId"),
                 "blogId": blogId
 
             }),
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+            },
+            error: function(xhr){
+                errorLogin($.parseJSON(xhr.responseText));
+                return false;
+            },
             success: function (data) {
                 if(data.body == "success"){
                     alertmsgFtm("取消收藏成功");
 
-                    $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i>收藏</i></a>");
+                    $(".collectionIcon").html("<a href='javascript:;' onclick='toCollection();'><i class=\"fa fa-heart-o\" aria-hidden=\"true\"></i>收藏</a>");
                     $(".collectionNums span").text(Number($(".collectionNums span").text())-1);
                 }else{
                     alertmsgFtm("操作失败,请稍后再试")
@@ -552,15 +587,21 @@ function toPraise(id,i,obj) {
             type: "post",
             contentType: "application/json",
             data: JSON.stringify({
-                "userId": localStorage.getItem("loginId"),
                 "id": id
 
             }),
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+            },
+            error: function(xhr){
+                errorLogin($.parseJSON(xhr.responseText));
+                return false;
+            },
             success: function (data) {
                 if(data.body == "success"){
                     alertmsgFtm("点赞成功");
 
-                    $(obj).parent().html('<a href="javascript:;" onclick="losePraise(\'' + id + '\',' + i +',this)"><i>已赞</i></a>')
+                    $(obj).parent().html('<a href="javascript:;" onclick="losePraise(\'' + id + '\',' + i +',this)"><i class="fa fa-thumbs-up" aria-hidden="true"></i>已赞</a>')
                     $(".praiseCount"+i).text(Number($(".praiseCount"+i).text()) +1)
                 }else{
                     alertmsgFtm("操作失败,请稍后再试")
@@ -581,14 +622,20 @@ function losePraise(id,i,obj) {
             type: "post",
             contentType: "application/json",
             data: JSON.stringify({
-                "userId": localStorage.getItem("loginId"),
                 "id": id
             }),
+            beforeSend: function (XMLHttpRequest) {
+                XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+            },
+            error: function(xhr){
+                errorLogin($.parseJSON(xhr.responseText));
+                return false;
+            },
             success: function (data) {
                 if(data.body == "success"){
                     alertmsgFtm("取消点赞成功");
 
-                    $(obj).parent().html('<a href="javascript:;" onclick="toPraise(\'' + id + '\',' + i +',this)"><i>赞</i></a>')
+                    $(obj).parent().html('<a href="javascript:;" onclick="toPraise(\'' + id + '\',' + i +',this)"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>赞</a>')
                     $(".praiseCount"+i).text(Number($(".praiseCount"+i).text()) -1)
                 }else{
                     alertmsgFtm("操作失败,请稍后再试")

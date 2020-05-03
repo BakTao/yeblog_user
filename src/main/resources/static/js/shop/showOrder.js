@@ -8,7 +8,16 @@ if(checkLogin() != "ok"){
         url: "/back/orderServices/pageOrderInfo",
         contentType: "application/json",
         type: "post",
-        data: JSON.stringify({"userId": localStorage.getItem("loginId"),"orderId":orderId}),
+        data: JSON.stringify({
+            "orderId":orderId
+        }),
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+            return false;
+        },
         success: function (data) {
             var rowData = data.body.data[0];
 

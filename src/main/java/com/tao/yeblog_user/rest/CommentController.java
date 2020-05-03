@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tao.yeblog_user.common.IPage;
 import com.tao.yeblog_user.common.Response;
 import com.tao.yeblog_user.model.dto.BlogDTO;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 评论管理Controller
@@ -60,7 +63,9 @@ public class CommentController {
      * @return
      */
     @PostMapping("/createComment")
-    public Response<String> createComment(@RequestBody CommentDTO commentDTO){
+    public Response<String> createComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        commentDTO.setUserId(json.getString("loginId"));
         return Response.successData(commentService.createComment(commentDTO));
     }
 
@@ -70,7 +75,9 @@ public class CommentController {
      * @return
      */
     @PostMapping("/createReplyComment")
-    public Response<String> createReplyComment(@RequestBody CommentDTO commentDTO){
+    public Response<String> createReplyComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        commentDTO.setUserId(json.getString("loginId"));
         return Response.successData(commentService.createReplyComment(commentDTO));
     }
 
@@ -80,7 +87,9 @@ public class CommentController {
      * @return
      */
     @PostMapping("/createCommentPraise")
-    public Response<String> createCommentPraise(@RequestBody CommentDTO commentDTO){
+    public Response<String> createCommentPraise(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        commentDTO.setUserId(json.getString("loginId"));
         return Response.successData(commentService.createCommentPraise(commentDTO));
     }
 
@@ -90,7 +99,9 @@ public class CommentController {
      * @return
      */
     @PostMapping("/deleteCommentPraise")
-    public Response<String> deleteCommentPraise(@RequestBody CommentDTO commentDTO){
+    public Response<String> deleteCommentPraise(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        commentDTO.setUserId(json.getString("loginId"));
         return Response.successData(commentService.deleteCommentPraise(commentDTO));
     }
 
@@ -100,7 +111,9 @@ public class CommentController {
      * @return
      */
     @PostMapping("/deleteComment")
-    public Response<String> deleteComment(@RequestBody CommentDTO commentDTO){
+    public Response<String> deleteComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        commentDTO.setUserId(json.getString("loginId"));
         return Response.successData(commentService.deleteComment(commentDTO));
     }
 
@@ -110,7 +123,9 @@ public class CommentController {
      * @return
      */
     @PostMapping("/deleteReplyComment")
-    public Response<String> deleteReplyComment(@RequestBody CommentDTO commentDTO){
+    public Response<String> deleteReplyComment(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        commentDTO.setUserId(json.getString("loginId"));
         return Response.successData(commentService.deleteReplyComment(commentDTO));
     }
 }

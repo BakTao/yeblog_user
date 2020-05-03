@@ -38,6 +38,7 @@ layui.use(['form','upload'], function () {
         var editor = editormd("blog-editor", {
             width  : "100%",
             height : "800px",
+            toolbarAutoFixed     : false,   //取消工具栏置顶
             path   : "/static/modules/editor.md-master/lib/",
             saveHTMLToTextarea : true,
             imageUpload    : true,

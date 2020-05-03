@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/static/img/logo.png">
-    <title>YeBlog - 博客 - 个人中心</title>
+    <title>YeBlog - 博客 - 空间</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <link href="/static/modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/static/modules/layui/css/layui.css" rel="stylesheet" />
@@ -14,32 +14,34 @@
 
 <body>
 <div class="app">
-    <div class="header"></div>
+    <div class="header">
+        <a href="/"><img class="header-logo" src="/static/img/logo.png"><span class="header-title">YeBlog</span></a>
+    </div>
     <div class="contain">
         <div class="navbar">
             <nav class="nav-list">
-                <a href="/" class="item">
-                    <i></i>
+                <a href="/" class="item item-active">
+                    <i class="fa fa-home" aria-hidden="true"></i>
                     <span>首页</span>
                 </a>
                 <a href="/column" class="item">
-                    <i></i>
+                    <i class="fa fa-columns" aria-hidden="true"></i>
                     <span>专栏</span>
                 </a>
                 <a href="/createBlog" class="item">
-                    <i></i>
+                    <i class="fa fa-edit" aria-hidden="true"></i>
                     <span>写博客</span>
                 </a>
                 <a href="/shop" class="item">
-                    <i></i>
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                     <span>商城</span>
                 </a>
                 <a href="/profile" class="item">
-                    <i></i>
+                    <i class="fa fa-user-o" aria-hidden="true"></i>
                     <span>个人中心</span>
                 </a>
                 <a href="/schedule" class="item">
-                    <i></i>
+                    <i class="fa fa-comment-o" aria-hidden="true"></i>
                     <span>留言板</span>
                 </a>
 
@@ -49,40 +51,37 @@
             <div class="room">
                 <div class="room-user">
                     <div class="top">
-                        <img src="/static/img/logo.png">
+                        <img src="/static/img/blogPhoto.jpg">
                     </div>
-                    <img src="/static/img/logo.png" class="room-photo">
+                    <div class="middle"><img src="/static/img/logo.png" class="profile-photo"></div>
                     <div class="bottom">
                         <div class="room-name">
-                            <i></i>
-                            <span class="value"></span>
+                            <span class="value"><i class="fa fa-info" aria-hidden="true"></i></span>
                         </div>
                         <div class="room-sex">
-                            <i></i>
-                            <span class="value"></span>
+                            <span class="value"><i class="fa fa-intersex (alias)" aria-hidden="true"></i></span>
                         </div>
                         <div class="room-enable">
-                            <i></i>
                             <span class="value"></span>
                         </div>
-                    </div>
-                    <div class="room-count">
-                        <div class="blogCount">
-                            <i></i>
-                            <span>TA发表的博客:</span>
+                        <div class="room-count">
+                            <div class="blogCount">
+                                <i class="fa fa-files-o" aria-hidden="true"></i>
+                                <span>TA发表的博客:</span>
 
-                            <a href="javascript:;" class="avalue" onclick="getBCData('blog',1)"></a>
-                        </div>
-                        <div class="blogCollCount">
-                            <i></i>
-                            <span>TA收藏的博客:</span>
+                                <a href="javascript:;" class="avalue" onclick="getBCData('blog',1)"></a>
+                            </div>
+                            <div class="blogCollCount">
+                                <i class="fa fa-heart-o" aria-hidden="true"></i>
+                                <span>TA收藏的博客:</span>
 
-                            <a href="javascript:;" class="avalue" onclick="getBCData('collBlog',1)"></a>
+                                <a href="javascript:;" class="avalue" onclick="getBCData('collBlog',1)"></a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="list">
+            <div class="room-list">
 
             </div>
         </div>

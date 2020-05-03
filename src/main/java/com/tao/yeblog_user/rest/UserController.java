@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tao.yeblog_user.common.IPage;
 import com.tao.yeblog_user.common.Response;
 import com.tao.yeblog_user.model.dto.UserDTO;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户管理Controller
@@ -37,7 +40,9 @@ public class UserController {
      * @return
      */
     @PostMapping("/updateUserInfo")
-    public Response<String> updateUserInfo(@RequestBody UserDTO userDTO){
+    public Response<String> updateUserInfo(@RequestBody UserDTO userDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        userDTO.setLoginId(json.getString("loginId"));
         return Response.successData(userService.updateUserInfo(userDTO));
     }
 

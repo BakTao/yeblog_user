@@ -16,11 +16,11 @@ $.ajax({
             $(".room-count .blogCount .avalue").text(rowData.blogCountHj + "篇")
             $(".room-count .blogCollCount .avalue").text(rowData.collectionNums + "篇")
             $(".room-user .room-photo").attr("src", userPhoto)
-            $(".room-user .room-name .value").text(rowData.name)
-            $(".room-user .room-sex .value").text(rowData.sex)
+            $(".room-user .room-name .value").append(rowData.name)
+            $(".room-user .room-sex .value").append(rowData.sex)
 
             if(rowData.enable == "0"){
-                $(".room-user .room-enable .value").text("该账号被封禁")
+                $(".room-user .room-enable .value").append('<i class="fa fa-hourglass-o" aria-hidden="true">该账号被封禁</i>')
             }
         }
     }
@@ -36,42 +36,44 @@ function getBCData(type,pageIndex){
             data: JSON.stringify({"userId": userId,"pageIndex":pageIndex,"enable":"1","type":"0,1"}),
             success: function (data) {
                 var rowData = data.body.data;
-                $(".main .list").empty();
+                $(".main .room-list").empty();
 
                 for(var i=0; i<rowData.length; i++){
                     var cover = rowData[i].cover ? (uploadUrl + rowData[i].cover) : '/static/img/logo.png';
                     var blogType = rowData[i].type == "0" ? "原创" : "转载";
+                    var typeClass = rowData[i].type == "0"? "own" : "noOwn";
 
-                    $(".main .list").append(
+                    var str = rowData[i].content;  //html文字字符串
+                    var con = str.replace(/\s*/g, "");  //去掉空格
+                    var content =con.replace(/<[^>]+>/g, ""); //去掉所有的html标记
+
+                    $(".main .room-list").append(
                         '<div class="article-item">' +
                         '<div class="article-content">' +
                         '<div class="article-cover">' +
                         '<a href="/article/' + rowData[i].blogId +'" target="_blank">' +
-                        '<span>' + blogType +'</span><img src="'+ cover + '">' +
+                        '<span class=' + typeClass + '>' + blogType +'</span><img src="'+ cover + '">' +
                         '</a>' +
                         '</div>' +
                         '<div class="article-body">' +
-                        '<h5 class="article-title">' +
-                        '<a href="/article/' + rowData[i].blogId +'"  target="_blank">' + rowData[i].title + '</a>' +
-                        '</h5>' +
-                        '<p class="article-descrption">' + rowData[i].content + '</p>' +
+                        '<div class="article-title">' +
+                        '<div class="title"><a href="/article/' + rowData[i].blogId +'"  target="_blank">' + rowData[i].title + '</a></div>' +
+                        '<div class="userName"><i class="fa fa-user-secret" aria-hidden="true"></i><a href="/room/'+ rowData[i].userId + '">' + rowData[i].userName + '</a></div>' +
+                        '</div>' +
+                        '<p class="article-descrption">' + content + '</p>' +
                         '<div class="article-meta">' +
-                        '<span class="date"><i></i><span>' + rowData[i].createTime + '</span></span>' +
-                        '<span class="userName"><i></i><spanf>' + rowData[i].userName + '</spanf></span>' +
-                        '<span class="view"><i></i><span>' + rowData[i].viewNums + '</span></span>' +
-                        '<span class="comment"><i></i><span>' + rowData[i].commentNums + '</span></span>' +
-                        '<span class="collection"><i></i><span>' + rowData[i].collectionNums + '</span></span>' +
-                        '<span class="columnName"><i></i><span>' + rowData[i].columnName + '</span></span>' +
+                        '<span class="date"><i class="fa fa-calendar" aria-hidden="true"></i><span>' + rowData[i].createTime + '</span></span>' +
+                        '<span class="view"><i class="fa fa-eye" aria-hidden="true"></i><span>' + rowData[i].viewNums + '</span></span>' +
+                        '<span class="comment"><i class="fa fa-commenting" aria-hidden="true"></i><span>' + rowData[i].commentNums + '</span></span>' +
+                        '<span class="collection"><i class="fa fa-heart" aria-hidden="true"></i><span>' + rowData[i].collectionNums + '</span></span>' +
+                        '<span class="columnName"><i class="fa fa-columns" aria-hidden="true"></i><a href="/column/'+ rowData[i].columnId + '">' + rowData[i].columnName + '</a></span>' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
                         '</div>'
                     )
-
-
-
                 }
-                $(".main .list").append('<div id="page"></div>')
+                $(".main .room-list").append('<div id="columnPage"></div>')
                 showPage(type,data.body.pager.recordCount,data.body.pager.pageIndex);
             }
         })
@@ -83,69 +85,44 @@ function getBCData(type,pageIndex){
             data: JSON.stringify({"userId": userId,"pageIndex":pageIndex,"enable":"1"}),
             success: function (data) {
                 var rowData = data.body.data;
-                $(".main .list").empty();
+                $(".main .room-list").empty();
 
                 for(var i=0; i<rowData.length; i++){
                     var cover = rowData[i].cover ? (uploadUrl + rowData[i].cover) : '/static/img/logo.png';
                     var blogType = rowData[i].type == "0" ? "原创" : "转载";
+                    var typeClass = rowData[i].type == "0"? "own" : "noOwn";
 
-                    if(rowData[i].enable == "0") {
-                        $(".main .list").append(
-                            '<div class="article-item">' +
-                            '<div class="article-content">' +
-                            '<div class="article-cover">' +
-                            '<a href="/article/' + rowData[i].blogId +'" target="_blank">' +
-                            '<span>' + blogType + '</span><img src="' + cover + '">' +
-                            '</a>' +
-                            '</div>' +
-                            '<div class="article-body">' +
-                            '<h5 class="article-title">' +
-                            '<a href="/article/' + rowData[i].blogId + '"  target="_blank">' + rowData[i].title + '</a>' +
-                            '</h5>' +
-                            '<p class="article-descrption">' + rowData[i].content + '</p>' +
-                            '<div class="article-meta">' +
-                            '<span class="date"><i></i><span>' + rowData[i].createTime + '</span></span>' +
-                            '<span class="userName"><i></i><span>' + rowData[i].userName + '</span></span>' +
-                            '<span class="view"><i></i><span>' + rowData[i].viewNums + '</span></span>' +
-                            '<span class="comment"><i></i><span>' + rowData[i].commentNums + '</span></span>' +
-                            '<span class="collection"><i></i><span>' + rowData[i].collectionNums + '</span></span>' +
-                            '<span class="columnName"><i></i><span>' + rowData[i].columnName + '</span></span>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>' +
-                            '<div><span>已失效</span>' +
-                            '</div>' +
-                            '</div>'
-                        )
-                    }else{
-                        $(".main .list").append(
-                            '<div class="article-item">' +
-                            '<div class="article-content">' +
-                            '<div class="article-cover">' +
-                            '<a href="/article/' + rowData[i].blogId + '" target="_blank">' +
-                            '<span>' + blogType + '</span><img src="' + cover + '">' +
-                            '</a>' +
-                            '</div>' +
-                            '<div class="article-body">' +
-                            '<h5 class="article-title">' +
-                            '<a href="/article/' + rowData[i].blogId + '"  target="_blank">' + rowData[i].title + '</a>' +
-                            '</h5>' +
-                            '<p class="article-descrption">' + rowData[i].content + '</p>' +
-                            '<div class="article-meta">' +
-                            '<span class="date"><i></i><span>' + rowData[i].createTime + '</span></span>' +
-                            '<span class="userName"><i></i><span>' + rowData[i].userName + '</span></span>' +
-                            '<span class="view"><i></i><span>' + rowData[i].viewNums + '</span></span>' +
-                            '<span class="comment"><i></i><span>' + rowData[i].commentNums + '</span></span>' +
-                            '<span class="collection"><i></i><span>' + rowData[i].collectionNums + '</span></span>' +
-                            '<span class="columnName"><i></i><span>' + rowData[i].columnName + '</span></span>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>'
-                        )
-                    }
+                    var str = rowData[i].content;  //html文字字符串
+                    var con = str.replace(/\s*/g, "");  //去掉空格
+                    var content =con.replace(/<[^>]+>/g, ""); //去掉所有的html标记
+
+                    $(".main .room-list").append(
+                        '<div class="article-item">' +
+                        '<div class="article-content">' +
+                        '<div class="article-cover">' +
+                        '<a href="/article/' + rowData[i].blogId +'" target="_blank">' +
+                        '<span class=' + typeClass + '>' + blogType +'</span><img src="'+ cover + '">' +
+                        '</a>' +
+                        '</div>' +
+                        '<div class="article-body">' +
+                        '<div class="article-title">' +
+                        '<div class="title"><a href="/article/' + rowData[i].blogId +'"  target="_blank">' + rowData[i].title + '</a></div>' +
+                        '<div class="userName"><i class="fa fa-user-secret" aria-hidden="true"></i><a href="/room/'+ rowData[i].userId + '">' + rowData[i].userName + '</a></div>' +
+                        '</div>' +
+                        '<p class="article-descrption">' + content + '</p>' +
+                        '<div class="article-meta">' +
+                        '<span class="date"><i class="fa fa-calendar" aria-hidden="true"></i><span>' + rowData[i].createTime + '</span></span>' +
+                        '<span class="view"><i class="fa fa-eye" aria-hidden="true"></i><span>' + rowData[i].viewNums + '</span></span>' +
+                        '<span class="comment"><i class="fa fa-commenting" aria-hidden="true"></i><span>' + rowData[i].commentNums + '</span></span>' +
+                        '<span class="collection"><i class="fa fa-heart" aria-hidden="true"></i><span>' + rowData[i].collectionNums + '</span></span>' +
+                        '<span class="columnName"><i class="fa fa-columns" aria-hidden="true"></i><a href="/column/'+ rowData[i].columnId + '">' + rowData[i].columnName + '</a></span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>'
+                    )
                 }
-                $(".main .list").append('<div id="page"></div>')
+                $(".main .room-list").append('<div id="columnPage"></div>')
                 showPage(type,data.body.pager.recordCount,data.body.pager.pageIndex);
             }
         })
@@ -159,9 +136,9 @@ function showPage(type,count,pageIndex){
 
         //完整功能
         laypage.render({
-            elem: 'page',
+            elem: 'columnPage',
             count: count,
-            theme: '#009587',
+            theme: '#53e8b8',
             curr : pageIndex,
             jump: function(obj,first){
                 if(!first){

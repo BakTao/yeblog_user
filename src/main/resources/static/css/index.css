@@ -4,19 +4,36 @@ body{
 .layui-layer-btn .layui-layer-btn0 {
     color: #fff !important;
 }
+.app{
+    background: url(/static/img/bg7.jpg);
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 625px;
+}
 .header{
     position: fixed;
     width: 100%;
-    height: 5.1rem;
-    background-color: black;
+    height: 60px;
+    background-color: rgba(255,255,255,.6);
     z-index: 999;
+}
+
+.header .header-logo{
+    width: 60px;
+    height: 55px;
+    margin-left: 130px;
+}
+
+.header .header-title{
+    font-family: Source Han Sans CN;
+    color: rgba(0,0,0,0.8);
+    font-size: 25px;
+    line-height: 55px;
 }
 
 .contain{
     width: 1050px;
-    height: 1050px;
-    background-color: green;
-    padding-top: 6.236rem;
+    padding-top: 80px;
     position: relative;
     margin: 0 auto;
     display: flex;
@@ -24,12 +41,11 @@ body{
 
 .navbar{
     width: 194px;
-    background-color: red;
     margin-right: 1.236rem;
 }
 
 .nav-list{
-    background-color: blue;
+    background-color: rgba(255,255,255,0.1);;
     width: 160px;
     height: 100%;
     position: fixed;
@@ -42,16 +58,31 @@ body{
     border: none;
 }
 
-.item{
+.nav-list .item{
     display: block;
-    height: 3em;
-    line-height: 3em;
+    height: 50px;
+    line-height: 50px;
     padding: 0 1.236rem;
     text-decoration: none;
     font-weight: 700;
-    color: var(--text-secondary);
     letter-spacing: .5px;
     margin-bottom: .618rem;
+    font-size: 14px;
+    color: #eee;
+}
+
+.nav-list .item:hover{
+    background-color: rgba(255,255,255,0.5);
+    color: mediumslateblue;
+}
+
+.nav-list .item-active{
+    background-color: rgba(255,255,255,0.8);
+    color: mediumslateblue;
+}
+
+.fa{
+    margin-right: 8px;
 }
 
 .main{
@@ -65,11 +96,10 @@ body{
 
 .rotation{
     height: 200px;
-    background-color: antiquewhite
 }
 
 .rotation-list .titleBack{
-    background-color: black;
+    background-color: rgba(0,0,0,0.6);;
     width: 100%;
     position: absolute;
     height: 20px;
@@ -82,23 +112,27 @@ body{
     position: absolute;
 }
 
+.rotation-list .rotation-img{
+    width: 100%;
+    height: 200%;
+}
+
 .new-article-list{
-    margin-top: 46px;
-    background-color: aquamarine;
+    margin-top: 30px;
 }
 
 .rank-list{
     width: 266px;
     position: absolute;
     right: 0;
-    background-color: yellow;
+    background-color: rgba(255,255,255,0.9);
 }
 
 .rank-list p{
     line-height: 3em;
     margin: 0;
     padding: 0 1rem;
-    border-bottom: 1px dashed black;
+    border-bottom: 1px solid #cdcfe1;
 }
 
 .rank-list ul{
@@ -126,9 +160,1206 @@ body{
     text-align: center;
     margin-right: .618rem;
     font-size: 1rem;
-    background-color: chartreuse;
+    background-color: slategray;
+    color: white;
 }
 .rank-list ul li span.index:before{
     counter-increment:subsection;
     content:counter(subsection);
+}
+
+.new-article-list .new-article-item{
+    background-color: rgba(255,255,255,0.9);
+    margin-bottom: 15px;
+    height: 135px;
+}
+
+.new-article-list .new-article-item:hover{
+    background-color: rgba(255,255,255,.5);
+}
+
+.new-article-list .new-article-item .new-article-content{
+    padding: 5px;
+    height: 125px;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-cover{
+    width: 170px;
+    height: 125px;
+    float: left;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-cover a span.own{
+    position: absolute;
+    background-color: lightskyblue;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-cover a span.noOwn{
+    position: absolute;
+    background-color: lightcoral;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.new-article-list .new-article-item:hover .new-article-content .new-article-cover a span{
+    opacity: 1;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-cover a img{
+    width: 100%;
+    height: 100%;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body{
+    float: left;
+    width: 405px;
+    height: 100%;
+    padding-left: 5px;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-title{
+    height: 24px;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-title .title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 320px;
+    float: left;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-title .userName{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 85px;
+    float: left;
+    color: #777;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-title .userName a{
+    color: #777;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-title .title a{
+    font-size: 17px;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body a:hover{
+    color: currentColor;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .fa{
+    margin-right: 3px;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-descrption{
+    height: 84px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .date
+,.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .view
+,.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .comment
+,.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .collection
+,.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .columnName{
+    display: block;
+    float: left;
+    margin-right: 10px;
+    font-size: 13px;
+    color: darkslategrey;
+}
+
+.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .view
+,.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .comment
+,.new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .collection{
+    width: 55px;
+}
+
+#page .layui-laypage{
+    padding-left: 200px;
+}
+
+/* 专栏 */
+.column-title{
+    border: 3px solid rgba(255,255,255,0.6);
+    border-radius: 15px;
+    height: 35px;
+    margin: 10px 0px;
+    background-color: rgba(255,255,255,0.5);
+}
+
+.column-title .columnRank
+,.column-title .columnName
+,.column-title .blogCount
+,.column-list-all .columnName
+,.column-list-all .blogCount
+,.column-item .columnRank
+,.column-item .columnName
+,.column-item .blogCount{
+    display: block;
+    float: left;
+    width: 33%;
+    line-height: 35px;
+    font-size: 15px;
+    color: black;
+    text-align: center;
+}
+
+.column-list-all,.column-item{
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 15px;
+    height: 35px;
+    margin: 10px 0px;
+    background-color: rgba(255,255,255,0.9);
+}
+
+.column-list-all .columnName {
+    margin-left: 33%;
+}
+
+.column-list-all a,.column-item a{
+    color: black;
+}
+
+#columnPage .layui-laypage,#commentPage .layui-laypage{
+    padding-left: 345px;
+}
+
+/* 专栏博客 */
+.blog-list{
+    margin-top: 20px;
+}
+
+.blog-list .article-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 15px;
+    height: 135px;
+}
+
+.blog-list .article-item:hover{
+    background-color: rgba(255,255,255,.5);
+}
+
+.blog-list .article-content {
+    padding: 5px;
+    height: 125px;
+}
+
+.blog-list .article-cover {
+    width: 170px;
+    height: 125px;
+    float: left;
+}
+
+.blog-list .article-cover a span.noOwn{
+    position: absolute;
+    background-color: lightcoral;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.blog-list .article-cover a span.own{
+    position: absolute;
+    background-color: lightskyblue;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.blog-list .article-item:hover .article-cover a span{
+    opacity: 1;
+}
+
+.blog-list .article-cover a img {
+    width: 100%;
+    height: 100%;
+}
+
+.blog-list .article-body {
+    float: left;
+    width: 680px;
+    height: 100%;
+    padding-left: 5px;
+}
+
+
+.blog-list .article-title{
+    height: 24px;
+}
+
+.blog-list .article-title .title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 590px;
+    float: left;
+}
+
+.blog-list .article-title .userName{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 85px;
+    float: left;
+    color: #777;
+}
+
+.blog-list .article-title .userName a{
+    color: #777;
+}
+
+.blog-list .article-title .title a{
+    font-size: 17px;
+}
+
+.blog-list .article-body a:hover{
+    color: currentColor;
+}
+
+.blog-list .article-body .fa{
+    margin-right: 3px;
+}
+
+.blog-list .article-descrption{
+    height: 84px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.blog-list .article-meta .date
+,.blog-list .article-meta .view
+,.blog-list .article-meta .comment
+,.blog-list .article-meta .collection
+,.blog-list .article-meta .columnName{
+    display: block;
+    float: left;
+    margin-right: 10px;
+    font-size: 13px;
+    color: darkslategrey;
+}
+
+.blog-list .article-meta .view
+,.blog-list .article-meta .comment
+,.blog-list .article-meta .collection{
+    width: 135px;
+}
+
+/* 创建/编辑博客 */
+.createBlog-area{
+    background-color: rgba(255,255,255,0.9);
+    padding: 1px;
+}
+
+.article-form .layui-form-item .layui-input-inline.blog-title {
+    width: 100%;
+}
+
+.article-form .layui-form-item .layui-input-inline .layui-btn {
+    margin-left: 110px;
+}
+
+/* 个人中心 */
+.profile{
+    height: 540px;
+}
+
+.profile-user1{
+    float: left;
+    height: 500px;
+    width: 65%;
+    background-color: rgba(255,255,255,0.9);
+    padding: 20px;
+}
+
+.profile-user1 div {
+    margin: 10px 0;
+    height: 50px;
+    line-height: 50px;
+}
+
+.profile-user1 span.title, .profile-user1 span.atitle {
+    display: block;
+    float: left;
+    width: 30%;
+    text-align: center;
+    color: teal;
+}
+
+.profile-user1 span.value, .profile-user1 a.avalue {
+    display: block;
+    float: left;
+    width: 60%;
+    font-size: 15px;
+}
+
+.profile-user2{
+    height: 100%;
+    float: left;
+    width: 28%;
+    margin-left: 15px;
+}
+
+.profile-user2 .top{
+    height: 150px;
+    overflow: hidden;
+}
+
+.profile-user2 .top img{
+    width: 720px;
+    animation: gt 80s infinite linear;
+}
+
+@keyframes gt {
+    0%{transform:translateZ(0)}
+    25%{transform:translate3d(-50%,-50%,0)}
+    50%{transform:translate3d(-50%,0,0)}
+    75%{transform:translate3d(0,-50%,0)}to{transform:translateZ(0)}
+}
+
+.profile-user2 .middle{
+    position: absolute;
+}
+
+.profile-user2 .middle img{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    top: -65px;
+    left: 65%;
+    border-radius: 53px;
+    border: 3px solid white;
+}
+
+.profile-user2 .bottom{
+    height: 350px;
+    background-color: rgba(255,255,255,0.9);
+    padding: 20px;
+}
+
+.profile-user2 .bottom div {
+    margin: 10px 0;
+    height: 50px;
+    line-height: 50px;
+}
+
+.profile-user2 .bottom .profile-loginId {
+    margin-top: 60px;
+}
+
+.profile-user2 .bottom div span {
+    text-align: center;
+    width: 100%;
+    height: 50px;
+    display: block;
+    float: left;
+    font-size: 15px;
+    color: midnightblue;
+}
+
+.profile-user2 .bottom .update {
+    margin: 40px;
+}
+
+.profile-list{
+    margin-top: 40px;
+}
+
+.profile-list .article-item {
+    margin-bottom: 15px;
+    height: 135px;
+}
+
+.profile-list .article-content:hover{
+    background-color: rgba(255,255,255,.5);
+}
+
+.profile-list .article-content {
+    padding: 5px;
+    height: 125px;
+    float: left;
+    width: 82%;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-list .article-cover {
+    width: 170px;
+    height: 125px;
+    float: left;
+}
+
+.profile-list .article-cover a span.noOwn{
+    position: absolute;
+    background-color: lightcoral;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.profile-list .article-cover a span.own{
+    position: absolute;
+    background-color: lightskyblue;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.profile-list .article-cover a span.noReady{
+    position: absolute;
+    color: red;
+    padding: 50px 0px 0px 50px;
+    background-color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    width: 120px;
+    height: 75px;
+}
+
+.profile-list .article-cover a span.noEnable{
+    position: absolute;
+    color: black;
+    padding: 50px 0px 0px 50px;
+    background-color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    width: 120px;
+    height: 75px;
+}
+
+.profile-list .article-cover .noLive{
+    position: absolute;
+    color: black;
+    padding: 50px 0px 0px 30px;
+    background-color: rgba(255,255,255,0.7);
+    font-size: 20px;
+    width: 140px;
+    height: 75px;
+}
+
+.profile-list .article-cover a span.testOwn{
+    position: absolute;
+    background-color: slategray;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.profile-list .article-content:hover .article-cover a span{
+    opacity: 1;
+}
+
+.profile-list .article-cover a img {
+    width: 100%;
+    height: 100%;
+}
+
+.profile-list .article-body {
+    float: left;
+    width: 535px;
+    height: 100%;
+    padding-left: 5px;
+}
+
+.profile-list .article-title{
+    height: 24px;
+}
+
+.profile-list .article-title .title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 450px;
+    float: left;
+}
+
+.profile-list .article-title .userName{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 85px;
+    float: left;
+    color: #777;
+}
+
+.profile-list .article-title .userName a{
+    color: #777;
+}
+
+.profile-list .article-title .title a{
+    font-size: 17px;
+}
+
+.profile-list .article-body a:hover{
+    color: currentColor;
+}
+
+.profile-list .article-body .fa{
+    margin-right: 3px;
+}
+
+.profile-list .article-descrption{
+    height: 84px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.profile-list .article-meta .date
+,.profile-list .article-meta .view
+,.profile-list .article-meta .comment
+,.profile-list .article-meta .collection
+,.profile-list .article-meta .columnName{
+    display: block;
+    float: left;
+    margin-right: 10px;
+    font-size: 13px;
+    color: darkslategrey;
+}
+
+.profile-list .article-meta .view
+,.profile-list .article-meta .comment
+,.profile-list .article-meta .collection{
+    width: 92px;
+}
+
+.profile-list .article-opera{
+    float: left;
+    height: 95px;
+    margin-left: 30px;
+    padding: 20px;
+}
+
+.profile-list .article-remark{
+    background-color: white;
+    margin-bottom: 15px;
+    width: 723px;
+    color: red;
+    margin-top: -10px;
+}
+
+.profile-list .comment-item{
+    width: 100%;
+    height: 52px;
+    margin-bottom: 10px;
+}
+
+.profile-list .comment-content {
+    float: left;
+    padding: 5px;
+    float: left;
+    width: 82%;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-list .comment-head {
+    width: 713px;
+    height: 20px;
+}
+
+.profile-list .comment-head span {
+    display: block;
+    float: left;
+}
+
+.profile-list span.comment-blog {
+    margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 595px;
+    font-size: 13px;
+}
+
+.profile-list span.comment-replyName {
+    width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 20px;
+}
+
+.profile-list .comment-body {
+    width: 713px;
+    height: 20px;
+}
+
+.profile-list .comment-body span {
+    display: block;
+    float: left;
+}
+
+.profile-list span.comment-text {
+    width: 590px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+.profile-list span.comment-praise {
+    margin-left: 15px;
+}
+
+.profile-list .comment-opera{
+    float: left;
+    margin-left: 30px;
+    padding: 7px;
+}
+
+.profile-list .comment-remark{
+    background-color: white;
+    margin-bottom: 15px;
+    width: 723px;
+    color: red;
+    margin-top: -10px;
+}
+
+/* 空间 */
+.room {
+    height: 440px;
+}
+
+.room .room-user {
+    height: 100%;
+    width: 100%;
+}
+
+.room .top {
+    height: 150px;
+    overflow: hidden;
+    width: 870px;
+}
+
+.room .top img {
+    width: 1740px;
+    animation: gt 80s infinite linear;
+}
+
+.room .middle {
+    position: absolute;
+}
+
+.room .middle img {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    top: -65px;
+    left: 375px;
+    border-radius: 53px;
+    border: 3px solid white;
+}
+
+.room .bottom {
+    height: 250px;
+    background-color: rgba(255,255,255,0.9);
+    padding: 20px;
+}
+
+.room .bottom .room-name {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 15px;
+    margin-left: -20px;
+}
+
+.room .bottom .room-sex
+,.room .bottom .room-enable{
+    text-align: center;
+    margin-top: 20px;
+    font-size: 15px;
+    margin-left: -20px;
+}
+
+.room .bottom .room-enable {
+    color: red;
+}
+
+.room .bottom .room-count {
+    width: 830px;
+    height: 20px;
+    margin-top: 25px;
+}
+
+.room .bottom .room-count .blogCount {
+    float: left;
+    width: 300px;
+    margin-left: 105px;
+}
+
+.room .bottom .room-count .blogCollCount {
+    float: left;
+    margin-left: 105px;
+    width: 300px;
+}
+
+.room-list{
+    margin-top: 20px;
+}
+
+.room-list .article-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 15px;
+    height: 135px;
+}
+
+.room-list .article-item:hover{
+    background-color: rgba(255,255,255,.5);
+}
+
+.room-list .article-content {
+    padding: 5px;
+    height: 125px;
+}
+
+.room-list .article-cover {
+    width: 170px;
+    height: 125px;
+    float: left;
+}
+
+.room-list .article-cover a span.noOwn{
+    position: absolute;
+    background-color: lightcoral;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.room-list .article-cover a span.own{
+    position: absolute;
+    background-color: lightskyblue;
+    color: white;
+    padding: 0px 8px;
+    opacity: 0.7;
+}
+
+.room-list .article-item:hover .article-cover a span{
+    opacity: 1;
+}
+
+.room-list .article-cover a img {
+    width: 100%;
+    height: 100%;
+}
+
+.room-list .article-body {
+    float: left;
+    width: 680px;
+    height: 100%;
+    padding-left: 5px;
+}
+
+
+.room-list .article-title{
+    height: 24px;
+}
+
+.room-list .article-title .title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 590px;
+    float: left;
+}
+
+.room-list .article-title .userName{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 85px;
+    float: left;
+    color: #777;
+}
+
+.room-list .article-title .userName a{
+    color: #777;
+}
+
+.room-list .article-title .title a{
+    font-size: 17px;
+}
+
+.room-list .article-body a:hover{
+    color: currentColor;
+}
+
+.room-list .article-body .fa{
+    margin-right: 3px;
+}
+
+.room-list .article-descrption{
+    height: 84px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    font-size: 13px;
+}
+
+.room-list .article-meta .date
+,.room-list .article-meta .view
+,.room-list .article-meta .comment
+,.room-list .article-meta .collection
+,.room-list .article-meta .columnName{
+    display: block;
+    float: left;
+    margin-right: 10px;
+    font-size: 13px;
+    color: darkslategrey;
+}
+
+.room-list .article-meta .view
+,.room-list .article-meta .comment
+,.room-list .article-meta .collection{
+    width: 135px;
+}
+
+/* 文章 */
+.detail {
+    background-color: white;
+    padding: 20px;
+}
+
+.detail-type {
+    position: absolute;
+    top: 80px;
+    left: 180px;
+    width: 0;
+    height: 0;
+    border-right: 60px solid transparent;
+}
+
+.ownType{
+    border-top: 60px solid lightskyblue;
+}
+
+.noOwnType{
+    border-top: 60px solid lightcoral;
+}
+
+.testOwnType{
+    border-top: 60px solid slategray;
+}
+
+.detail-type span {
+    display: block;
+    width: 80px;
+    height: 80px;
+    position: relative;
+    top: -100px;
+    transform: rotate(-45deg);
+    left: 0px;
+    line-height: 80px;
+    font-weight: 700;
+    color: white;
+    font-size: 13px;
+}
+
+.detail-title {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid #cdcfe1;
+    margin-bottom: 15px;
+}
+
+.detail-title span.user, .detail-title span.date, .detail-title span.viewNums {
+    margin-right: 20px;
+    color: lightseagreen;
+}
+
+.detail-title span i{
+    margin-right: 3px;
+}
+
+.editormd-preview-container, .editormd-html-preview {
+    padding: 0px;
+}
+
+.editormd-preview-container, .editormd-html-preview {
+    padding: 0px;
+}
+
+.detail-content .detail-cover-area{
+    width: 80%;
+    height: 270px;
+    margin: 0px auto;
+    overflow: hidden;
+}
+
+.detail-content .detail-cover-area img.detail-cover {
+    width: 100%;
+    margin-top: -25%;
+}
+
+.detail-collection {
+    background-color: white;
+    border-top: 1px solid #cdcfe1;
+    padding: 20px;
+    width: 830px;
+    height: 60px;
+}
+
+.detail-collection .collectionBtn {
+    width: 200px;
+    height: 60px;
+    margin: auto;
+    border: 1px solid #dc3749;
+    border-radius: 50px;
+}
+
+.detail-collection .collectionBtn .collectionIcon {
+    float: left;
+    margin-left: 25px;
+    width: 90px;
+    font-size: 16px;
+    height: 60px;
+    line-height: 60px;
+    border-right: 1px solid #dc3749;
+}
+
+.detail-collection .collectionBtn .collectionIcon a{
+    color: red;
+}
+
+.detail-collection .collectionBtn .collectionNums {
+    float: left;
+    margin-left: 10px;
+    width: 60px;
+    font-size: 14px;
+    height: 60px;
+    line-height: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.detail-meta {
+    margin-top: 10px;
+    background-color: rgb(255,255,255);
+}
+
+.detail-meta .item {
+    line-height: 50px;
+    padding: 0 1.236rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    margin-bottom: .618rem;
+    font-size: 14px;
+    color: lightslategray;
+}
+
+.detail-comment {
+    background-color: white;
+}
+
+.comment-box {
+    padding: 20px;
+}
+
+.comment-box .comment-create textarea.layui-textarea {
+    width: 720px;
+    float: left;
+}
+
+.comment-box .comment-create button {
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.comment-top {
+    width: 815px;
+    height: 30px;
+    border: 2px solid #cdcfe1;
+    border-radius: 30px;
+    margin-top: 25px;
+}
+
+.comment-top .total {
+    float: left;
+    width: 600px;
+    height: 100%;
+    line-height: 30px;
+    padding-left: 20px;
+}
+
+.comment-top .sort {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+}
+
+.comment-top a.sort-btn1,.comment-top a.sort-btn2{
+    margin: 0px 15px;
+}
+
+.comment-list {
+    margin-top: 15px;
+}
+
+.comment-list li.comment-item {
+    margin-top: 10px;
+    border: 2px solid #0019ffa1;
+    border-radius: 20px;
+    padding: 10px;
+    width: 800px;
+}
+
+.comment-list li.comment-item .comment-item-area{
+    overflow: auto;
+}
+
+.comment-list li.comment-item .userPhoto {
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+
+.comment-list li.comment-item .userPhoto img {
+    width: 100%;
+    border-radius: 30px;
+}
+
+.comment-list .comment-body {
+    float: left;
+    width: 770px;
+}
+
+.comment-list .comment-header {
+    width: 765px;
+    height: 20px;
+    padding-left: 5px;
+    border-bottom: 1px solid #cdcfe1;
+}
+
+.comment-list .comment-header a {
+    width: 720px;
+    display: block;
+    float: left;
+}
+
+.comment-list .comment-foot {
+    margin-top: 10px;
+    width: 770px;
+    height: 20px;
+}
+
+.comment-list .comment-foot span.time
+,.comment-list .comment-foot a.reply
+,.comment-list .comment-foot .like {
+    display: block;
+    float: left;
+}
+
+.comment-list .comment-foot span.time{
+    width: 170px;
+}
+
+.comment-list .comment-foot a.reply{
+    width: 85px;
+    line-height: 16px;
+}
+
+.comment-list .comment-foot .like {
+    line-height: 16px;
+}
+
+.comment-list .comment-foot span.praiseCount.praiseCount0 {
+    margin-left: 5px;
+}
+
+.createReplyClass {
+    margin-top: 10px;
+}
+
+.comment-box .comment-list textarea.layui-textarea {
+    width: 655px;
+    float: left;
+    margin-left: 20px;
+}
+
+.comment-box .comment-list button {
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.reply-list {
+    margin-top: 10px;
+}
+
+.reply-list li.reply-comment-item {
+    margin-top: 5px;
+    border: 1px solid #cdcfe1;
+    border-radius: 20px;
+    padding: 10px;
+    width: 745px;
+    margin-left: 20px;
+}
+
+.reply-list li.reply-comment-item .reply-comment-item-area{
+    overflow: auto;
+}
+
+.reply-list li.reply-comment-item .reply-userPhoto {
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+
+.reply-list li.reply-comment-item .reply-userPhoto img {
+    width: 100%;
+    border-radius: 30px;
+}
+
+.reply-list .reply-comment-body {
+    float: left;
+    width: 715px;
+}
+
+.reply-list .reply-comment-header {
+    width: 710px;
+    height: 20px;
+    padding-left: 5px;
+    border-bottom: 1px solid #cdcfe1;
+}
+
+.reply-list .reply-comment-foot {
+    margin-top: 10px;
+    width: 715px;
+    height: 20px;
+}
+
+.reply-list .reply-comment-foot span.reply-time
+,.reply-list .reply-comment-foot a.reply-reply{
+    display: block;
+    float: left;
+}
+
+.reply-list .reply-comment-foot span.reply-time{
+    width: 170px;
+}
+
+.reply-list .reply-comment-foot a.reply-reply{
+    width: 85px;
+    line-height: 16px;
+}
+
+/* 留言板 */
+.schedule-form .layui-form-item .layui-input-inline {
+    width: 100%;
+}
+.schedule-form .layui-textarea {
+    height: 297px;
 }

@@ -40,9 +40,15 @@ layui.use(['form','upload'], function () {
                 contentType: "application/json",
                 data: JSON.stringify({
                     "title": title,
-                    "content": content,
-                    "userId": localStorage.getItem("loginId")
+                    "content": content
                 }),
+                beforeSend: function (XMLHttpRequest) {
+                    XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+                },
+                error: function(xhr){
+                    errorLogin($.parseJSON(xhr.responseText));
+                    return false;
+                },
                 success: function (data) {
                     if(data.body == "success"){
                         alertmsgFtm("新增成功");

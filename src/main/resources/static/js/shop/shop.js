@@ -140,11 +140,17 @@ function updateAddress() {
                         contentType: "application/json",
                         type: "post",
                         data: JSON.stringify({
-                            "loginId": localStorage.getItem("loginId")
-                            ,"addressName":$("input[name=addName]").val()
+                            "addressName":$("input[name=addName]").val()
                             ,"addressPhone":$("input[name=addPhone]").val()
                             ,"address":$("input[name=address]").val()
                         }),
+                        beforeSend: function (XMLHttpRequest) {
+                            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+                        },
+                        error: function(xhr){
+                            errorLogin($.parseJSON(xhr.responseText));
+                            return false;
+                        },
                         success: function (data) {
                             if(data.body == 'success'){
                                 alertmsgFtm("更新成功");
@@ -177,9 +183,15 @@ function addShopCar(id) {
         contentType: "application/json",
         type: "post",
         data: JSON.stringify({
-            "userId": localStorage.getItem("loginId")
-            ,"goodsId":id
+            "goodsId":id
         }),
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+            return false;
+        },
         success: function (data) {
             if(data.body == 'success'){
                 alertmsgTm("添加成功");

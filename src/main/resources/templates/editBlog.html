@@ -16,79 +16,83 @@
 
 <body>
 <div class="app">
-    <div class="header"></div>
+    <div class="header">
+        <a href="/"><img class="header-logo" src="/static/img/logo.png"><span class="header-title">YeBlog</span></a>
+    </div>
     <div class="contain">
         <div class="navbar">
             <nav class="nav-list">
                 <a href="/" class="item">
-                    <i></i>
+                    <i class="fa fa-home" aria-hidden="true"></i>
                     <span>首页</span>
                 </a>
                 <a href="/column" class="item">
-                    <i></i>
+                    <i class="fa fa-columns" aria-hidden="true"></i>
                     <span>专栏</span>
                 </a>
-                <a href="/createBlog" class="item">
-                    <i></i>
+                <a href="/createBlog" class="item item-active">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
                     <span>写博客</span>
                 </a>
                 <a href="/shop" class="item">
-                    <i></i>
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                     <span>商城</span>
                 </a>
                 <a href="/profile" class="item">
-                    <i></i>
+                    <i class="fa fa-user-o" aria-hidden="true"></i>
                     <span>个人中心</span>
                 </a>
                 <a href="/schedule" class="item">
-                    <i></i>
+                    <i class="fa fa-comment-o" aria-hidden="true"></i>
                     <span>留言板</span>
                 </a>
 
             </nav>
         </div>
         <div class="main">
-            <form class="layui-form" lay-filter="articleCreateForm">
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div id="blog-editor">
-                        <textarea style="display:none;"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">封面</label>
-                    <div class="layui-input-inline">
-                        <div class="layui-upload">
-                            <input type="file" name="file" id="cover"/>
+            <div class="createBlog-area">
+                <form class="layui-form article-form">
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline blog-title">
+                            <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">专栏:</label>
-                    <div class="layui-input-inline">
-                        <div id="column"></div>
+                    <div class="layui-form-item">
+                        <div id="blog-editor">
+                            <textarea style="display:none;"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">类型:</label>
-                    <div class="layui-input-inline">
-                        <select name="type">
-                            <option value="0">原创</option>
-                            <option value="1">转载</option>
-                            <option value="2">草稿</option>
-                        </select>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">封面</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-upload">
+                                <input type="file" name="file" id="cover"/>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-inline">
-                        <button type="button" class="layui-btn" id="updateBtn">更新</button>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">专栏:</label>
+                        <div class="layui-input-inline">
+                            <div id="column"></div>
+                        </div>
                     </div>
-                </div>
-            </form>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">类型:</label>
+                        <div class="layui-input-inline">
+                            <select name="type">
+                                <option value="0">原创</option>
+                                <option value="1">转载</option>
+                                <option value="2">草稿</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" id="updateBtn">更新</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

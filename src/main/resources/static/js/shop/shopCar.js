@@ -25,7 +25,14 @@ if(checkLogin() != "ok"){
         url: "/back/shopServices/listShopCarInfo",
         contentType: "application/json",
         type: "post",
-        data: JSON.stringify({"userId": localStorage.getItem("loginId")}),
+        data: JSON.stringify({}),
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+            return false;
+        },
         success: function (data) {
             var rowData = data.body;
 
@@ -58,7 +65,16 @@ function deleteShop(id) {
         url: "/back/shopServices/deleteShopCar",
         contentType: "application/json",
         type: "post",
-        data: JSON.stringify({"userId": localStorage.getItem("loginId"),"goodsId":id}),
+        data: JSON.stringify({
+            "goodsId":id
+        }),
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+            return false;
+        },
         success: function (data) {
             if(data.body == 'success'){
                 alertmsgTm("删除成功");
@@ -78,7 +94,17 @@ function addShop(id,i) {
         url: "/back/shopServices/updateShopCarInfo",
         contentType: "application/json",
         type: "post",
-        data: JSON.stringify({"userId": localStorage.getItem("loginId"),"goodsId":id,"add":"1"}),
+        data: JSON.stringify({
+            "goodsId":id,
+            "add":"1"
+        }),
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+            return false;
+        },
         success: function (data) {
             if(data.body == 'success'){
                 var nums = Number($("#goodsNums"+i).val())+1;
@@ -98,7 +124,17 @@ function subShop(id,i) {
         url: "/back/shopServices/updateShopCarInfo",
         contentType: "application/json",
         type: "post",
-        data: JSON.stringify({"userId": localStorage.getItem("loginId"),"goodsId":id,"sub":"1"}),
+        data: JSON.stringify({
+            "goodsId":id,
+            "sub":"1"
+        }),
+        beforeSend: function (XMLHttpRequest) {
+            XMLHttpRequest.setRequestHeader("Authorization", "ym:" + localStorage.getItem('token'));
+        },
+        error: function(xhr){
+            errorLogin($.parseJSON(xhr.responseText));
+            return false;
+        },
         success: function (data) {
             if(data.body == 'success'){
                 var nums = Number($("#goodsNums"+i).val())-1;

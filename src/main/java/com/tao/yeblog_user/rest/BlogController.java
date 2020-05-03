@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.rest;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tao.yeblog_user.common.IPage;
 import com.tao.yeblog_user.common.Response;
 import com.tao.yeblog_user.model.dto.BlogDTO;
@@ -89,7 +90,9 @@ public class BlogController {
      * @return
      */
     @PostMapping("/createBlog")
-    public Response<String> createBlog(@RequestBody BlogDTO blogDTO){
+    public Response<String> createBlog(@RequestBody BlogDTO blogDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        blogDTO.setUserId(json.getString("loginId"));
         return Response.successData(blogService.createBlog(blogDTO));
     }
 
@@ -99,7 +102,9 @@ public class BlogController {
      * @return
      */
     @PostMapping("/deleteBlog")
-    public Response<String> deleteBlog(@RequestBody BlogDTO blogDTO){
+    public Response<String> deleteBlog(@RequestBody BlogDTO blogDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        blogDTO.setUserId(json.getString("loginId"));
         return Response.successData(blogService.deleteBlog(blogDTO));
     }
 
@@ -119,7 +124,9 @@ public class BlogController {
      * @return
      */
     @PostMapping("/createBlogCollection")
-    public Response<String> createBlogCollection(@RequestBody BlogDTO blogDTO){
+    public Response<String> createBlogCollection(@RequestBody BlogDTO blogDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        blogDTO.setUserId(json.getString("loginId"));
         return Response.successData(blogService.createBlogCollection(blogDTO));
     }
 
@@ -129,7 +136,9 @@ public class BlogController {
      * @return
      */
     @PostMapping("/deleteBlogCollection")
-    public Response<String> deleteBlogCollection(@RequestBody BlogDTO blogDTO){
+    public Response<String> deleteBlogCollection(@RequestBody BlogDTO blogDTO, HttpServletRequest request){
+        JSONObject json = (JSONObject)request.getSession().getAttribute("UserInfo");
+        blogDTO.setUserId(json.getString("loginId"));
         return Response.successData(blogService.deleteBlogCollection(blogDTO));
     }
 }

@@ -150,7 +150,7 @@
             select t6.*, count(t8.blogid) viewNums
             from
             (
-              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, case when t1.type="0" then "原创" when t1.type="1" then "转载" end as type, t1.content content, t4.url cover, date_format(t1.createtime, '%Y年%m月%d日') createTime,t1.createtime AllCreateTime, count(t5.blogid) collectionNums
+              select t1.id id, t1.blogid blogId, t2.loginid userId, t2.name userName, t3.columnid columnId, t3.name columnName, t1.title title, t1.type type, t1.content content, t4.url cover, date_format(t1.createtime, '%Y年%m月%d日') createTime,t1.createtime AllCreateTime, count(t5.blogid) collectionNums
               from blog t1
               left join blog_user t2 on t1.userid= t2.id
               left join yeblog_db.column t3 on t1.columnid= t3.id

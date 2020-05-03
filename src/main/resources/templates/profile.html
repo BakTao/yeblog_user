@@ -14,32 +14,34 @@
 
 <body>
 <div class="app">
-    <div class="header"></div>
+    <div class="header">
+        <a href="/"><img class="header-logo" src="/static/img/logo.png"><span class="header-title">YeBlog</span></a>
+    </div>
     <div class="contain">
         <div class="navbar">
             <nav class="nav-list">
                 <a href="/" class="item">
-                    <i></i>
+                    <i class="fa fa-home" aria-hidden="true"></i>
                     <span>首页</span>
                 </a>
                 <a href="/column" class="item">
-                    <i></i>
+                    <i class="fa fa-columns" aria-hidden="true"></i>
                     <span>专栏</span>
                 </a>
                 <a href="/createBlog" class="item">
-                    <i></i>
+                    <i class="fa fa-edit" aria-hidden="true"></i>
                     <span>写博客</span>
                 </a>
                 <a href="/shop" class="item">
-                    <i></i>
+                    <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                     <span>商城</span>
                 </a>
-                <a href="/profile" class="item">
-                    <i></i>
+                <a href="/profile" class="item item-active">
+                    <i class="fa fa-user-o" aria-hidden="true"></i>
                     <span>个人中心</span>
                 </a>
                 <a href="/schedule" class="item">
-                    <i></i>
+                    <i class="fa fa-comment-o" aria-hidden="true"></i>
                     <span>留言板</span>
                 </a>
 
@@ -49,82 +51,76 @@
             <div class="profile">
                 <div class="profile-user1">
                     <div class="mail">
-                        <i></i>
-                        <span>邮箱:</span>
+
+                        <span class="title"><i class="fa fa-envelope-o" aria-hidden="true"></i>邮箱:</span>
 
                         <span class="value"></span>
                     </div>
                     <div class="phone">
-                        <i></i>
-                        <span>手机:</span>
+
+                        <span class="title"><i class="fa fa-phone" aria-hidden="true"></i>手机:</span>
 
                         <span class="value"></span>
                     </div>
                     <div class="lastIP">
-                        <i></i>
-                        <span>上次登录IP:</span>
+
+                        <span class="title"><i class="fa fa-pied-piper-pp" aria-hidden="true"></i>上次登录IP:</span>
 
                         <span class="value"></span>
                     </div>
                     <div class="lastTime">
-                        <i></i>
-                        <span>上次登录时间:</span>
+
+                        <span class="title"><i class="fa fa-clock-o" aria-hidden="true"></i>上次登录时间:</span>
 
                         <span class="value"></span>
                     </div>
                     <div class="blogCount">
-                        <i></i>
-                        <span>我发表的博客:</span>
+
+                        <span class="atitle"><i class="fa fa-files-o" aria-hidden="true"></i>我发表的博客:</span>
 
                         <a href="javascript:;" class="avalue" onclick="getBCData('blog',1)"></a>
                     </div>
                     <div class="blogCollCount">
-                        <i></i>
-                        <span>我收藏的博客:</span>
+
+                        <span class="atitle"><i class="fa fa-heart-o" aria-hidden="true"></i>我收藏的博客:</span>
 
                         <a href="javascript:;" class="avalue" onclick="getBCData('collBlog',1)"></a>
                     </div>
                     <div class="commentCount">
-                        <i></i>
-                        <span>我发布的评论:</span>
+
+                        <span class="atitle"><i class="fa fa-comments-o" aria-hidden="true"></i>我发布的评论:</span>
 
                         <a href="javascript:;" class="avalue" onclick="getBCData('comment',1)"></a>
                     </div>
                     <div class="commentPraCount">
-                        <i></i>
-                        <span>我点赞的评论:</span>
+
+                        <span class="atitle"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>我点赞的评论:</span>
 
                         <a href="javascript:;" class="avalue" onclick="getBCData('praComment',1)"></a>
                     </div>
 
                 </div>
                 <div class="profile-user2">
-                    <div>
-                        <div class="top">
-                            <img src="/static/img/logo.png">
+                    <div class="top">
+                        <img src="/static/img/blogPhoto.jpg">
+                    </div>
+                    <div class="middle"><img src="/static/img/logo.png" class="profile-photo"></div>
+                    <div class="bottom">
+                        <div class="profile-loginId">
+                            <span class="value2"><i class="fa fa-id-card-o" aria-hidden="true"></i></span>
                         </div>
-                        <img src="/static/img/logo.png" class="profile-photo">
-                        <div class="bottom">
-                            <div class="profile-loginId">
-                                <i></i>
-                                <span class="value2"></span>
-
-                            </div>
-                            <div class="profile-name">
-                                <i></i>
-                                <span class="value2"></span>
-                            </div>
-                            <div class="profile-sex">
-                                <i></i>
-                                <span class="value2"></span>
-                            </div>
-                            <div class="update">
-                                <button type="button" class="layui-btn layui-btn-primary" id="updateBtn">更新个人信息</button>
-                            </div>
+                        <div class="profile-name">
+                            <span class="value2"><i class="fa fa-info" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="profile-sex">
+                            <span class="value2"><i class="fa fa-intersex (alias)" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="update">
+                            <button type="button" class="layui-btn layui-btn-primary" id="updateBtn">更新个人信息</button>
                         </div>
                     </div>
                 </div>
-                <div id="UserInfo" style="display: none;">
+                <div id="UserInfo" style="display: none;padding: 10px;">
                     <form class="layui-form" lay-filter="UserInfoForm">
                         <div class="layui-form-item">
                              <label class="layui-form-label" style="padding: 9px 12px;">性别</label>
@@ -156,7 +152,7 @@
                         </form>
                 </div>
             </div>
-            <div class="list">
+            <div class="profile-list">
 
             </div>
         </div>
