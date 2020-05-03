@@ -1,5 +1,6 @@
 package com.tao.yeblog_user.model.dto;
 
+import com.tao.yeblog_user.common.IPage;
 import lombok.Data;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class CommentDTO {
 
     private String praiseNums; //评论数
 
-    private List<CommentDTO> comments;
+    private IPage<CommentDTO> comments;
 
     private String ifPraise;   //是否点赞
 

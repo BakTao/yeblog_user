@@ -48,32 +48,34 @@
             </nav>
         </div>
         <div class="main">
-            <div class="order-top">
-                <div class="addressArea">
-                    <div class="address-title">收货信息</div>
-                    <div class="address-name"></div>
-                    <div class="address-phone"></div>
-                    <div class="address-info"></div>
+            <div class="order">
+                <div class="order-top">
+                    <div class="addressArea">
+                        <div class="address-title">收货信息</div>
+                        <div class="address-name"></div>
+                        <div class="address-phone"></div>
+                        <div class="address-info"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="order-content">
-                <table id="shopTable">
-                    <thead>
-                        <tr>
-                            <th>商品名称</th>
-                            <th>商品单价</th>
-                            <th>商品数量</th>
-                            <th>商品总价</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="order-content">
+                    <table id="shopTable">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>商品单价</th>
+                                <th>商品数量</th>
+                                <th>商品总价</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
-                <div class="orderPriceCount">总价:<input type="text" readonly="readonly"></div>
-            </div>
-            <div class="order-bottom">
-
+                        </tbody>
+                    </table>
+                    <div class="orderPriceCount">总价:<input type="text" readonly="readonly"></div>
+                </div>
+                <div class="order-bottom">
+                    <div class="order-back"><button type="button" class="layui-btn layui-btn-primary" onclick="orderBack();"><i class="fa fa-hand-o-left" aria-hidden="true"></i>返回</button></div>
+                </div>
             </div>
         </div>
     </div>

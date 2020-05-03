@@ -48,33 +48,36 @@
             </nav>
         </div>
         <div class="main">
-            <div class="shopCar-top">
-                <div class="addressArea">
-                    <div class="address-title">收货信息</div>
-                    <div class="address-name"></div>
-                    <div class="address-phone"></div>
-                    <div class="address-info"></div>
-                </div>
-            </div>
-            <div class="shopCar-content">
-                <table id="shopCarTable">
-                    <thead>
-                        <tr>
-                            <th>商品名称</th>
-                            <th>商品单价</th>
-                            <th>商品数量</th>
-                            <th>商品总价</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div class="shopCar">
+                <div class="shopCar-content">
+                    <table id="shopCarTable">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>商品单价</th>
+                                <th>商品数量</th>
+                                <th>商品总价</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                    </tbody>
-                </table>
-                <div class="shopCarPriceCount">总价:<input type="text" readonly="readonly"></div>
-            </div>
-            <div class="shopCar-bottom">
-                <button type="button" class="layui-btn layui-btn-warm" onclick="buy();">购买</button>
+                        </tbody>
+                    </table>
+                    <div class="shopCarPriceCount">总价:<input type="text" readonly="readonly"></div>
+                </div>
+                <div class="shopCar-bottom">
+                    <div class="shopCar-top">
+                        <div class="addressArea">
+                            <div class="address-name"></div>
+                            <div class="address-phone"></div>
+                            <div class="address-info"></div>
+                        </div>
+                    </div>
+                    <div class="shopCar-buy">
+                        <button type="button" class="layui-btn layui-btn-warm" onclick="buy();">购买</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

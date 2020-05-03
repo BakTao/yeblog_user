@@ -33,12 +33,54 @@ public class CommentService implements ICommentService {
         PageHelper.startPage(commentQO.getPageIndex(),commentQO.getPageSize());
         Page<CommentDTO> pageData = commentMapper.pageCommentInfo(commentQO);
         for(int i = 0; i < pageData.size(); i++){
+            PageDefaultImpl<CommentDTO> commentPage = new PageDefaultImpl<>();
             CommentQO query = new CommentQO();
             query.setCommentId(pageData.get(i).getId());
-            List<CommentDTO> comments = commentMapper.listReplyCommentInfo(query);
-            pageData.get(i).setComments(comments);
+            PageHelper.startPage(1,5);
+            Page<CommentDTO> comments = commentMapper.listReplyCommentInfo(query);
+            PageInfo<CommentDTO> pageInfo = new PageInfo<>(comments);
+
+            Pager pager = new Pager();
+            pager.setPageIndex(pageInfo.getPageNum());
+            pager.setPageSize(pageInfo.getPageSize());
+            pager.setPageCount(pageInfo.getPages());
+            pager.setRecordCount(pageInfo.getTotal());
+            pager.setPrePageIndex(pageInfo.getPrePage());
+            pager.setNextPageIndex(pageInfo.getNextPage());
+            pager.setExistsPrePage(pageInfo.isHasPreviousPage());
+            pager.setExistsNextPage(pageInfo.isHasNextPage());
+
+            commentPage.setPager(pager);
+            commentPage.setData(pageInfo.getList());
+
+
+            pageData.get(i).setComments(commentPage);
         }
         PageInfo<CommentDTO> pageInfo = new PageInfo<>(pageData);
+
+        Pager pager = new Pager();
+        pager.setPageIndex(pageInfo.getPageNum());
+        pager.setPageSize(pageInfo.getPageSize());
+        pager.setPageCount(pageInfo.getPages());
+        pager.setRecordCount(pageInfo.getTotal());
+        pager.setPrePageIndex(pageInfo.getPrePage());
+        pager.setNextPageIndex(pageInfo.getNextPage());
+        pager.setExistsPrePage(pageInfo.isHasPreviousPage());
+        pager.setExistsNextPage(pageInfo.isHasNextPage());
+
+        page.setPager(pager);
+        page.setData(pageInfo.getList());
+
+        return page;
+    }
+
+    @Override
+    public IPage<CommentDTO> pageReplyCommentInfo(CommentQO commentQO) {
+        PageDefaultImpl<CommentDTO> page = new PageDefaultImpl<>();
+
+        commentQO.setPageSize(5);
+        PageHelper.startPage(commentQO.getPageIndex(),commentQO.getPageSize());
+        PageInfo<CommentDTO> pageInfo = new PageInfo<>(commentMapper.listReplyCommentInfo(commentQO));
 
         Pager pager = new Pager();
         pager.setPageIndex(pageInfo.getPageNum());

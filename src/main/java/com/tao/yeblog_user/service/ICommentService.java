@@ -19,6 +19,13 @@ public interface ICommentService {
     IPage<CommentDTO> pageCommentInfo(CommentQO commentQO);
 
     /**
+     * 获取评论的评论信息
+     * @param commentQO
+     * @return
+     */
+    IPage<CommentDTO> pageReplyCommentInfo(CommentQO commentQO);
+
+    /**
      * 获取用户的评论信息
      * @param commentQO
      * @return

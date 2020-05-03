@@ -38,6 +38,16 @@ public class CommentController {
     }
 
     /**
+     * 获取评论的评论信息
+     * @param commentQO
+     * @return
+     */
+    @PostMapping("/pageReplyCommentInfo")
+    public Response<IPage<CommentDTO>> pageReplyCommentInfo(@RequestBody CommentQO commentQO){
+        return Response.successData(commentService.pageReplyCommentInfo(commentQO));
+    }
+
+    /**
      * 获取用户的评论信息
      * @param commentQO
      * @return

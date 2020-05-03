@@ -42,7 +42,7 @@ if(checkLogin() != "ok"){
                 $("#shopCarTable tbody").append('<tr>' +
                     '<td>'+ rowData[i].goodsName + '</td>' +
                     '<td>￥<span id="price' + i + '">' + rowData[i].price + '</span></td>' +
-                    '<td>' +
+                    '<td class="shopCar-opera">' +
                     '<button type="button" onclick="subShop(\'' + rowData[i].goodsId + '\',' + i +');">-</button>' + '<input id="goodsNums' + i + '" value="' + rowData[i].nums + '"><button type="button" onclick="addShop(\'' + rowData[i].goodsId + '\',' + i + ');">+</button>' +
                     '</td>' +
                     '<td>￥<span id="priceCount' + i + '">' + rowData[i].priceCount + '</span></td>' +

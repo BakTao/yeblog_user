@@ -72,19 +72,27 @@
             </div>
 
             <div class="shop-list">
-                <ul>
+                <div class="shop-area">
 
-                </ul>
+                </div>
             </div>
 
-            <div id="page">
+            <div id="columnPage" style="height: 100px;">
             </div>
             <div class="bottomArea">
-                <button type="button" onclick="shopCar();"><i></i>购物车</button>
-                <button type="button" onclick="order();"><i></i>我的订单</button>
-                <button type="button" onclick="updateAddress();"><i></i>我的收货信息</button>
+                <div>
+                    <button type="button" class="layui-btn layui-btn-danger" onclick="shopCar();"><i class="fa fa-shopping-cart" aria-hidden="true"></i>购物车</button>
+
+                </div>
+                <div>
+                    <button type="button" class="layui-btn" onclick="order();" ><i class="fa fa-reorder (alias)" aria-hidden="true"></i>我的订单</button>
+                </div>
+
+                <div>
+                    <button type="button" class="layui-btn layui-btn-warm" onclick="updateAddress();"><i class="fa fa-address-book-o" aria-hidden="true"></i>我的收货信息</button>
+                </div>
             </div>
-            <div id="AddressInfo" style="display: none;">
+            <div id="AddressInfo" style="display: none;padding: 10px;">
                 <form class="layui-form" lay-filter="AddressInfoForm">
                     <div class="layui-form-item">
                         <label class="layui-form-label" style="padding: 9px 12px;">收货人名称</label>
@@ -101,7 +109,7 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label" style="padding: 9px 12px;">收获人地址</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="address" placeholder="收获人地址" autocomplete="off" class="layui-input">
+                            <input type="text" name="address" placeholder="收获人地址" autocomplete="off" class="layui-input" style="width: 260px">
                         </div>
                     </div>
                 </form>

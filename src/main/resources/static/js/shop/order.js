@@ -28,10 +28,10 @@ function queryOrder(pageIndex) {
                     $("#orderTable tbody").append('<tr>' +
                         '<td>'+ rowData[i].orderId + '</td>' +
                         '<td>￥' + rowData[i].price + '</td>' +
-                        '<td>已关闭</td>' +
+                        '<td class="enable0">已关闭</td>' +
                         '<td>' + rowData[i].createTime + '</td>' +
                         '<td>' +
-                        '<button type="button" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
+                        '<button type="button" class="layui-btn layui-btn-primary" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
                         '</td>' +
                         '</tr>'
                     )
@@ -39,11 +39,11 @@ function queryOrder(pageIndex) {
                     $("#orderTable tbody").append('<tr>' +
                         '<td>'+ rowData[i].orderId + '</td>' +
                         '<td>￥' + rowData[i].price + '</td>' +
-                        '<td>待发货</td>' +
+                        '<td class="enable1">待发货</td>' +
                         '<td>' + rowData[i].createTime + '</td>' +
                         '<td>' +
-                        '<button type="button" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
-                        '<button type="button" onclick="updateOrder(\'' + rowData[i].orderId + '\',\'0\')">取消订单</button>' +
+                        '<button type="button" class="layui-btn layui-btn-primary" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
+                        '<button type="button" class="layui-btn layui-btn-danger" onclick="updateOrder(\'' + rowData[i].orderId + '\',\'0\')">取消订单</button>' +
                         '</td>' +
                         '</tr>'
                     )
@@ -51,11 +51,11 @@ function queryOrder(pageIndex) {
                     $("#orderTable tbody").append('<tr>' +
                         '<td>'+ rowData[i].orderId + '</td>' +
                         '<td>￥' + rowData[i].price + '</td>' +
-                        '<td>待收货</td>' +
+                        '<td class="enable2">待收货</td>' +
                         '<td>' + rowData[i].createTime + '</td>' +
                         '<td>' +
-                        '<button type="button" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
-                        '<button type="button" onclick="updateOrder(\'' + rowData[i].orderId + '\',\'3\')">完成订单</button>' +
+                        '<button type="button" class="layui-btn layui-btn-primary" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
+                        '<button type="button" class="layui-btn layui-btn-normal" onclick="updateOrder(\'' + rowData[i].orderId + '\',\'3\')">完成订单</button>' +
                         '</td>' +
                         '</tr>'
                     )
@@ -63,10 +63,10 @@ function queryOrder(pageIndex) {
                     $("#orderTable tbody").append('<tr>' +
                         '<td>'+ rowData[i].orderId + '</td>' +
                         '<td>￥' + rowData[i].price + '</td>' +
-                        '<td>已完成</td>' +
+                        '<td class="enable3">已完成</td>' +
                         '<td>' + rowData[i].createTime + '</td>' +
                         '<td>' +
-                        '<button type="button" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
+                        '<button type="button" class="layui-btn layui-btn-primary" onclick="showOrder(\'' + rowData[i] .orderId+ '\')">查看</button>' +
                         '</td>' +
                         '</tr>'
                     )
@@ -86,9 +86,9 @@ function showShopPage(count,pageIndex){
 
         //完整功能
         laypage.render({
-            elem: 'page',
+            elem: 'columnPage',
             count: count,
-            theme: '#009587',
+            theme: '#53e8b8',
             curr : pageIndex,
             jump: function(obj,first){
                 if(!first){

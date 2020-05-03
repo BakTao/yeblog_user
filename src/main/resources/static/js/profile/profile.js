@@ -1,4 +1,3 @@
-checkLogin();
 layui.use(['layer','upload','form'], function () {
     var layer = layui.layer
         ,form = layui.form
@@ -6,36 +5,40 @@ layui.use(['layer','upload','form'], function () {
 
     form.render();
 
-    $.ajax({
-        url: "/back/userServices/pageUserInfo",
-        contentType: "application/json",
-        type: "post",
-        data: JSON.stringify({"loginId": localStorage.getItem("loginId")}),
-        success: function (data) {
-            var rowData = data.body.data[0];
-            var userPhoto = rowData.userPhoto ? (uploadUrl + rowData.userPhoto) : '/static/img/logo.png';
+    if(checkLogin() !="ok"){
 
-            $(".profile-user1 .mail .value").text(rowData.email)
-            $(".profile-user1 .phone .value").text(rowData.phone)
-            $(".profile-user1 .lastIP .value").text(rowData.lastLogIp)
-            $(".profile-user1 .lastTime .value").text(rowData.lastLogTime)
-            $(".profile-user1 .blogCount .avalue").text(rowData.blogCountHj + "篇")
-            $(".profile-user1 .blogCollCount .avalue").text(rowData.collectionNums + "篇")
-            $(".profile-user1 .commentCount .avalue").text(rowData.commentNumsHj + "条")
-            $(".profile-user1 .commentPraCount .avalue").text(rowData.commentPraiseNums + "条")
+    }else{
+        $.ajax({
+            url: "/back/userServices/pageUserInfo",
+            contentType: "application/json",
+            type: "post",
+            data: JSON.stringify({"loginId": localStorage.getItem("loginId")}),
+            success: function (data) {
+                var rowData = data.body.data[0];
+                var userPhoto = rowData.userPhoto ? (uploadUrl + rowData.userPhoto) : '/static/img/logo.png';
 
-            $(".profile-user2 .profile-photo").attr("src", userPhoto)
-            $(".profile-user2 .profile-loginId .value2").append(rowData.loginId)
-            $(".profile-user2 .profile-name .value2").append(rowData.name)
-            $(".profile-user2 .profile-sex .value2").append(rowData.sex)
+                $(".profile-user1 .mail .value").text(rowData.email)
+                $(".profile-user1 .phone .value").text(rowData.phone)
+                $(".profile-user1 .lastIP .value").text(rowData.lastLogIp)
+                $(".profile-user1 .lastTime .value").text(rowData.lastLogTime)
+                $(".profile-user1 .blogCount .avalue").text(rowData.blogCountHj + "篇")
+                $(".profile-user1 .blogCollCount .avalue").text(rowData.collectionNums + "篇")
+                $(".profile-user1 .commentCount .avalue").text(rowData.commentNumsHj + "条")
+                $(".profile-user1 .commentPraCount .avalue").text(rowData.commentPraiseNums + "条")
 
-            form.val('UserInfoForm', {
-                "name": rowData.name
-                , "sex": rowData.sex
-                , "email": rowData.email
-            });
-        }
-    })
+                $(".profile-user2 .profile-photo").attr("src", userPhoto)
+                $(".profile-user2 .profile-loginId .value2").append(rowData.loginId)
+                $(".profile-user2 .profile-name .value2").append(rowData.name)
+                $(".profile-user2 .profile-sex .value2").append(rowData.sex)
+
+                form.val('UserInfoForm', {
+                    "name": rowData.name
+                    , "sex": rowData.sex
+                    , "email": rowData.email
+                });
+            }
+        })
+    }
 
     var photo;
 
@@ -893,3 +896,7 @@ function deleteReplyComment(id) {
     })
 }
 
+function loginOut() {
+    localStorage.clear();
+    $(window).attr('location', '/login');
+}

@@ -47,21 +47,21 @@ function queryShop(queryData,pageIndex) {
         }),
         success: function (data) {
             var rowData = data.body.data;
-            $(".main .shop-list ul").empty();
+            $(".main .shop-list .shop-area").empty();
 
             for(var i=0; i<rowData.length; i++){
                 var cover = rowData[i].photo ? (uploadUrl + rowData[i].photo) : '/static/img/logo.png';
                 var shopType = rowData[i].type == "0" ? "实物" : "电子";
 
-                $(".main .shop-list ul").append(
-                    '<li class="shop-item">' +
+                $(".main .shop-list .shop-area").append(
+                    '<div class="shop-item">' +
                     '<div class="shop-top">' +
-                    '<div class="shop=photo">' +
+                    '<div class="shop-photo">' +
                     '<img src="'+ cover +'"></div>' +
-                    '<div class="category">' + rowData[i].categoryName + '</div>' +
-                    '<div class="shopType">' + shopType + '</div>' +
+                    '<div class="category"><span>' + rowData[i].categoryName + '</span></div>' +
+                    '<div class="shopType"><span>' + shopType + '</span></div>' +
                     '<div class="shop-addCar">' +
-                    '<button onclick="addShopCar(\'' + rowData[i].goodsId + '\');">加入购物车</button></div>' +
+                    '<button onclick="addShopCar(\'' + rowData[i].goodsId + '\');"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button></div>' +
                     '</div>' +
                     '<div class="bottom">' +
                     '<div class="shop-name">' + rowData[i].goodsName + '</div>' +
@@ -72,7 +72,7 @@ function queryShop(queryData,pageIndex) {
                     '<span class="shop-price">价格:￥' + rowData[i].price + '</span>' +
                     '</div>' +
                     '</div>' +
-                    '</li>'
+                    '</div>'
                 )
             }
             showShopPage(queryData,data.body.pager.recordCount,data.body.pager.pageIndex);
@@ -88,9 +88,9 @@ function showShopPage(queryData,count,pageIndex){
 
         //完整功能
         laypage.render({
-            elem: 'page',
+            elem: 'columnPage',
             count: count,
-            theme: '#009587',
+            theme: '#53e8b8',
             curr : pageIndex,
             jump: function(obj,first){
                 if(!first){

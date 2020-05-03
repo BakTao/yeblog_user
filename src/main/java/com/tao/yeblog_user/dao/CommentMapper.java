@@ -41,7 +41,7 @@ public interface CommentMapper {
      * @param commentQO
      * @return
      */
-    List<CommentDTO> listReplyCommentInfo(CommentQO commentQO);
+    Page<CommentDTO> listReplyCommentInfo(CommentQO commentQO);
 
     /**
      * 新增评论信息

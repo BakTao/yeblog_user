@@ -227,22 +227,24 @@ function queryComment(pageIndex,sort){
 
                 var replyData = rowData[i].comments;
 
-                if(replyData != null && replyData.length != 0){
-                    for(var j=0; j<replyData.length; j++){
-                        var replyUserPhoto = replyData[j].userPhoto?(uploadUrl+replyData[j].userPhoto):'/static/img/logo.png';
-                        if(replyData[j].replyUserId){
+                if(replyData.data != null && replyData.data.length != 0){
+                    $(".reply-list" + i + " ul.reply-list-box").empty();
+                    var replyCommentData = replyData.data;
+                    for(var j=0; j<replyCommentData.length; j++){
+                        var replyUserPhoto = replyCommentData[j].userPhoto?(uploadUrl+replyCommentData[j].userPhoto):'/static/img/logo.png';
+                        if(replyCommentData[j].replyUserId){
                             $(".reply-list" + i + " ul.reply-list-box").append('<li class="reply-comment-item">' +
                                 '<div class="reply-comment-item-area">' +
                                 '<div class="reply-userPhoto"><img src="' + replyUserPhoto + '"></div>' +
                                 '<div class="reply-comment-body">' +
                                 '<div class="reply-comment-header">' +
-                                '<a href="/room/' + replyData[j].userId + '" target="_blank">' + replyData[j].userName +'</a>' +
+                                '<a href="/room/' + replyCommentData[j].userId + '" target="_blank">' + replyCommentData[j].userName +'</a>' +
                                 '</div>' +
-                                '<div class="reply-comment-content"><span class="reply-user">回复 <a href="/room/' + replyData[j].replyUserId + '" target="_blank">' + replyData[j].replyUserName + ' : </a></span>' + replyData[j].content +
+                                '<div class="reply-comment-content"><span class="reply-user">回复 <a href="/room/' + replyCommentData[j].replyUserId + '" target="_blank">' + replyCommentData[j].replyUserName + ' : </a></span>' + replyCommentData[j].content +
                                 '</div>' +
                                 '<div class="reply-comment-foot">' +
-                                '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyData[j].time + '</span>' +
-                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                                '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyCommentData[j].time + '</span>' +
+                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyCommentData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>' +
@@ -254,23 +256,25 @@ function queryComment(pageIndex,sort){
                                 '<div class="reply-userPhoto"><img src="' + replyUserPhoto + '"></div>' +
                                 '<div class="reply-comment-body">' +
                                 '<div class="reply-comment-header">' +
-                                '<a href="/room/' + replyData[j].userId + '" target="_blank">' + replyData[j].userName +'</a>' +
+                                '<a href="/room/' + replyCommentData[j].userId + '" target="_blank">' + replyCommentData[j].userName +'</a>' +
                                 '</div>' +
-                                '<div class="reply-comment-content">' + replyData[j].content +
+                                '<div class="reply-comment-content">' + replyCommentData[j].content +
                                 '</div>' +
                                 '<div class="reply-comment-foot">' +
-                                '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyData[j].time + '</span>' +
-                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                                '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyCommentData[j].time + '</span>' +
+                                '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + rowData[i].id + '\',\'' + replyCommentData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
                                 '</div>' +
                                 '</div>' +
                                 '</div>' +
                                 '</li>'
                             )
                         }
-
-
-
                     }
+                    var k = i;
+                    $(".reply-list" + i + " ul.reply-list-box").append('<div id="replyCommentPage' + k + '" style="margin-left: 314px;"></div>');
+                    var commentId = rowData[i].id;
+
+                    showReplyCommentPage(replyData.pager.recordCount,replyData.pager.pageIndex,commentId,k);
                 }
             }
             showCommentPage(data.body.pager.recordCount,data.body.pager.pageIndex,sort);
@@ -292,6 +296,87 @@ function showCommentPage(count,pageIndex,sort){
             jump: function(obj,first){
                 if(!first){
                     queryComment(obj.curr,sort);
+                }
+            }
+        });
+    });
+}
+
+function queryReplyComment(pageIndex,id,i){
+    $.ajax({
+        url: "/back/commentServices/pageReplyCommentInfo",
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "commentId": id,
+            "pageIndex": pageIndex
+
+        }),
+        success: function (replyData) {
+            $(".reply-list" + i + " ul.reply-list-box").empty();
+            var replyCommentData = replyData.body.data;
+            for(var j=0; j<replyCommentData.length; j++){
+                var replyUserPhoto = replyCommentData[j].userPhoto?(uploadUrl+replyCommentData[j].userPhoto):'/static/img/logo.png';
+                if(replyCommentData[j].replyUserId){
+                    $(".reply-list" + i + " ul.reply-list-box").append('<li class="reply-comment-item">' +
+                        '<div class="reply-comment-item-area">' +
+                        '<div class="reply-userPhoto"><img src="' + replyUserPhoto + '"></div>' +
+                        '<div class="reply-comment-body">' +
+                        '<div class="reply-comment-header">' +
+                        '<a href="/room/' + replyCommentData[j].userId + '" target="_blank">' + replyCommentData[j].userName +'</a>' +
+                        '</div>' +
+                        '<div class="reply-comment-content"><span class="reply-user">回复 <a href="/room/' + replyCommentData[j].replyUserId + '" target="_blank">' + replyCommentData[j].replyUserName + ' : </a></span>' + replyCommentData[j].content +
+                        '</div>' +
+                        '<div class="reply-comment-foot">' +
+                        '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyCommentData[j].time + '</span>' +
+                        '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + id + '\',\'' + replyCommentData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>'
+                    )
+                }else{
+                    $(".reply-list" + i + " ul.reply-list-box").append('<li class="reply-comment-item">' +
+                        '<div class="reply-comment-item-area">' +
+                        '<div class="reply-userPhoto"><img src="' + replyUserPhoto + '"></div>' +
+                        '<div class="reply-comment-body">' +
+                        '<div class="reply-comment-header">' +
+                        '<a href="/room/' + replyCommentData[j].userId + '" target="_blank">' + replyCommentData[j].userName +'</a>' +
+                        '</div>' +
+                        '<div class="reply-comment-content">' + replyCommentData[j].content +
+                        '</div>' +
+                        '<div class="reply-comment-foot">' +
+                        '<span class="reply-time"><i class="fa fa-clock-o" aria-hidden="true"></i>' + replyCommentData[j].time + '</span>' +
+                        '<a href="javascript:;" class="reply-reply" onclick="replyComment(\'' + id + '\',\'' + replyCommentData[j].userId +'\',this)"><i class="fa fa-reply" aria-hidden="true"></i>回复</a>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</li>'
+                    )
+                }
+            }
+            $(".reply-list" + i + " ul.reply-list-box").append('<div id="replyCommentPage' + i + '" style="margin-left: 314px;"></div>');
+            showReplyCommentPage(replyData.body.pager.recordCount,replyData.body.pager.pageIndex,id,i);
+        }
+    })
+}
+
+
+
+function showReplyCommentPage(count,pageIndex,id,i){
+    layui.use(['laypage'], function(){
+        var laypage = layui.laypage;
+
+        //完整功能
+        laypage.render({
+            elem: 'replyCommentPage'+i,
+            count: count,
+            theme: '#53e8b8',
+            limit: 5,
+            curr : pageIndex,
+            jump: function(obj,first){
+                if(!first){
+                    queryReplyComment(obj.curr,id,i);
                 }
             }
         });

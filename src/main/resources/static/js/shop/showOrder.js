@@ -29,7 +29,7 @@ if(checkLogin() != "ok"){
                 $(".order-top .addressArea .address-info").text('收货人地址:'+rowData.address)
 
                 if(rowData.enable == "2" || rowData.enable == "3"){
-                    $(".order-bottom").append('<div>' +
+                    $(".order-bottom").append('<div class="order-express">' +
                         '物流编号:<input type="text" readonly="readonly" class="order-expressId" value="'+ rowData.expressId + '">' +
                         '</div>'
                     )
@@ -110,4 +110,8 @@ if(checkLogin() != "ok"){
     })
 
 
+}
+
+function orderBack() {
+    $(window).attr('location', '/order')
 }
