@@ -52,4 +52,11 @@ public interface IOrderService {
      * @return
      */
     String createOrder(OrderDTO orderDTO);
+
+    /**
+     * 退款
+     * @param orderDTO
+     * @return
+     */
+    String refund(OrderDTO orderDTO);
 }

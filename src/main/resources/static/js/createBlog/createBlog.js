@@ -97,6 +97,8 @@ layui.use(['form','upload'], function () {
 
         var column = columnSelect.getValue("valueStr");
 
+        var type = $("select[name=type]").val()
+
         if(column == ''){
             layer.open({
                 offset: "auto"
@@ -110,7 +112,7 @@ layui.use(['form','upload'], function () {
             return false;
         }
 
-        var type = $("select[name=type]").val()
+
 
         var enable;
         if(type == "2"){
@@ -143,7 +145,10 @@ layui.use(['form','upload'], function () {
             success: function (data) {
                 if(data.body == "success"){
                     alertmsgFtm("新增成功");
-                    $(window).attr('location', '/')
+                    setTimeout(function () {
+                        $(window).attr('location', '/')
+                    },2500)
+
                 }else{
                     alertmsgFtm("操作失败,请稍后再试")
                 }

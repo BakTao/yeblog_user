@@ -78,7 +78,6 @@ function alertmsgTm(msg) {
         layer = layui.layer;
 
         layer.msg(msg, {
-            area: ['300px', '100px'],
             time: 5000, //5s后自动关闭
             btnAlign: 'c', //按钮居中
             btn: ['关闭']

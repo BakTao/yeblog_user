@@ -175,6 +175,12 @@
         <if test="buyNums != null and buyNums != ''">
           t.buynums = #{buyNums},
         </if>
+        <if test="add !=null and add != ''">
+          t.buynums = t.buynums + #{add},
+        </if>
+        <if test="sub !=null and sub != ''">
+          t.buynums = t.buynums - #{sub},
+        </if>
         <if test="price != null and price != ''">
           t.price = #{price},
         </if>

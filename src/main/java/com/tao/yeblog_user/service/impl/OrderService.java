@@ -94,27 +94,28 @@ public class OrderService implements IOrderService {
     @Override
     public String createOrder(OrderDTO orderDTO) {
         //获取购物车总价
-        ShopQO shopQO = new ShopQO();
-        shopQO.setUserId(orderDTO.getUserId());
-        String price = shopMapper.getShopCarPrice(shopQO).getOrderPriceCount();
 
-        //创建订单
-        String orderId = "o" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
-        orderDTO.setOrderId(orderId);
-        orderDTO.setPrice(price);
+//        String price = shopMapper.getShopCarPrice(shopQO).getOrderPriceCount();
+//
+//        //创建订单
+//        String orderId = "o" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+//        orderDTO.setOrderId(orderId);
+//        orderDTO.setPrice(price);
         orderMapper.createOrder(orderDTO);
 
         //创建订单商品关联信息
         OrderDTO data = new OrderDTO();
-        data.setOrderId(orderId);
+        data.setOrderId(orderDTO.getOrderId());
         orderMapper.createOrderShop(data);
 
         //更新商品表各个商品购买数
+        ShopQO shopQO = new ShopQO();
+        shopQO.setUserId(orderDTO.getUserId());
         List<ShopDTO> list = shopMapper.listShopCarInfo(shopQO);
         for(int i=0; i<list.size(); i++){
             ShopDTO shopDTO = new ShopDTO();
             shopDTO.setGoodsId(list.get(i).getGoodsId());
-            shopDTO.setNums(list.get(i).getNums());
+            shopDTO.setAdd(list.get(i).getNums());
             shopMapper.updateShopInfo(shopDTO);
         }
 
@@ -122,6 +123,25 @@ public class OrderService implements IOrderService {
         ShopDTO shopDTO = new ShopDTO();
         shopDTO.setUserId(orderDTO.getUserId());
         shopMapper.deleteShopCar(shopDTO);
+        return "success";
+    }
+
+    @Override
+    public String refund(OrderDTO orderDTO) {
+        orderDTO.setEnable("0");
+
+        OrderQO orderQO = new OrderQO();
+        orderQO.setOrderId(orderDTO.getOrderId());
+        //更新商品表各个商品购买数
+        List<OrderDTO> list = orderMapper.listOrderShopInfo(orderQO);
+        for(int i=0; i<list.size(); i++){
+            ShopDTO shopDTO = new ShopDTO();
+            shopDTO.setGoodsId(list.get(i).getGoodsId());
+            shopDTO.setSub(list.get(i).getNums());
+            shopMapper.updateShopInfo(shopDTO);
+        }
+
+        orderMapper.updateOrderInfo(orderDTO);
         return "success";
     }
 }

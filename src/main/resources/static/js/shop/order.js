@@ -114,12 +114,12 @@ function updateOrder(id,enable) {
             , btnAlign: 'c'
             , yes: function () {
                 $.ajax({
-                    url: "/back/orderServices/updateOrderInfo",
+                    url: "/refund",
                     contentType: "application/json",
                     type: "post",
                     data: JSON.stringify({"orderId": id, "enable": enable}),
                     success: function (data) {
-                        if (data.body == 'success') {
+                        if (data == 'success') {
                             alertmsgFtm("操作成功");
                             setTimeout(function () {
                                 $(window).attr('location', '/order')

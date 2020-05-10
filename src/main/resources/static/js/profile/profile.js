@@ -16,11 +16,14 @@ layui.use(['layer','upload','form'], function () {
             success: function (data) {
                 var rowData = data.body.data[0];
                 var userPhoto = rowData.userPhoto ? (uploadUrl + rowData.userPhoto) : '/static/img/logo.png';
+                var email = rowData.email?rowData.email:"";
+                var lastLogIp = rowData.lastLogIp?rowData.lastLogIp:"";
+                var lastLogTime = rowData.lastLogTime?rowData.lastLogTime:"";
 
-                $(".profile-user1 .mail .value").text(rowData.email)
+                $(".profile-user1 .mail .value").text(email)
                 $(".profile-user1 .phone .value").text(rowData.phone)
-                $(".profile-user1 .lastIP .value").text(rowData.lastLogIp)
-                $(".profile-user1 .lastTime .value").text(rowData.lastLogTime)
+                $(".profile-user1 .lastIP .value").text(lastLogIp)
+                $(".profile-user1 .lastTime .value").text(lastLogTime)
                 $(".profile-user1 .blogCount .avalue").text(rowData.blogCountHj + "篇")
                 $(".profile-user1 .blogCollCount .avalue").text(rowData.collectionNums + "篇")
                 $(".profile-user1 .commentCount .avalue").text(rowData.commentNumsHj + "条")

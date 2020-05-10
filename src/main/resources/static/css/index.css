@@ -259,7 +259,7 @@ body{
 }
 
 .new-article-list .new-article-item .new-article-content .new-article-body .new-article-descrption{
-    height: 84px;
+    height: 75px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
@@ -1385,7 +1385,7 @@ body{
 
 .shop-list .shop-photo img{
     width: 100%;
-    height: 100%;
+    height: 150px;
 }
 
 .shop-list .category {
@@ -1474,7 +1474,7 @@ body{
 
 .shop-list .bottom {
     background-color: white;
-    height: 90px;
+    min-height: 125px;
     margin-bottom: 15px;
 }
 

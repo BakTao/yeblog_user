@@ -240,7 +240,7 @@
         from blog_user t
         where 1=1
         <if test="loginId != null and loginId != '' ">
-            and t.loginid = #{loginId}
+            and (t.loginid = #{loginId} or t.phone = #{loginId})
         </if>
         <if test="password != null and password != '' ">
             and t.password = #{password}

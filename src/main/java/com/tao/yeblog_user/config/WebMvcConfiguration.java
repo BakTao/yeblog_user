@@ -36,11 +36,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         return new UserLoginInterceptor();
     }
 
-    @Bean
-    public UserLoginInterceptor2 getUserLoginInterceptor2(){
-        return new UserLoginInterceptor2();
-    }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getUserLoginInterceptor()).addPathPatterns(
@@ -67,6 +62,13 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(getUserLoginInterceptor2()).addPathPatterns(
                 "/back/userLoginServices/checkLogin2"
         );
+
+
+    }
+
+    @Bean
+    public UserLoginInterceptor2 getUserLoginInterceptor2(){
+        return new UserLoginInterceptor2();
     }
 
     protected class UserLoginInterceptor extends HandlerInterceptorAdapter {

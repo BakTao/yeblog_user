@@ -215,7 +215,7 @@
 
     <delete id="deleteReplyComment" parameterType="com.tao.yeblog_user.model.dto.CommentDTO">
       delete from comment_reply
-      where id = #{id}
+      where id = #{id}xx+
       and userid =  (select t1.id from blog_user t1 where t1.loginid = #{userId})
 
     </delete>

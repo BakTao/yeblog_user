@@ -183,12 +183,18 @@ public class UserLoginController {
      */
     @PostMapping("/register")
     public Response register(HttpServletRequest request, @RequestBody UserDTO userDTO) {
-        UserQO userQO = new UserQO();
-        userQO.setPhone(userDTO.getPhone());
-        userQO.setLoginId(userDTO.getLoginId());
-        UserDTO data = userService.getUserInfo(userQO);
-        if(data != null){
-            return new Response("808","用户名或手机号被占用");
+        UserQO userQO1 = new UserQO();
+        userQO1.setLoginId(userDTO.getLoginId());
+        UserDTO data1 = userService.getUserInfo(userQO1);
+        if(data1 != null){
+            return new Response("808","用户名被占用");
+        }
+
+        UserQO userQO2 = new UserQO();
+        userQO2.setPhone(userDTO.getPhone());
+        UserDTO data2 = userService.getUserInfo(userQO2);
+        if(data2 != null){
+            return new Response("808","手机号被占用");
         }
 
         JSONObject json = (JSONObject)request.getSession().getAttribute("verifyCode");
