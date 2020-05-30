@@ -113,22 +113,35 @@ function updateOrder(id,enable) {
             , btn: ['确认', '关闭']
             , btnAlign: 'c'
             , yes: function () {
-                $.ajax({
-                    url: "/refund",
-                    contentType: "application/json",
-                    type: "post",
-                    data: JSON.stringify({"orderId": id, "enable": enable}),
-                    success: function (data) {
-                        if (data == 'success') {
+                if(enable == "0"){
+                    $.ajax({
+                        url: "/refund",
+                        contentType: "application/json",
+                        type: "post",
+                        data: JSON.stringify({"orderId": id, "enable": enable}),
+                        success: function (data) {
+
                             alertmsgFtm("操作成功");
                             setTimeout(function () {
                                 $(window).attr('location', '/order')
                             }, 2000);
-                        } else {
-                            alertmsgFtmIndex("操作失败,请稍后再试");
                         }
-                    }
-                })
+                    })
+                } else{
+                    $.ajax({
+                        url: "/back/orderServices/updateOrderInfo",
+                        contentType: "application/json",
+                        type: "post",
+                        data: JSON.stringify({"orderId": id, "enable": enable}),
+                        success: function (data) {
+
+                            alertmsgFtm("操作成功");
+                            setTimeout(function () {
+                                $(window).attr('location', '/order')
+                            }, 2000);
+                        }
+                    })
+                }
             }
         });
     })

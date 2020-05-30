@@ -52,7 +52,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 ,"/back/blogServices/createBlog"
                 ,"/back/userServices/updateUserInfo"
                 ,"/back/blogServices/deleteBlog"
-                ,"/back/scheduleServices/createSchedule"
                 ,"/back/orderServices/pageOrderInfo"
                 ,"/back/shopServices/createShopCar"
                 ,"/back/shopServices/listShopCarInfo"
@@ -61,6 +60,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         );
         registry.addInterceptor(getUserLoginInterceptor2()).addPathPatterns(
                 "/back/userLoginServices/checkLogin2"
+                ,"/back/scheduleServices/createSchedule"
         );
 
 

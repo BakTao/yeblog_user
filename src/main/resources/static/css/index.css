@@ -259,12 +259,13 @@ body{
 }
 
 .new-article-list .new-article-item .new-article-content .new-article-body .new-article-descrption{
-    height: 75px;
+    height: 80px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 14px;
+    font-family: -webkit-body;
 }
 
 .new-article-list .new-article-item .new-article-content .new-article-body .new-article-meta .date
@@ -432,12 +433,13 @@ body{
 }
 
 .blog-list .article-descrption{
-    height: 84px;
+    height: 80px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 14px;
+    font-family: -webkit-body;
 }
 
 .blog-list .article-meta .date
@@ -709,12 +711,13 @@ body{
 }
 
 .profile-list .article-descrption{
-    height: 84px;
+    height: 80px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 14px;
+    font-family: -webkit-body;
 }
 
 .profile-list .article-meta .date
@@ -1001,12 +1004,13 @@ body{
 }
 
 .room-list .article-descrption{
-    height: 84px;
+    height: 80px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 14px;
+    font-family: -webkit-body;
 }
 
 .room-list .article-meta .date

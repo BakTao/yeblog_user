@@ -92,7 +92,7 @@ public class OrderController {
     }
 
     /**
-     * 获取订单信息
+     * 更新订单信息
      * @param orderDTO
      * @return
      */
